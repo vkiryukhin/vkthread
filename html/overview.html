@@ -1,0 +1,31 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Overview</div>
+<p>
+<b>vkThread</b> is a javascript plugin, which allows you to execute any function of a your code in a thread. 
+</p>
+<p>
+<span class="color_blue">Standalone function:</span> simply pass it as an argument to the <b>vkthread()</b>, and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker. 
+</p>
+<p><span class="color_blue">Object's method:</span> <b>vkthread</b> accepts context as an optional parameter and executes function in it's context. Simply pass the object as a context, that's it.</p>
+<p><span class="color_blue">Function with dependencies:</span> <b>vkthread</b> accepts a list of filenames as an optional argument and imports these files in the thread before the function is calling </p>
+<p>
+Here is a basic example:
+<pre><code data-language="javascript">
+	var foo, bar;
+	
+	function sum(num1, num2) {
+		return num1 + num2;
+	}
+	
+	/* execute function foo() here, in the main thread. */
+	foo = sum(2,3);
+	
+	/* open a new thread and execute function foo() in this thread. */
+	vkthread.exec(sum, [2,3], function(data){ bar = data; });
+</code>	</pre>
+</p>
+
+
+
+</td></tr></table>

@@ -1,0 +1,68 @@
+<style type="text/css">
+#doc {margin:1em;}
+#doc ul li {margin:0.5em;}
+#tab1 td {padding-right:15px;}
+</style>
+<div id="doc">
+<div class="h6">Documentation</div>
+<p>
+	<ul>
+	<li> <div style="background-color:#e0e0ff; padding-left:0.5em;height:1.5em;"><b>javascript version</b></div>
+		<ul> 
+			<li><code>&lt;script type="text/javascript" src="jsonfn.js"&gt;&lt;/script&gt;</code>
+			<li>No configuration is needed</li>
+			<li>Plugin uses native JSON object, which is implemented in most modern browsers. It's tested in <span style="color:green;"><b>Firefox, Chrome, Opera, IE9</span></b>. It doesnt work in <span style="color:red;">IE8</span>.
+			</li>
+
+			<li>Usage:
+				<ul>
+					<li><b>Stringify</b> <br/>
+						<div><code>var str = JSONfn.stringify(obj);</code></div>
+						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@obj</code>   - javascript object;</div>
+						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - string;</div>
+
+					</li>
+				</ul>
+
+				<ul>
+					<li><b>Parse</b> <br/>
+					<div><code>var obj = JSONfn.parse(str);</code></div>
+							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@str</code>   - string;</div>
+							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - object;</div>
+					
+					</li>
+				</ul>
+
+			</li>
+		</ul>
+	</li>
+	<li>
+	<div style="background-color:#e0ffff;padding-left:0.5em;height:1.5em;"><b>Node.js version:</b></div>
+	<ul>
+	<li> download: <code>npm install jsonfn</code> </li>
+
+<li>code: <code><a href="https://github.com/vkiryukhin/jsonfn-node" target="_blank" title="go to https://github.com/vkiryukhin/jsonfn">https://github.com/vkiryukhin/jsonfn-node</a> </code> </li>
+		<li>Usage:
+			<ul>
+			
+					<li><b>Stringify</b> <br/>
+						<div><code>var strfn = require('jsonfn').JSONfn.stringify(obj);</code></div>
+						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@obj</code>   - javascript object;</div>
+						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - string;</div>
+
+					</li>
+				</ul>
+				<ul>
+					<li><b>Parse</b> <br/>
+					<div><code>var objfn = require('jsonfn').JSONfn.parse(strfn);</code></div>
+							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@str</code>   - string;</div>
+							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - object;</div>
+					
+					</li>
+				</ul>
+			</li>
+	</ul>
+</li>
+</ul>
+</p>
+</div>

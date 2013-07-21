@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html> 
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+<meta content="utf-8" http-equiv="encoding"/>
+<head>
+<script src="vkthread/vkthread.js" type="text/javascript"></script>
+<title>Worker - Test</title>
+<style type="text/css">
+.interactive{cursor:pointer;text-decoration:underline;}
+</style>
+</head>
+<body>
+<h2 align="center" title="check&#13;&#10;this&#13;&#10;out">worker Test</h2>
+
+<div id="statusReport" >worker is working . . .</div>
+
+<div id="statusReport2" >worker is working . . .</div>
+
+<div id="statusReport3" >worker is working . . .</div>
+
+<div id="statusReport4" >worker is working . . .</div>
+<div id="statusReport5" >worker is working . . .</div>
+
+<script type="text/javascript" >
+
+
+
+//vkthread.setPath("js/worker.js");
+
+function workerTest(str, max){
+	this.str = str;
+	this.max = max;
+}
+
+workerTest.prototype.loop = function(){
+	var ret, ix;
+	
+	for(ix=0;ix<this.max;ix++){
+		ret = this.str.split(',').join('#');
+	}
+	return ret;
+};
+
+
+workerTest.prototype.loop2 = function(){
+/*	
+	this.foo = function() {
+		var ret,ix;
+		
+		for(ix=0;ix<this.max;ix++){
+			ret = this.str.split(',').join('-');
+		}
+		return ret;
+	}
+*/	
+	//return foo();
+/*	
+	vkthread(this.foo,[ch], function(data){
+		document.getElementById('statusReport').innerHTML = data;
+		//return
+	},this);
+*/	
+
+		vkthread.exec(function(){
+						var ret,ix;
+						for(ix=0;ix<this.max;ix++){
+							ret = this.str.split(',').join('-');
+						}
+						return ret;
+					},
+					[],
+					function(data){
+						document.getElementById('statusReport5').innerHTML = data;
+					},
+					this
+				);
+	
+};
+
+
+	var suffix = '_____________';
+
+	function foo(str) {
+		var ret,ix;
+		
+		for(ix=0;ix<2e6;ix++){
+			ret = str.split(',').join('-');
+		}
+		return ret;
+	}
+
+	function bar(arr1,arr2){
+//console.log('zzz');
+		return _.union(arr1,arr2);
+	}
+	
+	var test = new workerTest('aaa,bbb,ddd',4e6);
+	//document.getElementById('statusReport').innerHTML = test.loop();
+	
+	vkthread.exec(test.loop,[], function(data){
+		document.getElementById('statusReport3').innerHTML = data;
+	},test);
+	
+
+	
+	var test2 = new workerTest('bbb,cc,d',5000000);
+	test2.loop2();
+	
+	
+	vkthread.exec(foo,['a,b,c'], function(data){
+		document.getElementById('statusReport').innerHTML = data;
+	}, {suffix:suffix});
+	
+	
+	vkthread.exec(bar,[[1,2,3],[2,3,4]], function(data){
+		document.getElementById('statusReport2').innerHTML = data;
+	}, '../js/underscore-min.js');
+	
+	vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)},
+			[[7,8,9],[5,6,7]], 
+			function(data){
+				document.getElementById('statusReport4').innerHTML = data;
+			}, 
+			'../js/underscore-min.js'
+	);
+
+	//var zzz, xxx, thread=new vkthread("js/worker.js");
+	var zzz, xxx;
+	
+	function sum(num1, num2) {
+		return num1 + num2;
+	}
+	
+	//zzz = sum(2,4);
+//console.log(zzz);
+	
+	//vkthread.setPath("js/worker.js");
+	vkthread.exec(sum, [2,3], function(data){ xxx = data; console.log(xxx);});
+	vkthread.exec(sum, [4,5], function(data){ xxx = data; console.log(xxx);});
+
+</script>
+
+<!--div id="zzz"><b>zzz</b></div-->
+</body>
+</html>
