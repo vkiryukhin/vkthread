@@ -11,8 +11,7 @@
 <p><span class="color_blue">Function with dependencies:</span> <b>vkthread</b> accepts a list of filenames as an optional argument and imports these files in the thread before the function is calling </p>
 <p>
 Here is a basic example:
-<pre><code data-language="javascript">
-	var foo, bar;
+<pre><code data-language="javascript">	var foo;
 	
 	function sum(num1, num2) {
 		return num1 + num2;
@@ -22,10 +21,10 @@ Here is a basic example:
 	foo = sum(2,3);
 	
 	/* open a new thread and execute function foo() in this thread. */
-	vkthread.exec(sum, [2,3], function(data){ bar = data; });
+	vkthread.exec(sum, [2,3], function(data){ foo = data; });
 </code>	</pre>
 </p>
-
+Plagin is super tiny: development version (plain text with comments) is less then 2k. I even don't care to minify/compress it. 
 
 
 </td></tr></table>

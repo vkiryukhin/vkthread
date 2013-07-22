@@ -1,13 +1,15 @@
 /**
- * function vkthread() 
+ *  vkThread
+ *  is a javascript plugin, which allows you to execute any function of javascript code in a thread.  
  */
 
 (function(){
 
 function vkthread(){
-	/* In this constructor we want to find a peth to the file. We use Error.stack property,
-	 * which is available in modern browsers, but IE9 doesn't support it (IE10 does). If we 
-	 * are not able to find it (IE9), user must provide path with vkthread.setPath() method. 
+
+	/* Set a path to the "worker.js" file, which should be located in the same folder with 
+	 * vkthread.js (this one). To get path we make a trick by throwing error and parsing 
+	 * "Error.stack" property. User also can provide path explicetely with vkthread.setPath() method. 
 	 */
 	var err;
 	try { throw new Error()} 

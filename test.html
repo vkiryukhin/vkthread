@@ -27,12 +27,12 @@
 
 //vkthread.setPath("js/worker.js");
 
-function workerTest(str, max){
+function Demo(str, max){
 	this.str = str;
 	this.max = max;
 }
 
-workerTest.prototype.loop = function(){
+Demo.prototype.foo = function(){
 	var ret, ix;
 	
 	for(ix=0;ix<this.max;ix++){
@@ -42,7 +42,7 @@ workerTest.prototype.loop = function(){
 };
 
 
-workerTest.prototype.loop2 = function(){
+Demo.prototype.loop2 = function(){
 /*	
 	this.foo = function() {
 		var ret,ix;
@@ -94,16 +94,16 @@ workerTest.prototype.loop2 = function(){
 		return _.union(arr1,arr2);
 	}
 	
-	var test = new workerTest('aaa,bbb,ddd',4e6);
-	//document.getElementById('statusReport').innerHTML = test.loop();
+	var myDemo = new Demo('aaa,bbb,ddd',4e6);
+	//document.getElementById('statusReport').innerHTML = myDemo.foo();
 	
-	vkthread.exec(test.loop,[], function(data){
+	vkthread.exec(myDemo.foo,[], function(data){
 		document.getElementById('statusReport3').innerHTML = data;
-	},test);
+	},myDemo);
 	
 
 	
-	var test2 = new workerTest('bbb,cc,d',5000000);
+	var test2 = new Demo('bbb,cc,d',5000000);
 	test2.loop2();
 	
 	
