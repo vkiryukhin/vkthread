@@ -3,6 +3,8 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
 <meta content="utf-8" http-equiv="encoding"/>
 <head>
+<script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
+<script src="js/underscore-min.js" type="text/javascript"></script>
 <script src="vkthread/vkthread.js" type="text/javascript"></script>
 <title>Worker - Test</title>
 <style type="text/css">
@@ -15,18 +17,37 @@
 <div id="statusReport" >worker is working . . .</div>
 
 <div id="statusReport2" >worker is working . . .</div>
+<div id="statusReport22" >worker is working . . .</div>
 
 <div id="statusReport3" >worker is working . . .</div>
 
 <div id="statusReport4" >worker is working . . .</div>
 <div id="statusReport5" >worker is working . . .</div>
 
+<div id="statusReport7" >worker is working . . .</div>
+<div id="statusReport77" >worker is working . . .</div>
+
 <script type="text/javascript" >
 
 
 
 //vkthread.setPath("js/worker.js");
+//---------------------------------------------------------
+function Foobar(arr1,arr2){
+	this.arr1 = arr1;
+	this.arr2 = arr2;
+}
+Foobar.prototype.union = function(){
+	return _.union(this.arr1,this.arr2);
+}
 
+var myFoobar = new Foobar([1,2,3],[2,3,4]);
+document.getElementById('statusReport7').innerHTML = myFoobar.union();
+
+vkthread.exec(myFoobar.union,[],function(data){
+	document.getElementById('statusReport77').innerHTML = data;
+},myFoobar,'../js/underscore-min.js');
+//---------------------------------------------------------
 function Demo(str, max){
 	this.str = str;
 	this.max = max;
@@ -111,8 +132,9 @@ Demo.prototype.loop2 = function(){
 		document.getElementById('statusReport').innerHTML = data;
 	}, {suffix:suffix});
 	
+	document.getElementById('statusReport22').innerHTML = bar([1,2,3],[2,3,4]);
 	
-	vkthread.exec(bar,[[1,2,3],[2,3,4]], function(data){
+	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
 		document.getElementById('statusReport2').innerHTML = data;
 	}, '../js/underscore-min.js');
 	

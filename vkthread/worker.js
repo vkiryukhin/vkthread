@@ -1,3 +1,8 @@
+/**
+ * worker.js - component of vkThread plugin.  
+ * it doesn't have public interface; used implicitely by vkthread.js 
+ */
+
 var JSONfn;
 if (!JSONfn) {
     JSONfn = {};

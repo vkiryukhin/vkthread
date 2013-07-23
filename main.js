@@ -53,6 +53,51 @@ function run_demo_in_thread(){
 	},myDemo);
 }
 //----------------------------------------------------//
+function bar(arr1,arr2){
+	return _.union(arr1,arr2);
+}
+function run_bar(){
+	document.getElementById('demo_result').innerHTML = bar([1,2,3],[2,3,4]);
+}
+function run_bar_in_thread(){
+	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	}, '../js/underscore-min.js');
+}
+//----------------------------------------------------//
+function Foobar(arr1,arr2){
+	this.arr1 = arr1;
+	this.arr2 = arr2;
+}
+Foobar.prototype.union = function(){
+	return _.union(this.arr1,this.arr2);
+}
+function run_foobar(){
+	var myFoobar = new Foobar([1,2,3],[2,3,4]);
+	document.getElementById('demo_result').innerHTML = myFoobar.union();
+}
+function run_foobar_in_thread(){
+	var myFoobar = new Foobar([6,7,8],[7,8,9]);
+	vkthread.exec(myFoobar.union,[],function(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	},myFoobar,'../js/underscore-min.js');
+}
+//----------------------------------------------------//
+function run_anonim(){
+	document.getElementById('demo_result').innerHTML = (function(ar1,ar2){
+									return _.union(ar1,ar2);
+								})([1,2,3],[3,4,5]);
+}
+function run_anonim_in_thread(){
+	vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)},
+			[[7,8,9],[5,6,7]], 
+			function(data){
+				document.getElementById('demo_result_thread').innerHTML = data;
+			}, 
+			'../js/underscore-min.js'
+	);
+}
+//----------------------------------------------------//
 function loadTemplate(name)
 {
 	switch(name) {
@@ -75,6 +120,16 @@ function loadTemplate(name)
 		case 'dependency':
 			$('#leftpanel').hide();
 			$('#rightpanel').empty().load('html/dependency.html',function(){Rainbow.color();});
+			break;
+			
+		case 'cntx_depend':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/context_depend.html',function(){Rainbow.color();});
+			break;
+			
+		case 'anonym':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/anonymous.html',function(){Rainbow.color();});
 			break;
 		
 		case 'doc':

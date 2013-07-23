@@ -7,24 +7,21 @@
 <p>
 <span class="color_blue">Standalone function:</span> simply pass it as an argument to the <b>vkthread()</b>, and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker. 
 </p>
-<p><span class="color_blue">Object's method:</span> <b>vkthread</b> accepts context as an optional parameter and executes function in it's context. Simply pass the object as a context, that's it.</p>
+<p><span class="color_blue">Object's method:</span> <b>vkthread</b> accepts context as an optional parameter and executes function in its context. Simply pass the object as a context, that's it.</p>
 <p><span class="color_blue">Function with dependencies:</span> <b>vkthread</b> accepts a list of filenames as an optional argument and imports these files in the thread before the function is calling </p>
 <p>
 Here is a basic example:
-<pre><code data-language="javascript">	var foo;
+<pre><code data-language="javascript">function sum(num1, num2) {
+	return num1 + num2;
+}
 	
-	function sum(num1, num2) {
-		return num1 + num2;
-	}
-	
-	/* execute function foo() here, in the main thread. */
-	foo = sum(2,3);
-	
-	/* open a new thread and execute function foo() in this thread. */
-	vkthread.exec(sum, [2,3], function(data){ foo = data; });
-</code>	</pre>
-</p>
-Plagin is super tiny: development version (plain text with comments) is less then 2k. I even don't care to minify/compress it. 
+/* execute function foo() here, in the main thread. */
+var foo = sum(2,3);
 
+/* open a new thread and execute function foo() in this thread. */
+vkthread.exec(sum, [2,3], function(data){ var foo = data; });
+</code>	</pre></p>
+<b>vkThread</b> is based on HTML5 "Worker" technology.  It also incorporates <a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"  title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a> code to execute key tasks.<br/>
+In spite of technical complexity, plugin is super compact. Development version (plain text with comments) is less than 2k. I don't care to minify it. 
 
 </td></tr></table>
