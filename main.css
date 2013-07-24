@@ -117,6 +117,9 @@ a:visited {color:black;}
 .highlight {background-color:#FFFF00;}
 .comment {color:green;font-size:85%;}
 .color_blue{color:#0000CC !important; font-size:105%;}
+.color_blue_bold{color:#0000CC !important; font-size:105%; font-weight:bold;}
+.color_red{color:#cc0000 !important; font-size:105%;}
+.color_green{color:#008800 !important; font-size:105%;}
 
 .span_demo_result{
 	background-color:#ffffe0; border:1px solid gray; display:inline-block;

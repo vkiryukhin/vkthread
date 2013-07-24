@@ -20,7 +20,7 @@
  *
  *	Example:
  *
- *  vkthread.exec( foo,           // function to execute
+ *  vkthread.exec( foo,          // function to execute
  *				  ['abc','xyz'],  // function's arguments
  *				  function(data){alert( data)}, //callback function
  *			  	  {bar:123},      // context object

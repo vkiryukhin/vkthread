@@ -5,7 +5,79 @@
 </style>
 <div id="doc">
 <div class="h6">Documentation</div>
-<p>
+<ul>
+	<li>
+	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread.js"&gt;&lt;/script&gt;</code></pre></li>
+	<li>
+	<b>Configuration</b> ( optional )<br/><br/>
+	vkthread plugin consist of 2 files: vkthread.js and worker.js, which are locatef in the same folder. Plugin needs to know path to <b>worker.js</b>. At construction time plugin figures it out automatically.
+	However, developer can set it manually.
+	<pre><code data-language="javascript">vkthread.setPath("vkthread/worker.js");</code></pre>
+	</li>
+	<li>
+	<b>Usage</b>
+
+	<pre><code data-language="javascript">vkthread.exec(fn,[arg1, ...], callback, context, dependents );</code></pre>
+	<ul>
+	<li><span class="color_blue_bold">fn</span> - function to execute in a thread <br/><span class="color_red">mandatory</span> <br/><br/>
+	<pre><code data-language="javascript">function foo();
+	
+vkthread.exec(foo, . . . );</code></pre>
+Function can be anonymous:<br/>
+<pre><code data-language="javascript">vkthread.exec(function(n,m){return n+m;},  . . . );</code></pre>
+	</li>
+	
+	
+	<li><span class="color_blue_bold">[arg1, ...]</span> - Array of arguments, which you want to pass along with this function<br/> <span class="color_red">mandatory</span> <br/><br/>
+	<pre><code data-language="javascript">function foo(m,n){return n+m};
+	
+vkthread.exec(foo, [2,3], . . . );</code></pre>
+Array can be empty:
+<pre><code data-language="javascript">function foo(){return 'hello world'};
+
+vkthread.exec(foo, [], . . . );</code></pre>
+	</li>
+	
+	
+	<li><span class="color_blue_bold">callback</span> - function to process returned data. Data is passed as an argument<br/> <span class="color_red">mandatory</span> <br/><br/>
+	<pre><code data-language="javascript">function foo(m,n){return n+m};
+	
+vkthread.exec(foo, [2,3], function(data){alert(data)} );</code></pre>
+	</li>
+	
+	<li><span class="color_blue_bold">context</span> - object, which function's <code><i>this</i></code> pointer will point to.<br/> <span class="color_green">optional</span> <br/><br/>
+	If ommitted, thread's <code>self</code> is used as context.
+	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
+Foo.prototype.bar = function(){return this.n + this.m};
+	
+var myFoo = new Foo(2,3);<br/>
+	
+vkthread.exec(myFoo.bar, [], function(data){...}, myFoo );</code></pre>
+	</li>
+	
+	<li><span class="color_blue_bold">dependencies</span> - String; comma-separated list of files, this function depends on.
+	<br/> <span class="color_green">optional</span> <br/><br/>
+	
+	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
+Foo.prototype.bar = function(){return _.union(this.n + this.m) };
+	
+var myFoo = new Foo([1,2],[2,3]);<br/>	
+vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, 'js/underscore.js' );</code></pre>
+
+If context is ommitted, it is set at the 4-th position.
+<pre><code data-language="javascript">function bar(arr1,arr2){ return _.union(arr1,arr2) }
+
+vkthread.exec(bar, [ [1,2],[1,3] ], function(data){...}, 'js/underscore.js' );
+</code></pre>
+	</li>
+	
+	
+	</ul>
+	</p>
+	</li>
+</ul>
+
+<!--p>
 	<ul>
 	<li> <div style="background-color:#e0e0ff; padding-left:0.5em;height:1.5em;"><b>javascript version</b></div>
 		<ul> 
@@ -64,5 +136,5 @@
 	</ul>
 </li>
 </ul>
-</p>
+</p-->
 </div>
