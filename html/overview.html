@@ -13,15 +13,15 @@
 Here is a basic example:
 <pre><code data-language="javascript">function sum(num1, num2) {
 	return num1 + num2;
-}
+}</code></pre>
 	
-/* execute function foo() here, in the main thread. */
-var foo = sum(2,3);
+In the main thread you execute it this way:
+<pre><code data-language="javascript">var foo = sum(2,3);</code></pre>
 
-/* open a new thread and execute function foo() in this thread. */
-vkthread.exec(sum, [2,3], function(data){ var foo = data; });
-</code>	</pre></p>
-<b>vkThread</b> is based on HTML5 "Worker" technology.  It also incorporates <a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"  title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a> code to execute key tasks.<br/>
+Now, let's open a new thread and execute function sum(...) in this thread.
+<pre><code data-language="javascript">vkthread.exec(sum, [2,3], function(data){ var foo = data; })</code>	</pre></p>
+
+<b>vkThread</b> is built on HTML5 "Worker" technology.  It also incorporates <a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"  title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a> code to implement key tasks.<br/>
 In spite of technical complexity, plugin is super compact. Development version (plain text with comments) is less than 2k. I don't care to minify it. 
 
 </td></tr></table>
