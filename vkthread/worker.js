@@ -1,6 +1,5 @@
 /**
  * worker.js - component of vkThread plugin.  
- * it doesn't have public interface; used implicitely by vkthread.js 
  */
 
 var JSONfn;
@@ -10,7 +9,7 @@ if (!JSONfn) {
 (function () {
 
 	JSONfn.parse = function(str) {
-		return JSON.parse(str,function(key, value){
+		return JSON.parse(str, function(key, value){
 			if(typeof value != 'string') return value;
 			return ( value.substring(0,8) == 'function') ? eval('('+value+')') : value;
 		});

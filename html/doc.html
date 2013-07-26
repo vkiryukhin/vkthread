@@ -10,7 +10,7 @@
 	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread.js"&gt;&lt;/script&gt;</code></pre></li>
 	<li>
 	<b>Configuration</b> ( optional )<br/><br/>
-	vkthread plugin consist of 2 files: vkthread.js and worker.js, which are locatef in the same folder. Plugin needs to know path to <b>worker.js</b>. At construction time plugin figures it out automatically.
+	vkthread plugin consist of 2 files: vkthread.js and worker.js, which are located in the same folder. Plugin needs to know path to <b>worker.js</b>. At construction time plugin figures it out automatically.
 	However, developer can set it manually.
 	<pre><code data-language="javascript">vkthread.setPath("vkthread/worker.js");</code></pre>
 	</li>
@@ -46,7 +46,7 @@ vkthread.exec(foo, [2,3], function(data){alert(data)} );</code></pre>
 	</li>
 	
 	<li><span class="color_blue_bold">context</span> - object, which function's <code><i>this</i></code> pointer will point to.<br/> <span class="color_green">optional</span> <br/><br/>
-	If ommitted, thread's <code>self</code> is used as context.
+	If omitted, thread's <code>self</code> is used as context.
 	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
 Foo.prototype.bar = function(){return this.n + this.m};
 	
@@ -64,7 +64,7 @@ Foo.prototype.bar = function(){return _.union(this.n + this.m) };
 var myFoo = new Foo([1,2],[2,3]);<br/>	
 vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, 'js/underscore.js' );</code></pre>
 
-If context is ommitted, it is set at the 4-th position.
+If context is omitted, it is set at the 4-th position.
 <pre><code data-language="javascript">function bar(arr1,arr2){ return _.union(arr1,arr2) }
 
 vkthread.exec(bar, [ [1,2],[1,3] ], function(data){...}, 'js/underscore.js' );

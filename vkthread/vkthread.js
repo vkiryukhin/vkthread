@@ -1,7 +1,7 @@
 /**
- * vkThread - javascript plugin, which allows to execute any function of javascript code in a thread.  
+ * vkThread - javascript plugin, which allows to execute javascript function in a thread.  
  *
- * Version - 0.2.00.beta 
+ * Version - 0.2.00.beta; 07/2013
  * Copyright (c) 2013 Vadim Kiryukhin; 
  * vkiryukhin @ gmail.com
  * http://www.eslinstructor.net/vkthread/
@@ -59,7 +59,7 @@ vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
 			});
 	};
 	
-	if(typeof context == 'string') {//'context' object is skept.
+	if(typeof context == 'string') {//'context' object is not provided.
 		obj.imprt = context;
 	} else 
 	if(context) {
