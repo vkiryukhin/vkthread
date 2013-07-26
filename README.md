@@ -26,6 +26,8 @@ now, let's open a new thread and execute function sum() in this thread.
 >vkthread.exec(sum, [2,3], function(data){ var foo = data } );
 >
 
+See live examples at [http://eslinstructor.net/vkthread](http://eslinstructor.net/vkthread)
+
 vkThread is built on HTML5 "Worker" technology. It also incorporates [JSONfn](http://www.eslinstructor.net/jsonfn/) code to implement the key tasks.
 In spite of technical complexity, plugin is super compact. Development version (plain text with comments) is less than 2k. I don't care to minify it.
 
