@@ -1,0 +1,39 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Function with Context and Dependencies</div>
+<pre><code data-language="javascript">function Foobar(arr1,arr2){
+	this.arr1 = arr1;
+	this.arr2 = arr2;
+}
+Foobar.prototype.union = function(){
+	return _.union(this.arr1,this.arr2);
+}</code></pre>
+
+<input type="button" value="Run in Page" onclick="run_foobar()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+<pre><code data-language="javascript">function run_foobar(){
+	var myFoobar = new Foobar([1,2,3],[2,3,4]);
+	document.getElementById('demo_result').innerHTML = myFoobar.union();
+}
+</code></pre>
+	
+	<input type="button" value="Run in Thread" onclick="run_foobar_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+
+<pre><code data-language="javascript">function run_foobar_in_thread(){
+	var myFoobar = new Foobar([6,7,8],[7,8,9]);
+	vkthread.exec(myFoobar.union,[],function(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	},myFoobar,'../js/underscore-min.js');
+}
+</code></pre>
+
+
+
+<p>
+
+
+</td></tr></table>

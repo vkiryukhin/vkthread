@@ -49,7 +49,7 @@ function vkthread(){
 
 vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
 
-	var myWorker = new Worker(this.path),
+	var worker = new Worker(this.path),
 		obj = {fn:fn, args:args, cntx:false, imprt:false},
 		JSONfn = {};
 		
@@ -70,10 +70,15 @@ vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
 		obj.imprt = importFiles;
 	}
 	
-	myWorker.onmessage = function (oEvent) {
+	worker.onmessage = function (oEvent) {
 		cb(oEvent.data);
 	};
-	myWorker.postMessage(JSONfn.stringify(obj));
+	
+	worker.onerror = function(error) {
+      dump("Worker error: " + error.message + "\n");
+      throw error;
+    };
+	worker.postMessage(JSONfn.stringify(obj));
 	
 };
 

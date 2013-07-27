@@ -98,6 +98,25 @@ function run_anonim_in_thread(){
 	);
 }
 //----------------------------------------------------//
+function greetLambda(param) {
+	var displayMessage = (function(msg1){  
+		return function(msg2){  
+			return msg1 + msg2;
+	   }     
+	}(param));
+	return displayMessage("Lambda World!");
+}
+
+function run_greetLambda(){
+	document.getElementById('demo_result').innerHTML = greetLambda('Hello, ');
+}
+
+function run_greetLambda_in_thread(){
+	vkthread.exec(greetLambda, ['Hello, '], function(data){ 
+		document.getElementById('demo_result_thread').innerHTML = data;
+	});
+}
+//----------------------------------------------------//
 function loadTemplate(name)
 {
 	switch(name) {
@@ -130,6 +149,11 @@ function loadTemplate(name)
 		case 'anonym':
 			$('#leftpanel').hide();
 			$('#rightpanel').empty().load('html/anonymous.html',function(){Rainbow.color();});
+			break;
+			
+		case 'lambda':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/lambda.html',function(){Rainbow.color();});
 			break;
 		
 		case 'doc':

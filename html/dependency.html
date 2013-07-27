@@ -1,0 +1,34 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Function with Dependencies</div>
+<pre><code data-language="javascript">//function "_.union()" belongs to "Underscore" library.
+function bar(arr1,arr2){
+	return _.union(arr1,arr2);
+}</code></pre>
+
+<input type="button" value="Run in Page" onclick="run_bar()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+<pre><code data-language="javascript">function run_bar(){
+	document.getElementById('demo_result').innerHTML = bar([1,2,3],[2,3,4]);
+}
+</code></pre>
+	
+	<input type="button" value="Run in Thread" onclick="run_bar_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+
+<pre><code data-language="javascript">function run_bar_in_thread(){
+	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	}, '../js/underscore-min.js');
+}
+</code></pre>
+
+
+
+<p>
+
+
+</td></tr></table>

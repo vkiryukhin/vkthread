@@ -1,0 +1,37 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Standalone Function</div>
+<pre><code data-language="javascript">function foo(str) {
+	var ret, ix;
+	for(ix=0;ix<7e6;ix++){
+		ret = str.split(',').join('-');
+	}
+	return ret;
+}</code></pre>
+
+<input type="button" value="Run in Page" onclick="run_foo()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+<pre><code data-language="javascript">function run_foo(){
+	document.getElementById('demo_result').innerHTML = foo('a,b,c');
+}
+</code></pre>
+	
+	<input type="button" value="Run in Thread" onclick="run_foo_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+
+<pre><code data-language="javascript">function run_foo_in_thread(){
+	vkthread.exec(foo,['x,y,z'], function(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	});
+}
+</code></pre>
+
+
+
+<p>
+
+
+</td></tr></table>

@@ -1,0 +1,39 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Lambda Function</div>
+<br/>
+<pre><code data-language="javascript">function greetLambda(param) {
+	var displayMessage = (function(msg1){  
+		return function(msg2){  
+			return msg1 + msg2;
+	   }     
+	}(param));
+	return displayMessage("Lambda World!");
+}</code></pre>
+
+
+
+<input type="button" value="Run in Page" onclick="run_greetLambda()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+<pre><code data-language="javascript">document.getElementById('demo_result').innerHTML = greetLambda('Hello, ');
+</code></pre>
+	
+	<input type="button" value="Run in Thread" onclick="run_greetLambda_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+
+<pre><code data-language="javascript">function run_greetLambda_in_thread(){
+	vkthread.exec(greetLambda, ['Hello, '], function(data){ 
+		document.getElementById('demo_result_thread').innerHTML = data;
+	});
+}
+</code></pre>
+
+
+
+<p>
+
+
+</td></tr></table>

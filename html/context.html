@@ -1,0 +1,45 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Function with Context</div>
+<pre><code data-language="javascript">function Demo(str, max){
+	this.str = str;
+	this.max = max;
+}
+Demo.prototype.foo = function(){
+	var ret, ix;
+	for(ix=0;ix&lt;this.max;ix++){
+		ret = this.str.split(',').join('-');
+	}
+	return ret;
+};</code></pre>
+
+<input type="button" value="Run in Page" onclick="run_demo()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+<pre><code data-language="javascript">function run_demo(){
+	var myDemo = new Demo('aaa,bbb,ccc',7e6);
+	document.getElementById('demo_result').innerHTML = myDemo.foo();
+}
+</code></pre>
+	
+	<input type="button" value="Run in Thread" onclick="run_demo_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+
+<pre><code data-language="javascript">//Context (myDemo) is passed as the forth argument.
+//function Demo.foo() doesn't accept arguments, so we pass an empty array.
+function run_demo_in_thread(){
+	var myDemo = new Demo('xxx,yyy,zzz',7e6);
+	vkthread.exec(myDemo.foo,[], function(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	},myDemo);
+}
+</code></pre>
+
+
+
+<p>
+
+
+</td></tr></table>
