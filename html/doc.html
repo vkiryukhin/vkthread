@@ -7,7 +7,7 @@
 <div class="h6">Documentation</div>
 <ul>
 	<li>
-	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread.js"&gt;&lt;/script&gt;</code></pre></li>
+	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre></li>
 	<li>
 	<b>Configuration</b> ( optional )<br/><br/>
 	vkthread plugin consist of 2 files: vkthread.js and worker.js, which are located in the same folder. Plugin needs to know path to <b>worker.js</b>. At construction time plugin figures it out automatically.
@@ -50,7 +50,7 @@ vkthread.exec(foo, [2,3], function(data){alert(data)} );</code></pre>
 	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
 Foo.prototype.bar = function(){return this.n + this.m};
 	
-var myFoo = new Foo(2,3);<br/>
+var myFoo = new Foo(2,3);
 	
 vkthread.exec(myFoo.bar, [], function(data){...}, myFoo );</code></pre>
 	</li>
@@ -61,7 +61,7 @@ vkthread.exec(myFoo.bar, [], function(data){...}, myFoo );</code></pre>
 	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
 Foo.prototype.bar = function(){return _.union(this.n + this.m) };
 	
-var myFoo = new Foo([1,2],[2,3]);<br/>	
+var myFoo = new Foo([1,2],[2,3]);	
 vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, ['js/underscore.js'] );</code></pre>
 
 If context is omitted, it is set at the 4-th position.
