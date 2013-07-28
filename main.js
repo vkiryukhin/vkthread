@@ -62,7 +62,7 @@ function run_bar(){
 function run_bar_in_thread(){
 	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
-	}, '../js/underscore-min.js');
+	}, ['../js/underscore-min.js']);
 }
 //----------------------------------------------------//
 function Foobar(arr1,arr2){
@@ -80,7 +80,7 @@ function run_foobar_in_thread(){
 	var myFoobar = new Foobar([6,7,8],[7,8,9]);
 	vkthread.exec(myFoobar.union,[],function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
-	},myFoobar,'../js/underscore-min.js');
+	},myFoobar,['../js/underscore-min.js']);
 }
 //----------------------------------------------------//
 function run_anonim(){
@@ -94,7 +94,7 @@ function run_anonim_in_thread(){
 			function(data){
 				document.getElementById('demo_result_thread').innerHTML = data;
 			}, 
-			'../js/underscore-min.js'
+			['../js/underscore-min.js']
 	);
 }
 //----------------------------------------------------//

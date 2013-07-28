@@ -16,19 +16,16 @@ if (!JSONfn) {
 	};
 }());
 
-self.onmessage = function(e) {
+onmessage = function(e) {
 
 	var obj = JSONfn.parse(e.data),
 		cntx = obj.cntx ? obj.cntx : self;
 	
 	if(obj.imprt){
-		importScripts(obj.imprt); 
+		importScripts.apply(null,obj.imprt);
 	}
-
-	postMessage(obj.fn.apply(cntx,obj.args));
-
-	self.close();
 	
+	postMessage(obj.fn.apply(cntx,obj.args));
 };
 
 

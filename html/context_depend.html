@@ -27,7 +27,7 @@ Foobar.prototype.union = function(){
 	var myFoobar = new Foobar([6,7,8],[7,8,9]);
 	vkthread.exec(myFoobar.union,[],function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
-	},myFoobar,'../js/underscore-min.js');
+	},myFoobar,['../js/underscore-min.js']);
 }
 </code></pre>
 

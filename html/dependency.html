@@ -22,7 +22,7 @@ function bar(arr1,arr2){
 <pre><code data-language="javascript">function run_bar_in_thread(){
 	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
-	}, '../js/underscore-min.js');
+	}, ['../js/underscore-min.js']);
 }
 </code></pre>
 

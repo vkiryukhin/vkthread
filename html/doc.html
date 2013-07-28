@@ -55,19 +55,21 @@ var myFoo = new Foo(2,3);<br/>
 vkthread.exec(myFoo.bar, [], function(data){...}, myFoo );</code></pre>
 	</li>
 	
-	<li><span class="color_blue_bold">dependencies</span> - String; comma-separated list of files, this function depends on.
+	<li><span class="color_blue_bold">dependencies</span> - Array of strings; list of files, which this function depends on.
 	<br/> <span class="color_green">optional</span> <br/><br/>
 	
 	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
 Foo.prototype.bar = function(){return _.union(this.n + this.m) };
 	
 var myFoo = new Foo([1,2],[2,3]);<br/>	
-vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, 'js/underscore.js' );</code></pre>
+vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, ['js/underscore.js'] );</code></pre>
 
 If context is omitted, it is set at the 4-th position.
 <pre><code data-language="javascript">function bar(arr1,arr2){ return _.union(arr1,arr2) }
 
-vkthread.exec(bar, [ [1,2],[1,3] ], function(data){...}, 'js/underscore.js' );
+vkthread.exec(bar, [ [1,2],[1,3] ], 
+		function(data){...}, 
+		['js/underscore.js','js/lib/helper.js'] );
 </code></pre>
 	</li>
 	
@@ -77,64 +79,4 @@ vkthread.exec(bar, [ [1,2],[1,3] ], function(data){...}, 'js/underscore.js' );
 	</li>
 </ul>
 
-<!--p>
-	<ul>
-	<li> <div style="background-color:#e0e0ff; padding-left:0.5em;height:1.5em;"><b>javascript version</b></div>
-		<ul> 
-			<li><code>&lt;script type="text/javascript" src="jsonfn.js"&gt;&lt;/script&gt;</code>
-			<li>No configuration is needed</li>
-			<li>Plugin uses native JSON object, which is implemented in most modern browsers. It's tested in <span style="color:green;"><b>Firefox, Chrome, Opera, IE9</span></b>. It doesnt work in <span style="color:red;">IE8</span>.
-			</li>
-
-			<li>Usage:
-				<ul>
-					<li><b>Stringify</b> <br/>
-						<div><code>var str = JSONfn.stringify(obj);</code></div>
-						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@obj</code>   - javascript object;</div>
-						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - string;</div>
-
-					</li>
-				</ul>
-
-				<ul>
-					<li><b>Parse</b> <br/>
-					<div><code>var obj = JSONfn.parse(str);</code></div>
-							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@str</code>   - string;</div>
-							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - object;</div>
-					
-					</li>
-				</ul>
-
-			</li>
-		</ul>
-	</li>
-	<li>
-	<div style="background-color:#e0ffff;padding-left:0.5em;height:1.5em;"><b>Node.js version:</b></div>
-	<ul>
-	<li> download: <code>npm install jsonfn</code> </li>
-
-<li>code: <code><a href="https://github.com/vkiryukhin/jsonfn-node" target="_blank" title="go to https://github.com/vkiryukhin/jsonfn">https://github.com/vkiryukhin/jsonfn-node</a> </code> </li>
-		<li>Usage:
-			<ul>
-			
-					<li><b>Stringify</b> <br/>
-						<div><code>var strfn = require('jsonfn').JSONfn.stringify(obj);</code></div>
-						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@obj</code>   - javascript object;</div>
-						<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - string;</div>
-
-					</li>
-				</ul>
-				<ul>
-					<li><b>Parse</b> <br/>
-					<div><code>var objfn = require('jsonfn').JSONfn.parse(strfn);</code></div>
-							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@str</code>   - string;</div>
-							<div>&nbsp;&nbsp;&nbsp;&nbsp;<code>@return</code> - object;</div>
-					
-					</li>
-				</ul>
-			</li>
-	</ul>
-</li>
-</ul>
-</p-->
 </div>
