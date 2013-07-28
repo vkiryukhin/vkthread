@@ -1,5 +1,6 @@
 /**
- * worker.js - component of vkThread plugin.  
+ * worker.js - component of vkThread plugin. 
+ * Copyright (c) 2013 Vadim Kiryukhin ( vkiryukhin @ gmail.com ) 
  */
 
 var JSONfn;

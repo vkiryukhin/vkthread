@@ -66,7 +66,6 @@ vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
     };
 	
 	worker.postMessage(JSONfn.stringify(obj));
-	
 };
 
 /* 
