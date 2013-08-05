@@ -24,7 +24,7 @@ a:visited {color:black;}
 
 #menu { 	width:20%;	float:left; margin:3px;	border:0px solid blue; background:#E8E8FF; padding:1%}
 #menu ul li { cursor:pointer; margin-bottom:1em;}
-#menu ul li:hover {color:#ff0000;}
+#menu ul li ul li:hover {color:#ff0000;}
 
 #content { width:70%; float:left; min-height:20px; border:0px solid black; }
 

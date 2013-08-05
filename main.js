@@ -117,6 +117,54 @@ function run_greetLambda_in_thread(){
 	});
 }
 //----------------------------------------------------//
+function dummySum(start,end){
+	var sum =0,
+		ix,
+		dummy = 'a,b,c';
+		
+	for(var ix=start; ix<end; ix++){
+		dummy.split(',').join('-');
+		sum = sum+ix;
+	}
+	return sum;
+} 
+
+function run_dummySum(){
+
+	vkthread.run(dummySum, [0,7e6])
+			.then(function (data) {
+				document.getElementById('demo_result')
+						.innerHTML = data;
+			})
+}
+
+function run_dummySum_time(){
+
+	var d1= +(new Date()),
+		timeSpan;
+		
+	vkthread.run(dummySum, [0,7e6])
+			.then(function (data) {
+				timeSpan = (+(new Date())-d1)/1000;
+				document.getElementById('demo_result')
+						.innerHTML = data + ' -- spent ' + timeSpan + ' sec';
+			})
+}
+
+function runAll_dummySum(){
+
+	var d1= +(new Date()),
+		timeSpan;
+		
+	vkthread.runAll([ [dummySum, [0,  3e6]], 
+					  [dummySum, [3e6,7e6]] ]
+					).then(function (data) {
+				timeSpan = (+(new Date())-d1)/1000;
+				document.getElementById('demo_result_thread')
+					    .innerHTML = data[0]+data[1] + ' : ' + timeSpan + ' sec';
+				})
+}
+//----------------------------------------------------//
 function loadTemplate(name)
 {
 	switch(name) {
@@ -154,6 +202,11 @@ function loadTemplate(name)
 		case 'lambda':
 			$('#leftpanel').hide();
 			$('#rightpanel').empty().load('html/lambda.html',function(){Rainbow.color();});
+			break;
+			
+		case 'run':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/run.html',function(){Rainbow.color();});
 			break;
 		
 		case 'doc':

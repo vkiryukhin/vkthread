@@ -1,28 +1,62 @@
 /**
- * vkThread - javascript plugin to execute javascript function in a thread.  
- *
+ * vkThread - javascript plugin to execute javascript function(s) in a thread.  
  * http://www.eslinstructor.net/vkthread/
  *
- * Version - 0.30.00.beta; 07/2013
+ * @version: 0.40.00.beta; 07/2013
  *
- * Copyright (c) 2013 Vadim Kiryukhin ( vkiryukhin @ gmail.com )
- * 
- * Licensed under the MIT license.
+ * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
+ * Copyright (c) 2013 Vadim Kiryukhin 
+ *
+ * Licensed under the MIT License.
  */
-
+ 
 (function(){
 
-function vkthread(){
+/**
+* JSONfn - javascript plugin to stringify/parse objects with function(s)
+*          http://www.eslinstructor.net/jsonfn/
+*/
 
-	/* Set a path to the "worker.js" file, which should be 
+var JSONfn;
+if (!JSONfn) {
+    JSONfn = {};
+}
+
+(function () {
+
+	JSONfn.stringify = function(obj) {
+		return JSON.stringify(obj,function(key, value){
+				return (typeof value === 'function' ) ? value.toString() : value;
+			});
+	};
+
+	JSONfn.parse = function(str) {
+		return JSON.parse(str,function(key, value){
+			if(typeof value != 'string') {
+				return value;
+			}
+			return ( value.substring(0,8) === 'function') ? eval('('+value+')') : value;
+		});
+	};
+}()); 
+
+
+function Vkthread(){
+
+	/* 
+	 * Set a path to the "worker.js" file, which should be 
 	 * located in the same folder with vkthread.js (this one). 
 	 * User also can provide the path directly with vkthread.setPath() method. 
 	 */
 	var err;
-	try { throw new Error()} 
-	catch(e){ err = e.stack}
+	try { 
+		throw new Error();
+	} 
+	catch(e){ 
+		err = e.stack;
+	}
 	
-	if (typeof err == 'undefined') {
+	if (err === 'undefined') {
 		this.path = '';
 	} else {
 		this.path = 'http'+ err.split('http')[1].split('vkthread.js').slice(0,-1) + 'worker.js';
@@ -30,20 +64,15 @@ function vkthread(){
 }
 
 /*
- * API function to execute a user's function in a new thread
+ * API function to open a new thread and execute a user's function in the thread. 
+ * Process the result in a callback function, provided by user.
  */
-vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
+ 
+ Vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
 
 	var worker = new Worker(this.path),
-		obj = {fn:fn, args:args, cntx:false, imprt:false},
-		JSONfn = {};
-		
-	JSONfn.stringify = function(obj) {
-		return JSON.stringify(obj,function(key, value){
-				return (typeof value === 'function' ) ? value.toString() : value;
-			});
-	};
-	
+		obj = {fn:fn, args:args, cntx:false, imprt:false};
+
 	if(Array.isArray(context)) {//'context' object is not provided.
 		obj.imprt = context;
 	} else 
@@ -61,24 +90,77 @@ vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
 	};
 	
 	worker.onerror = function(error) {
-      console.error("Worker error: " + error.message);
+ 	  cb(null, error.message);
 	  worker.terminate();
     };
 	
 	worker.postMessage(JSONfn.stringify(obj));
 };
 
-/* 
- * API function to set a path to worker.js. 
- * It overwrites default setting.
+/*
+ * API function to open a new threade and xecute a user's function 
+ * in the thread. Returns deferred object.
  */
-vkthread.prototype.setPath = function(path){ 
-	this.path = path
+ 
+Vkthread.prototype.run = function(fn, args,  context, importFiles){
+	
+	var dfr = when.defer(),
+		worker = new Worker(this.path),
+		obj = {fn:fn, args:args, cntx:false, imprt:false};
+
+	if(Array.isArray(context)) {
+		//'context' object is not provided.//
+		obj.imprt = context;
+	} else 
+	if(context) {
+		obj.cntx = context;
+	}
+	
+	if(importFiles) {
+		obj.imprt = importFiles;
+	}
+	
+	worker.onmessage = function (oEvent) {
+		dfr.resolve(oEvent.data);
+		worker.terminate();
+	};
+	
+	worker.onerror = function(error) {
+	  dfr.reject(new Error('Worker error: ' + error.message));
+	  worker.terminate();
+    };
+	
+	worker.postMessage(JSONfn.stringify(obj));
+	
+	return dfr.promise;
 };
 
-window.vkthread = new vkthread();
+/*
+ * API function to execute a multiple user's function 
+ * and return array of deferred objects
+ */
+Vkthread.prototype.runAll = function(args){
 
-})();
+	var dfrs = [],
+		len = args.length,
+		ix; 
+	
+	for(ix=0; ix<len; ix++){
+		dfrs.push( this.run.apply(this,args[ix]));
+	}
 
+	return when.all(dfrs);
+};
 
+/* 
+ * API function to set a path to worker.js 
+ * It overwrites default setting.
+ */
+Vkthread.prototype.setPath = function(path){ 
+	this.path = path;
+};
 
+window.vkthread = new Vkthread();
+
+}());
+ 

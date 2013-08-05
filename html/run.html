@@ -1,0 +1,34 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Promise-based API. &nbsp;&nbsp; Single Thread.</div>
+<pre><code data-language="javascript">function dummySum(start,end){
+	var sum = 0,
+	    ix,
+	    dummy = 'a,b,c';
+		
+	for(var ix=start; ix&lt;end; ix++){
+		dummy.split(',').join('-');
+		sum = sum+ix;
+	}
+	return sum;
+} </code></pre>
+
+<input type="button" value="Run in Thread" onclick="run_dummySum()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+<pre><code data-language="javascript">function run_dummySum(){
+
+vkthread.run(dummySum, [0,7e6])
+	.then(function (data) {
+		document.getElementById('demo_result').innerHTML = data;
+	})
+}
+</code></pre>
+
+
+
+
+<p>
+
+
+</td></tr></table>

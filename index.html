@@ -12,6 +12,9 @@
 
 <script src="js/jquery-1.9.1.min.js" type="text/javascript"></script>
 <script src="js/underscore-min.js" type="text/javascript"></script>
+
+<script src="vkthread/when-legacy-setup.js" type="text/javascript"></script>
+<script src="vkthread/when.js" type="text/javascript"></script>
 <script src="vkthread/vkthread.js" type="text/javascript"></script>
 
 <script src="js/rainbow/rainbow.min.js" type="text/javascript"></script>
@@ -51,13 +54,27 @@
 <div id="menu" >
 <div id="notsupported" style="color:red;font-weight:bold;"></div>
 	<ul>
-		<div><b>Examples</b></div><br/>
-		<li onclick="loadTemplate('function')">Regular Function</li>
-		<li onclick="loadTemplate('context')">Function with Context</li>
-		<li onclick="loadTemplate('dependency')">Function with Dependencies</li>
-		<li onclick="loadTemplate('cntx_depend')">Context + Dependencies</li>
-		<li onclick="loadTemplate('anonym')">Anonymous Function</li>
-		<li onclick="loadTemplate('lambda')">Lambda Function</li>
+		<li><b>Examples</b><br/><br/>
+			<ul>
+				<li onclick="loadTemplate('function')">Regular Function</li>
+				<li onclick="loadTemplate('context')">Function with Context</li>
+				<li onclick="loadTemplate('dependency')">Function with Dependencies</li>
+				<li onclick="loadTemplate('cntx_depend')">Context + Dependencies</li>
+				<li onclick="loadTemplate('anonym')">Anonymous Function</li>
+				<li onclick="loadTemplate('lambda')">Lambda Function</li>
+			</ul>
+		</li>
+		<li><b>Promise-based API</b><br/><br/>
+			<ul>
+				<li onclick="loadTemplate('run')">vkthread.run()</li>
+				<li onclick="loadTemplate('runAll')">vkthread.runAll()</li>
+			</ul>
+		</li>
+		<li><b>Multi-core Processing</b><br/><br/>
+			<ul>
+				<li onclick="loadTemplate('multiCoreDemo')">Demo</li>
+			</ul>
+		</li>
 	</ul>
 </div> <!-- /menu -->
 <!-- ================= right panel ======================= -->
