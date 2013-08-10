@@ -2,7 +2,7 @@
  * vkThread - javascript plugin to execute javascript function(s) in a thread.  
  * http://www.eslinstructor.net/vkthread/
  *
- * @version: 0.40.00.beta; 07/2013
+ * @version: 0.40.00.alpha; 08/2013
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  * Copyright (c) 2013 Vadim Kiryukhin 
@@ -98,7 +98,7 @@ function Vkthread(){
 };
 
 /*
- * API function to open a new threade and xecute a user's function 
+ * API function to open a new threade and execute a user's function 
  * in the thread. Returns deferred object.
  */
  
@@ -109,7 +109,7 @@ Vkthread.prototype.run = function(fn, args,  context, importFiles){
 		obj = {fn:fn, args:args, cntx:false, imprt:false};
 
 	if(Array.isArray(context)) {
-		//'context' object is not provided.//
+		/* "context" object is not provided.*/
 		obj.imprt = context;
 	} else 
 	if(context) {

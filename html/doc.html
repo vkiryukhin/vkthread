@@ -3,11 +3,19 @@
 #doc ul li {margin:0.5em;}
 #tab1 td {padding-right:15px;}
 </style>
+
 <div id="doc">
 <div class="h6">Documentation</div>
 <ul>
 	<li>
-	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre></li>
+	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+	If you prefer to use promise-style functions <b>vkthread.run()</b> and <b>vkthread.runAll()</b>, include reference to when() library above the reference to vkthread.js
+	
+	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/when-legacy-setup.js"&gt;&lt;/script&gt;</code>
+<code data-language="html">&lt;script type="text/javascript" src="vkthread/when.js"&gt;&lt;/script&gt;</code>
+<code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+	
+	</li>
 	<li>
 	<b>Configuration</b> ( optional )<br/><br/>
 	vkthread plugin consist of 2 files: vkthread.js and worker.js, which are located in the same folder. Plugin needs to know path to <b>worker.js</b>. At construction time plugin figures it out automatically.
@@ -15,9 +23,9 @@
 	<pre><code data-language="javascript">vkthread.setPath("vkthread/worker.js");</code></pre>
 	</li>
 	<li>
-	<b>Usage</b>
-
-	<pre><code data-language="javascript">vkthread.exec(fn,[arg1, ...], callback, context, dependents );</code></pre>
+	<b>API</b>
+<div id="accordion">
+	<h3><pre><code data-language="javascript">vkthread.exec(fn,args, callback[, context[, dependents]] );</code></pre></h3>
 	<ul>
 	<li><span class="color_blue_bold">fn</span> - function to execute in a thread <br/><span class="color_red">mandatory</span> <br/><br/>
 	<pre><code data-language="javascript">function foo();
@@ -28,7 +36,7 @@ Function can be anonymous:<br/>
 	</li>
 	
 	
-	<li><span class="color_blue_bold">[arg1, ...]</span> - Array of arguments, which you want to pass along with this function<br/> <span class="color_red">mandatory</span> <br/><br/>
+	<li><span class="color_blue_bold">args</span> - Array of arguments, which you want to pass along with this function<br/> <span class="color_red">mandatory</span> <br/><br/>
 	<pre><code data-language="javascript">function foo(m,n){return n+m};
 	
 vkthread.exec(foo, [2,3], . . . );</code></pre>
@@ -75,7 +83,67 @@ vkthread.exec(bar, [ [1,2],[1,3] ],
 	
 	
 	</ul>
-	</p>
+	
+	
+	
+<h3><pre><code data-language="javascript">vkthread.run(fn,args[, context[, dependents]] ).then(function(data){...});</code></pre>	</h3>
+	<ul>
+	<li> 
+		<div><span class="color_blue_bold">fn</span>  - same as in vkthread.exec()</div> 
+		<div><span class="color_blue_bold">args</span>  - same as in vkthread.exec() </div>
+		<div><span class="color_blue_bold">context</span>  - same as in vkthread.exec() </div> 
+		<div><span class="color_blue_bold">dependents</span>  - same as in vkthread.exec() </div>
+<br/>		
+There is no @callback argument. Returned data is processed in <span class="color_blue_bold">.then()</span> claster. It's passed as an argument to the <span class="color_blue_bold">then()</span> function
+<br/>
+<pre><code data-language="javascript">function sum(num1, num2){
+	return num1 + num2;
+}
+
+vkthread.run( [sum, [1, 2]] )
+	.then(function (data) {
+		console.log( data ); // print "3"
+	});
+</code></pre>
+
+	</li>
+	
+	</ul>
+	
+
+
+<h3><pre><code data-language="javascript">vkthread.runAll( [fn,args[, context[, dependents]] ], [...], ...  )
+	.then(function(data){...});</code></pre>	</h3>
+	<ul>
+	<li> <p>
+		Function <span class="color_blue_bold">vkthread.runAll()</span> is similar to <span class="color_blue_bold">vkthread.run()</span>, but let you to start simultaneous execution of multiple functions in parallel threads. It processes returned data when all threads finish their work.
+		
+		Function's argument is an array, each element of which is argument list (see <b>vkthread.run()</b> for details).</p>
+		
+<pre><code data-language="javascript">function sum(num1, num2){
+	return num1 + num2;
+}
+
+function mul(num1, num2){
+	return num1 * num2;
+}
+
+vkthread.runAll([ 
+	[sum, [1, 2]], 
+	[mul, [7, 8]] 
+]).then(function (data) {
+	console.log( data[1] - data[0]); // print "53"
+});
+</code></pre>
+	</li>
+	
+	</ul>	
+	
+	
+	
+	
+</div><!-- /accordion -->	
+
 	</li>
 </ul>
 

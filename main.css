@@ -6,7 +6,7 @@ font:12px Verdana, Arial, 'Helvetica', sans-serif;
 color: #222;
 background:#FFFFF0;}
 
-h1, h2, h3 {text-align:center; color:#000080;}
+h1, h2, h4 {text-align:center; color:#000080;}
 p {margin:10px; padding:5px;}
 /*code {color:#000080; font-weight:bold; font-size:110%; /*fint-style:italic;*/}*/
 pre {/*font-size:120%;*/ /*font-family: monospace;color:#000033; font-weight:bold;*/}
@@ -123,7 +123,7 @@ a:visited {color:black;}
 
 .span_demo_result{
 	background-color:#ffffe0; border:1px solid gray; display:inline-block;
-	width:15em;height:1.5em;padding-left:1em; margin-left:3em;
+	width:25em;height:1.5em;padding-left:1em; margin-left:3em;
 }
 
 

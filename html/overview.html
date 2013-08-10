@@ -18,10 +18,19 @@ Here is a basic example:
 In the main thread you execute it this way:
 <pre><code data-language="javascript">var foo = sum(2,3);</code></pre>
 
-Now, let's open a new thread and execute function sum(...) in this thread.
-<pre><code data-language="javascript">vkthread.exec(sum, [2,3], function(data){ var foo = data; })</code>	</pre></p>
+Now, let's open a new thread and execute function sum(...) in this thread. <br/><br/>
 
-<b>vkThread</b> is built on HTML5 "Worker" technology.  It also incorporates <a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"  title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a> code to implement key tasks. 
-Plugin is very compact. Development version (plain text with comments) is less than 2.5k. I don't care to minify it. 
+Callback style:
+<pre><code data-language="javascript">vkthread.exec(sum, [2,3], function(data){ var foo = data; });</code></pre>
+
+Promise style:
+<pre><code data-language="javascript">vkthread.run(sum, [2,3])
+	.then(function (data) { var foo = data; });</code>	</pre>
+
+
+</p>
+
+<b>vkThread</b> is built on HTML5 "Worker" technology.  It also incorporates <a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"  title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a> code to implement key tasks. To implement promise functionality I use <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a> library from <a href="http://cujojs.com/" target="_blank" class="color_blue">cujojs</a><br/><br/>
+Plugin is very compact. Development version (plain text with comments) is less than 2.5k. External "when()" library is optional.
 
 </td></tr></table>

@@ -120,9 +120,9 @@ function run_greetLambda_in_thread(){
 function dummySum(start,end){
 	var sum =0,
 		ix,
-		dummy = 'a,b,c';
+		dummy = 'a,b,c,d';
 		
-	for(var ix=start; ix<end; ix++){
+	for(ix=start; ix<end; ix++){
 		dummy.split(',').join('-');
 		sum = sum+ix;
 	}
@@ -131,7 +131,7 @@ function dummySum(start,end){
 
 function run_dummySum(){
 
-	vkthread.run(dummySum, [0,7e6])
+	vkthread.run(dummySum, [0,8e6])
 			.then(function (data) {
 				document.getElementById('demo_result')
 						.innerHTML = data;
@@ -140,26 +140,34 @@ function run_dummySum(){
 
 function run_dummySum_time(){
 
-	var d1= +(new Date()),
-		timeSpan;
+	var d1= +(new Date());
 		
-	vkthread.run(dummySum, [0,7e6])
+	vkthread.run(dummySum, [0,8e6])
 			.then(function (data) {
-				timeSpan = (+(new Date())-d1)/1000;
+				var timeSpan = (+(new Date())-d1)/1000;
 				document.getElementById('demo_result')
-						.innerHTML = data + ' -- spent ' + timeSpan + ' sec';
+						.innerHTML = data + ' : ' + timeSpan + ' sec';
 			})
 }
 
 function runAll_dummySum(){
 
-	var d1= +(new Date()),
-		timeSpan;
-		
-	vkthread.runAll([ [dummySum, [0,  3e6]], 
-					  [dummySum, [3e6,7e6]] ]
+	vkthread.runAll([ [dummySum, [0,  4e6]], 
+					  [dummySum, [4e6,8e6]] ]
 					).then(function (data) {
-				timeSpan = (+(new Date())-d1)/1000;
+				document.getElementById('demo_result')
+					    .innerHTML = data[0]+data[1];
+				})
+}
+
+function runAll_dummySum_time(){
+
+	var d1= +(new Date());
+		
+	vkthread.runAll([ [dummySum, [0,  4e6]], 
+					  [dummySum, [4e6,8e6]]]
+					).then(function (data) {
+				var timeSpan = (+(new Date())-d1)/1000;
 				document.getElementById('demo_result_thread')
 					    .innerHTML = data[0]+data[1] + ' : ' + timeSpan + ' sec';
 				})
@@ -209,9 +217,26 @@ function loadTemplate(name)
 			$('#rightpanel').empty().load('html/run.html',function(){Rainbow.color();});
 			break;
 		
+		case 'run_all':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/run_all.html',function(){Rainbow.color();});
+			break;
+		
+		case 'multicore_demo':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/multicore_demo.html',function(){Rainbow.color();});
+			break;
+		
 		case 'doc':
 			$('#leftpanel').hide();
-			$('#rightpanel').load('html/doc.html',function(){Rainbow.color();});
+			$('#rightpanel').load('html/doc.html',function(){
+								Rainbow.color();
+								$(function() {
+									$( "#accordion" ).accordion({collapsible: true,  
+																 active:false,
+																 heightStyle: "content"}); 
+								});
+							});
 			break;
 	
 		//case 'function':
