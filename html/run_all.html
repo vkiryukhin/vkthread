@@ -1,6 +1,12 @@
 <table style="text-align:justify;">
 <tr><td>
-<div class="h6">Promise-based API: &nbsp;&nbsp; Multiple Threads.</div>
+<div class="h6">Promise-based API</div> <div class="h6">Multiple Threads:&nbsp;&nbsp;&nbsp;vkthread.runAll()</div>
+
+<p>
+This function opens the door to implementation concept of  "parallel computing". You simply pass 2 or more functions as arguments to the <b>vkthread.runAll()</b>, that's all! On multi-core CPU this can significantly increase application performance  (see "Parallel Computing Demo" page for details.)
+</p>
+<p><i>It is Promise object, so you need to include when.js library (see Documentation for details)</i>
+</p>
 <pre><code data-language="javascript">function dummySum(start,end){
 	var sum = 0,
 	    ix,

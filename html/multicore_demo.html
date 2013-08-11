@@ -1,18 +1,26 @@
 <table style="text-align:justify;">
 <tr><td>
-<div class="h6">Multi-Core Processing</div>
-<p>This page demonstrates an advantage of multi-threading on multi-core CPU. The first example runs <b>dummySum()</b> function in a single thread. The second one divides this function in 2 tasks and runs a separate thread for each of them. At OS kernel level these threads are executed in 2 CPU cores simultaneously, which makes this application almost 2 times faster. <p> However, in javascript we don't have access to OS, so we can't guarantee, that browser forces OS to run threads on different cores; both threads can be run on the same core. In this case we won't see significant advantage. You can run this page in different browsers to compare performance and multicore feature. </p> 
-  
+<div class="h6">Multi-Threading</div>
+<p>Function <b>vkthread.runAll()</b> let you to  create multiple threads and execute task in these threads independently. In computer science it is known as "parallel computing". This technology significantly gain performance on multi-core CPU computers. </p>
+ <p>
+This page demonstrates an advantage of multi-threading on multi-core CPU. The first example runs dummySum() function in a single thread. The second one divides this function in 2 tasks and runs a separate thread for each of them. At OS kernel level these threads are executed in 2 CPU cores, which makes this application about 60%-70% faster. <br/>
+It doesn't make sense to create too many threads, as number of CPU cores is limited. The best case is: number of cpu cores is equal to number of threads.
+ </p> 
+ <p> 
+However, we can't 100% guarantee, that OS runs these threads on different cores ( it depends on browser and other stuff which is out of our control ), but there is a very good chance for this. 
+</p> 
 
 </p>
-<pre><code data-language="javascript">function dummySum(start,end){
-	var sum =0, ix, dummy = 'a,b,c';
-		
-	for(ix=start; ix&lt;end; ix++){
-		dummy.split(',').join('-');
-		sum = sum+ix;
-	}
-	return sum;
+<pre><code data-language="javascript">function run_dummySum(){
+
+	vkthread.run(dummySum, [0,8e6]).then(
+		function (data) {
+			document.getElementById('demo_result').innerHTML = data;
+		},
+		function(err) {
+			document.getElementById('demo_result').innerHTML = err;
+		}
+	)
 } </code></pre>
 
 <input type="button" value="Run in Page" onclick="run_dummySum_time()" />
@@ -22,12 +30,16 @@
 
 var d1= +(new Date());
 	
-vkthread.run(dummySum, [0,8e6])
-	.then(function (data) {
-		var timeSpan = (+(new Date())-d1)/1000;
-		document.getElementById('demo_result')
-			.innerHTML = data + ' : ' + timeSpan + ' sec';
-	})
+	vkthread.run(dummySum, [0,8e6]).then(
+		function (data) {
+			var timeSpan = (+(new Date())-d1)/1000;
+			document.getElementById('demo_result')
+				.innerHTML = data + ' : ' + timeSpan + ' sec';
+		},
+		function(err) {
+			document.getElementById('demo_result').innerHTML = err;
+		}
+	)
 }
 </code></pre>
 	
@@ -38,17 +50,20 @@ vkthread.run(dummySum, [0,8e6])
 
 <pre><code data-language="javascript">function runAll_dummySum_time(){
 
-var d1= +(new Date());
+	var d1= +(new Date());
 	
-vkthread.runAll([ 
-		  [dummySum, [0, 4e6]], 
-		  [dummySum, [4e6, 8e6]] 
-		]).then(function (data) {
+	vkthread.runAll([ [dummySum, [0,  4e6]], 
+			  [dummySum, [4e6,8e6]]]).then(
+		function (data) {
 			var timeSpan = (+(new Date())-d1)/1000;
 			document.getElementById('demo_result_thread')
 				.innerHTML = data[0]+data[1] + ' : ' + timeSpan + ' sec';
-		})
-	}
+		},
+		function(err) {
+			document.getElementById('demo_result_thread').innerHTML = err;
+		}
+	)
+}
 </code></pre>
 
 

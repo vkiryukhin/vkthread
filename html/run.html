@@ -1,6 +1,9 @@
 <table style="text-align:justify;">
 <tr><td>
-<div class="h6">Promise-based API. &nbsp;&nbsp; Single Thread.</div>
+<div class="h6">Promise-based API</div> <div class="h6">Single Thread:&nbsp;vkthread.run()</div>
+<p>
+If you prefer to use Promise object, go ahead and use it. To provide Promise functionality I use <a href="https://github.com/cujojs/when" target="_blank" >when.js</a> library. "Documentation" section of this manual shows how to include this library.
+</p>
 <pre><code data-language="javascript">function dummySum(start,end){
 	var sum = 0,
 	    ix,
@@ -18,10 +21,14 @@
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
 <pre><code data-language="javascript">function run_dummySum(){
 
-vkthread.run(dummySum, [0,7e6])
-	.then(function (data) {
-		document.getElementById('demo_result').innerHTML = data;
-	})
+	vkthread.run(dummySum, [0,8e6]).then(
+		function (data) {
+			document.getElementById('demo_result').innerHTML = data;
+		},
+		function(err) {
+			document.getElementById('demo_result').innerHTML = err;
+		}
+	)
 }
 </code></pre>
 

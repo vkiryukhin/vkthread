@@ -13,7 +13,7 @@ $(document).ready(function()
 
 function foo(str) {
 	var ret, ix;
-	for(ix=0;ix<10e6;ix++){
+	for(ix=0;ix<1e7;ix++){
 		ret = str.split(',').join('-');
 	}
 	return ret;
@@ -131,11 +131,16 @@ function dummySum(start,end){
 
 function run_dummySum(){
 
-	vkthread.run(dummySum, [0,8e6])
-			.then(function (data) {
-				document.getElementById('demo_result')
-						.innerHTML = data;
-			})
+	vkthread.run(dummySum, [0,8e6]).then(
+		function (data) {
+			document.getElementById('demo_result')
+					.innerHTML = data;
+		},
+		function(err) {
+			document.getElementById('demo_result')
+					.innerHTML = err;
+		}
+	)
 }
 
 function run_dummySum_time(){
@@ -143,21 +148,30 @@ function run_dummySum_time(){
 	var d1= +(new Date());
 		
 	vkthread.run(dummySum, [0,8e6])
-			.then(function (data) {
-				var timeSpan = (+(new Date())-d1)/1000;
-				document.getElementById('demo_result')
-						.innerHTML = data + ' : ' + timeSpan + ' sec';
-			})
+			.then(
+				function (data) {
+					var timeSpan = (+(new Date())-d1)/1000;
+					document.getElementById('demo_result')
+							.innerHTML = data + ' : ' + timeSpan + ' sec';
+				},
+				function(err) {
+					document.getElementById('demo_result').innerHTML = err;
+				}
+			)
 }
 
 function runAll_dummySum(){
 
 	vkthread.runAll([ [dummySum, [0,  4e6]], 
-					  [dummySum, [4e6,8e6]] ]
-					).then(function (data) {
-				document.getElementById('demo_result')
-					    .innerHTML = data[0]+data[1];
-				})
+					  [dummySum, [4e6,8e6]] ])
+			.then(
+				function (data) {
+					document.getElementById('demo_result').innerHTML = data[0]+data[1];
+				},
+				function(err) {
+					document.getElementById('demo_result').innerHTML = err;
+				}
+			)
 }
 
 function runAll_dummySum_time(){
@@ -165,12 +179,17 @@ function runAll_dummySum_time(){
 	var d1= +(new Date());
 		
 	vkthread.runAll([ [dummySum, [0,  4e6]], 
-					  [dummySum, [4e6,8e6]]]
-					).then(function (data) {
-				var timeSpan = (+(new Date())-d1)/1000;
-				document.getElementById('demo_result_thread')
-					    .innerHTML = data[0]+data[1] + ' : ' + timeSpan + ' sec';
-				})
+					  [dummySum, [4e6,8e6]]])
+		    .then(
+				function (data) {
+					var timeSpan = (+(new Date())-d1)/1000;
+					document.getElementById('demo_result_thread')
+							.innerHTML = data[0]+data[1] + ' : ' + timeSpan + ' sec';
+				},
+				function(err) {
+					document.getElementById('demo_result_thread').innerHTML = err;
+				}
+			)
 }
 //----------------------------------------------------//
 function loadTemplate(name)
