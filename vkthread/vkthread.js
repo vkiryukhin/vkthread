@@ -2,7 +2,7 @@
  * vkThread - javascript plugin to execute javascript function(s) in a thread.  
  * http://www.eslinstructor.net/vkthread/
  *
- * @version: 0.41.00.alpha; 08/2013
+ * @version: 0.51.00.alpha; ( December 2013 )
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  * Copyright (c) 2013 Vadim Kiryukhin 
@@ -101,7 +101,66 @@ function Vkthread(){
  * API function to open a new threade and execute a user's function 
  * in the thread. Returns deferred object.
  */
+ Vkthread.prototype.run = function(fn, args,  context, importFiles){
+	
+	//var dfr = when.defer(),
+	var dfr = $.Deferred(),
+		worker = new Worker(this.path),
+		obj = {fn:fn, args:args, cntx:false, imprt:false};
+
+	if(Array.isArray(context)) {
+		// "context" object is not provided. //
+		obj.imprt = context;
+	} else 
+	if(context) {
+		obj.cntx = context;
+	}
+	
+	if(importFiles) {
+		obj.imprt = importFiles;
+	}
+	
+	worker.onmessage = function (oEvent) {
+		dfr.resolve(oEvent.data);
+		worker.terminate();
+	};
+	
+	worker.onerror = function(error) {
+	  dfr.reject(new Error('Worker error: ' + error.message));
+	  worker.terminate();
+    };
+	
+	worker.postMessage(JSONfn.stringify(obj));
+	
+	//return dfr.promise;
+	return dfr;
+};
+
+/*
+ * API function to execute a multiple user's function 
+ * and return array of deferred objects
+ */
+Vkthread.prototype.runAll = function(args){
+
+	var dfrs = [],
+		len = args.length,
+		ix; 
+	
+	for(ix=0; ix<len; ix++){
+		dfrs.push( this.run.apply(this,args[ix]));
+	}
+
+	//return when.all(dfrs);
+	return $.when.apply($,dfrs).then(function(){return arguments});
+};
  
+
+//=============================================================================//
+/*
+ * API function to open a new threade and execute a user's function 
+ * in the thread. Returns deferred object.
+ */
+/*
 Vkthread.prototype.run = function(fn, args,  context, importFiles){
 	
 	var dfr = when.defer(),
@@ -109,7 +168,7 @@ Vkthread.prototype.run = function(fn, args,  context, importFiles){
 		obj = {fn:fn, args:args, cntx:false, imprt:false};
 
 	if(Array.isArray(context)) {
-		/* "context" object is not provided.*/
+		// "context" object is not provided.//
 		obj.imprt = context;
 	} else 
 	if(context) {
@@ -134,11 +193,13 @@ Vkthread.prototype.run = function(fn, args,  context, importFiles){
 	
 	return dfr.promise;
 };
-
+*/
+//=============================================================================//
 /*
  * API function to execute a multiple user's function 
  * and return array of deferred objects
  */
+/*
 Vkthread.prototype.runAll = function(args){
 
 	var dfrs = [],
@@ -151,6 +212,7 @@ Vkthread.prototype.runAll = function(args){
 
 	return when.all(dfrs);
 };
+*/
 
 /* 
  * API function to set a path to worker.js 
