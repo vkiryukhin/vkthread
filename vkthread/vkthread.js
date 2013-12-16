@@ -150,7 +150,6 @@ Vkthread.prototype.runAll = function(args){
 		dfrs.push( this.run.apply(this,args[ix]));
 	}
 
-	//return when.all(dfrs);
 	return $.when.apply($,dfrs).then(function(){return arguments});
 };
  
