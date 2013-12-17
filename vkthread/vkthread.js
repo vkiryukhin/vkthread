@@ -2,21 +2,23 @@
  * vkThread - javascript plugin to execute javascript function(s) in a thread.  
  * http://www.eslinstructor.net/vkthread/
  *
- * @version: 0.51.00.alpha; ( December 2013 )
+ * @version: 0.51.00 ( December 2013 )
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  * Copyright (c) 2013 Vadim Kiryukhin 
  *
  * Licensed under the MIT License.
+ *
+ * Function vkthread.exec() can be used with no dependancies;
+ * Promise-style functions vkthread.run() and vkthread.runAll() require jQuery library.
  */
- 
-
  
 (function(){
 "use strict";
+
 /**
  *   JSONfn - plugin to stringify/parse javascript objects with functions.
- *   Description and live demo:  http://www.eslinstructor.net/jsonfn/  
+ *   http://www.eslinstructor.net/jsonfn/  
  */
 
 var JSONfn;
@@ -65,15 +67,7 @@ function Vkthread(){
 	}
 }
 
-/*
- * API function to open a new thread and execute a user's function in the thread. 
- * Process the result in a callback function, provided by user.
- */
- 
- Vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
-
-	var worker = new Worker(this.path),
-		obj = {fn:fn, args:args, cntx:false, imprt:false};
+function _buildObj(obj, fn, args, context, importFiles){
 
 	if(Array.isArray(context)) {//'context' object is not provided.
 		obj.imprt = context;
@@ -85,6 +79,28 @@ function Vkthread(){
 	if(importFiles) {
 		obj.imprt = importFiles;
 	}
+}
+
+/*
+ * Callback-style API function ( no dependency on libraries )
+ *
+ *   Execute function in the thread and process result in callback function.
+ *
+ *   @fn          - Function;  function to open in a thread;
+ *   @args        - Array;     array of arguments for @fn;
+ *   @cb          - Function;  callback function to process returned data;
+ *	 @context     - Object;    object which will be 'this' for @fn.
+ *   @importFiles - Array of Strings;  list of files (with path), which @fn depends on. 
+ */
+ 
+ Vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
+
+ /* no dependency  */
+ 
+	var worker = new Worker(this.path),
+		obj = {fn:fn, args:args, cntx:false, imprt:false};
+		
+	_buildObj(obj, fn, args, context, importFiles);
 	
 	worker.onmessage = function (oEvent) {
 		cb(oEvent.data);
@@ -100,27 +116,24 @@ function Vkthread(){
 };
 
 /*
- * API function to open a new threade and execute a user's function 
- * in the thread. Returns deferred object.
+ *   Promise-style API function ( depends on jQuery )
+ * 
+ *   Execute a single function in a thread. 
+ *
+ *   @fn          - Function;  function to execute in a thread;
+ *   @args        - Array;     array of arguments for @fn;
+ *	 @context     - Object;    object which will be 'this' for @fn.
+ *   @importFiles - Array of Strings;  list of files (with path), which @fn depends on. 
  */
  Vkthread.prototype.run = function(fn, args,  context, importFiles){
 
+ /* depends on jQuery  */
+ 
 	var dfr = $.Deferred(),
 		worker = new Worker(this.path),
 		obj = {fn:fn, args:args, cntx:false, imprt:false};
-		
-console.log(typeof window.when);
-
-	if(Array.isArray(context)) {//'context' object is not provided.
-		obj.imprt = context;
-	} else 
-	if(context) {
-		obj.cntx = context;
-	}
 	
-	if(importFiles) {
-		obj.imprt = importFiles;
-	}
+	_buildObj(obj, fn, args, context, importFiles)
 	
 	worker.onmessage = function (oEvent) {
 		dfr.resolve(oEvent.data);
@@ -138,10 +151,17 @@ console.log(typeof window.when);
 };
 
 /*
- * API function to execute a multiple user's function 
- * and return array of deferred objects
+ * Promise-style API function ( depends on jQuery )
+ * 
+ * Execute multiple functions in a thread(s).
+ *
+ *   @args - Array of Arrays;  In fact, vkthread.runAll() executes multiple vkthread.run(). 
+ *           So, we need to provide arguments for each of them. Each element of the array is 
+ *           array of arguments for correspondent vkthread.run() function.  
  */
 Vkthread.prototype.runAll = function(args){
+
+/* depends on jQuery  */
 
 	var dfrs = [],
 		len = args.length,
@@ -155,86 +175,10 @@ Vkthread.prototype.runAll = function(args){
 				function(){
 					return Array.prototype.slice.call(arguments)
 				});
-	
-	//return $.when.all(dfrs)
-
-/*	
-	return $.when.apply($,dfrs).then(
-				function(){
-					//deferred.resolve(Array.prototype.slice.call(arguments));
-					return Array.prototype.slice.call(arguments);
-				},
-				function() {
-					return "Error";
-				}
-			);
-*/
-
 };
- 
-
-//=============================================================================//
-/*
- * API function to open a new threade and execute a user's function 
- * in the thread. Returns deferred object.
- */
-/*
-Vkthread.prototype.run = function(fn, args,  context, importFiles){
-	
-	var dfr = when.defer(),
-		worker = new Worker(this.path),
-		obj = {fn:fn, args:args, cntx:false, imprt:false};
-
-	if(Array.isArray(context)) {
-		// "context" object is not provided.//
-		obj.imprt = context;
-	} else 
-	if(context) {
-		obj.cntx = context;
-	}
-	
-	if(importFiles) {
-		obj.imprt = importFiles;
-	}
-	
-	worker.onmessage = function (oEvent) {
-		dfr.resolve(oEvent.data);
-		worker.terminate();
-	};
-	
-	worker.onerror = function(error) {
-	  dfr.reject(new Error('Worker error: ' + error.message));
-	  worker.terminate();
-    };
-	
-	worker.postMessage(JSONfn.stringify(obj));
-	
-	return dfr.promise;
-};
-*/
-//=============================================================================//
-/*
- * API function to execute a multiple user's function 
- * and return array of deferred objects
- */
-/*
-Vkthread.prototype.runAll = function(args){
-
-	var dfrs = [],
-		len = args.length,
-		ix; 
-	
-	for(ix=0; ix<len; ix++){
-		dfrs.push( this.run.apply(this,args[ix]));
-	}
-
-	return when.all(dfrs);
-};
-*/
 
 /* 
- * API function to set a path to worker.js 
- * It overwrites default setting.
+ * API function to set a path to worker.js if needed. It overwrites default setting.
  */
 Vkthread.prototype.setPath = function(path){ 
 	this.path = path;
