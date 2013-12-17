@@ -10,12 +10,14 @@
  * Licensed under the MIT License.
  */
  
-(function(){
 
+ 
+(function(){
+"use strict";
 /**
-* JSONfn - javascript plugin to stringify/parse objects with function(s)
-*          http://www.eslinstructor.net/jsonfn/
-*/
+ *   JSONfn - plugin to stringify/parse javascript objects with functions.
+ *   Description and live demo:  http://www.eslinstructor.net/jsonfn/  
+ */
 
 var JSONfn;
 if (!JSONfn) {
@@ -40,20 +42,20 @@ if (!JSONfn) {
 	};
 }()); 
 
-
 function Vkthread(){
 
 	/* 
-	 * Set a path to the "worker.js" file, which should be 
-	 * located in the same folder with vkthread.js (this one). 
+	 * Set a path to the "worker.js" file, which should be located in the same 
+	 * folder with vkthread.js (this one). To find out the path We throw "Error" 
+	 * object and then parse it ( path is a part of the object.)
 	 * User also can provide the path directly with vkthread.setPath() method. 
 	 */
 	var err;
 	try { 
-		throw new Error();
+		throw new Error()	
 	} 
 	catch(e){ 
-		err = e.stack;
+		err = e.stack	
 	}
 	
 	if (err === 'undefined') {
@@ -102,14 +104,14 @@ function Vkthread(){
  * in the thread. Returns deferred object.
  */
  Vkthread.prototype.run = function(fn, args,  context, importFiles){
-	
-	//var dfr = when.defer(),
+
 	var dfr = $.Deferred(),
 		worker = new Worker(this.path),
 		obj = {fn:fn, args:args, cntx:false, imprt:false};
+		
+console.log(typeof window.when);
 
-	if(Array.isArray(context)) {
-		// "context" object is not provided. //
+	if(Array.isArray(context)) {//'context' object is not provided.
 		obj.imprt = context;
 	} else 
 	if(context) {
@@ -132,7 +134,6 @@ function Vkthread(){
 	
 	worker.postMessage(JSONfn.stringify(obj));
 	
-	//return dfr.promise;
 	return dfr;
 };
 
@@ -149,8 +150,26 @@ Vkthread.prototype.runAll = function(args){
 	for(ix=0; ix<len; ix++){
 		dfrs.push( this.run.apply(this,args[ix]));
 	}
+	
+	return $.when.apply($,dfrs).then(
+				function(){
+					return Array.prototype.slice.call(arguments)
+				});
+	
+	//return $.when.all(dfrs)
 
-	return $.when.apply($,dfrs).then(function(){return arguments});
+/*	
+	return $.when.apply($,dfrs).then(
+				function(){
+					//deferred.resolve(Array.prototype.slice.call(arguments));
+					return Array.prototype.slice.call(arguments);
+				},
+				function() {
+					return "Error";
+				}
+			);
+*/
+
 };
  
 
