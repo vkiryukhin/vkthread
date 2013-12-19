@@ -9,11 +9,20 @@
 <ul>
 	<li>
 	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
-	If you prefer to use promise-style functions <b>vkthread.run()</b> and <b>vkthread.runAll()</b>, include reference to when.js library above the reference to vkthread.js
-	
-	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/when-legacy-setup.js"&gt;&lt;/script&gt;</code>
-<code data-language="html">&lt;script type="text/javascript" src="vkthread/when.js"&gt;&lt;/script&gt;</code>
+	There is no dependency on external javascript library, if you prefer to use traditional "callback" coding style. 
+	Function <b>vkthread.exec()</b> uses only native javascript objects<br/><br/>
+	However, if you prefer to use promise-style functions <b>vkthread.run()</b> and <b>vkthread.runAll()</b>, which depend on external
+	library, you need to include reference to those library above the reference to vkthread.js. 
+	Master branch uses <a href="http://jquery.com/" target="_blank" class="color_blue">jQuery</a>  as the 
+	promise library.
+<br/><br/>	Another option is <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a>
+	from <a href="http://cujojs.com/" target="_blank" class="color_blue">cujojs</a>. 
+	Branch <a href="https://github.com/vkiryukhin/vkthread/tree/when" target="_blank" class="color_blue" >vkthread/when</a> 
+	on github is customized to work with this library.
+
+<pre><code data-language="html">&lt;script type="text/javascript" src="path/to/jquery-1.9.1.min.js"&gt;&lt;/script&gt;</code>
 <code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+
 	
 	</li>
 	<li>
