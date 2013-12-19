@@ -6,10 +6,11 @@
 <input type="button" value="Run in Page" onclick="run_anonim()" />
 	<span class="span_demo_result" id="demo_result"></span>  
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">document.getElementById('demo_result').innerHTML = 
-	(function(ar1,ar2){
+<pre><code data-language="javascript">var foo = (function(ar1,ar2){
 		return _.union(ar1,ar2);
 	})([1,2,3],[3,4,5]);
+	
+console.log(foo);
 </code></pre>
 	
 	<input type="button" value="Run in Thread" onclick="run_anonim_in_thread()" />
@@ -17,13 +18,24 @@
 	<span class="span_demo_result"  id="demo_result_thread"></span> 
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
-	[[7,8,9],[5,6,7]], //list of arguments
-	function(data){ // callback function
-		document.getElementById('demo_result_thread').innerHTML = data;
-	}, 
-	['../js/underscore-min.js']
-);
+<pre><code data-language="javascript">/* Callback style */
+vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
+		[[7,8,9],[5,6,7]], //list of arguments
+		function(data){ // callback function
+			var foo = data;
+			console.log(foo);
+		}, 
+		['../js/underscore-min.js'] 
+	);
+
+/* Promise style */	
+vkthread.run(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
+		[[7,8,9],[5,6,7]], //list of arguments
+		['../js/underscore-min.js'] 
+	).then(function(data){ 
+		var foo = data;
+		console.log(foo);
+	});
 </code></pre>
 
 

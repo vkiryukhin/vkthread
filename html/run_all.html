@@ -1,19 +1,27 @@
 <table style="text-align:justify;">
 <tr><td>
-<div class="h6">Promise-based API</div> <div class="h6">Multiple Threads:&nbsp;&nbsp;&nbsp;vkthread.runAll()</div>
-
+<div class="h6">Multi-Threading</div> 
 <p>
-This function opens the door to implementation concept of  "parallel computing". You simply pass 2 or more functions as arguments to the <b>vkthread.runAll()</b>, that's all! On multi-core CPU this can significantly increase application performance  (see "Parallel Computing Demo" page for details.)
+This function opens the door for implementation a concept of "parallel computing". <br/>
+Simply pass 2 or more functions as arguments to the <span class="color_blue_bold">vkthread.runAll()</span>. That's all! 
+Function <b>vkthread.runAll()</b> is similar to 
+		<b>vkthread.run()</b>, but let you to start simultaneous 
+		execution of multiple functions in parallel threads. 
+		On multi-core CPU this can significantly increase application performance.
+<br/>	
+		Function's argument is an array, each element of which is argument list 
+		(see vkthread.run() for details).
+
 </p>
-<p><i>It is Promise object, so you need to include when.js library (see Documentation for details)</i>
-</p>
-<pre><code data-language="javascript">function dummySum(start,end){
+
+
+<pre><code data-language="javascript">function foo(start,end){
 	var sum = 0,
-	    ix,
-	    dummy = 'a,b,c';
+		dummy = 'a,b,c,d,e',
+	    ix;
 		
-	for(var ix=start; ix&lt;end; ix++){
-		dummy.split(',').join('-');
+	for(ix=start; ix&lt;end; ix++){
+		dummy.split(',').join('-'); // do something to slowdown the process
 		sum = sum+ix;
 	}
 	return sum;
@@ -22,21 +30,19 @@ This function opens the door to implementation concept of  "parallel computing".
 <input type="button" value="Run in Thread" onclick="runAll_dummySum()" />
 	<span class="span_demo_result" id="demo_result"></span>  
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">function runAll_dummySum(){
+<pre><code data-language="javascript">vkthread.runAll([ [foo, [0, 4e6]], // first function
+		  [foo, [4e6,8e6]] ] //second function
+		).then(function (data) {
+			var bar = data[0]+data[1];
+			console.log(bar);
+		});
 
-	vkthread.runAll([ [dummySum, [0,  3e6]], 
-			  [dummySum, [3e6,7e6]] ]
-			).then(function (data) {
-		document.getElementById('demo_result')
-				.innerHTML = data[0]+data[1];
-		})
-}
 </code></pre>
 
-
-
-
-<p>
+<p><i style="color:#000099;">vkthread.runAll() is a Promise object, so it depends on promise library. 
+Plugin supports two libraries: <b>jQuery</b> and <b>when.js</b> (see "Documentation" for details.) 
+There is no "Callback" version for this function.</i>
+</p>
 
 
 </td></tr></table>

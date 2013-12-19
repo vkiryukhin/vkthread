@@ -116,9 +116,14 @@ vkthread.run( [sum, [1, 2]] )
 	.then(function(data){...});</code></pre>	</h3>
 	<ul>
 	<li> <p>
-		Function <span class="color_blue_bold">vkthread.runAll()</span> is similar to <span class="color_blue_bold">vkthread.run()</span>, but let you to start simultaneous execution of multiple functions in parallel threads. It processes returned data when all threads finish their work.
+		Function <span class="color_blue_bold">vkthread.runAll()</span> is similar to 
+		<span class="color_blue_bold">vkthread.run()</span>, but let you to start simultaneous 
+		execution of multiple functions in parallel threads. It processes returned data when 
+		all threads finish their work.
 		
-		Function's argument is an array, each element of which is argument list (see <b>vkthread.run()</b> for details).</p>
+		Function's argument is an array, each element of which is argument list 
+		(see <b>vkthread.run()</b> for details).
+		</p>
 		
 <pre><code data-language="javascript">function sum(num1, num2){
 	return num1 + num2;

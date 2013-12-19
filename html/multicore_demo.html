@@ -6,41 +6,29 @@
 This page demonstrates an advantage of multi-threading on multi-core CPU. The first example runs dummySum() function in a single thread. The second one divides this function in 2 tasks and runs a separate thread for each of them. At OS kernel level these threads are executed in 2 CPU cores, which makes this application about 60%-70% faster. <br/>
 It doesn't make sense to create too many threads, as number of CPU cores is limited. The best case is: number of cpu cores is equal to number of threads.
  </p> 
- <p> 
-However, we can't 100% guarantee, that OS runs these threads on different cores ( it depends on browser and other stuff which is out of our control ), but there is a very good chance for this. 
-</p> 
 
 </p>
-<pre><code data-language="javascript">function run_dummySum(){
-
-	vkthread.run(dummySum, [0,8e6]).then(
-		function (data) {
-			document.getElementById('demo_result').innerHTML = data;
-		},
-		function(err) {
-			document.getElementById('demo_result').innerHTML = err;
-		}
-	)
-} </code></pre>
+<pre><code data-language="javascript">function foo(start,end){
+	var sum = 0,
+		dummy = 'a,b,c,d,e',
+	    ix;
+		
+	for(ix=start; ix&lt;end; ix++){
+		dummy.split(',').join('-'); // do something to slowdown the process
+		sum = sum+ix;
+	}
+	return sum;
+} 
+</code></pre>
 
 <input type="button" value="Run in Page" onclick="run_dummySum_time()" />
 	<span class="span_demo_result" id="demo_result"></span>  
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">function run_dummySum_time(){
-
-var d1= +(new Date());
-	
-	vkthread.run(dummySum, [0,8e6]).then(
-		function (data) {
-			var timeSpan = (+(new Date())-d1)/1000;
-			document.getElementById('demo_result')
-				.innerHTML = data + ' : ' + timeSpan + ' sec';
-		},
-		function(err) {
-			document.getElementById('demo_result').innerHTML = err;
-		}
-	)
-}
+<pre><code data-language="javascript">vkthread.run(foo, [0, 8e6]).then(
+	function (data) {
+		var bar = data;
+		console.log(bar);
+	})
 </code></pre>
 	
 	<input type="button" value="Run in Thread" onclick="runAll_dummySum_time()" />
@@ -48,27 +36,21 @@ var d1= +(new Date());
 	<span class="span_demo_result"  id="demo_result_thread"></span> 
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">function runAll_dummySum_time(){
-
-	var d1= +(new Date());
-	
-	vkthread.runAll([ [dummySum, [0,  4e6]], 
-			  [dummySum, [4e6,8e6]]]).then(
-		function (data) {
-			var timeSpan = (+(new Date())-d1)/1000;
-			document.getElementById('demo_result_thread')
-				.innerHTML = data[0]+data[1] + ' : ' + timeSpan + ' sec';
-		},
-		function(err) {
-			document.getElementById('demo_result_thread').innerHTML = err;
-		}
-	)
-}
+<pre><code data-language="javascript">vkthread.runAll([ [foo, [0, 4e6]], 
+		  [foo, [4e6, 8e6]]]).then(
+	function (data) {
+		var bar = data[0]+data[1];
+		console.log(bar);
+	})
 </code></pre>
+ <p> 
+However, we can't  guarantee, that OS runs these threads on different cores 
+as it depends on many things, which we are not able to control with javascript.
+ But there is a very good chance that threads, opened with runAll(), will be executed in parallel. 
+</p> 
 
 
 
-<p>
 
 
 </td></tr></table>

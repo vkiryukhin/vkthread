@@ -174,7 +174,8 @@ Vkthread.prototype.runAll = function(args){
 	return $.when.apply($,dfrs).then(
 				function(){
 					return Array.prototype.slice.call(arguments)
-				});
+				}
+			);
 };
 
 /* 

@@ -1,7 +1,7 @@
 <table style="text-align:justify;">
 <tr><td>
 <div class="h6">Function with Context and Dependencies</div>
-<p>In case, when we pass both context and dependency, context is the 4th argument and dependency is the 5th one</p>
+<p>This example demonstrate how to pass both optional arguments: context and dependency. </p>
 
 <pre><code data-language="javascript">function Foobar(arr1,arr2){
 	this.arr1 = arr1;
@@ -9,15 +9,19 @@
 }
 Foobar.prototype.union = function(){
 	return _.union(this.arr1,this.arr2);
-}</code></pre>
+}
+
+var myFoobar = new Foobar([1,2,3],[2,3,4]);
+</code></pre>
 
 <input type="button" value="Run in Page" onclick="run_foobar()" />
 	<span class="span_demo_result" id="demo_result"></span>  
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">function run_foobar(){
-	var myFoobar = new Foobar([1,2,3],[2,3,4]);
-	document.getElementById('demo_result').innerHTML = myFoobar.union();
-}
+<pre><code data-language="javascript">
+
+var baz = myFoobar.union();
+console.log(baz);
+
 </code></pre>
 	
 	<input type="button" value="Run in Thread" onclick="run_foobar_in_thread()" />
@@ -25,12 +29,26 @@ Foobar.prototype.union = function(){
 	<span class="span_demo_result"  id="demo_result_thread"></span> 
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">function run_foobar_in_thread(){
-	var myFoobar = new Foobar([6,7,8],[7,8,9]);
-	vkthread.exec(myFoobar.union,[],function(data){
-		document.getElementById('demo_result_thread').innerHTML = data;
-	},myFoobar,['../js/underscore-min.js']);
-}
+<pre><code data-language="javascript">/* Callback style */
+vkthread.exec(myFoobar.union, //function to run in a thread;
+		[], //arguments for the function;
+		function(data){ // callback function;
+			var baz = data;
+			console.log(baz);
+		},
+		myFoobar, // context
+		['../js/underscore-min.js'] /* dependency */
+	);
+
+/* Promise style */	
+vkthread.run(myFoobar.union, //function to run in a thread;
+		[], //arguments for the function;
+		myFoobar, // context
+		['../js/underscore-min.js'] /* dependency */
+	).then(function(data){
+		var baz = data;
+		console.log(baz);
+	});
 </code></pre>
 
 

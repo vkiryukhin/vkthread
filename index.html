@@ -54,7 +54,7 @@
 <div id="menu" >
 <div id="notsupported" style="color:red;font-weight:bold;"></div>
 	<ul>
-		<li><b>Examples</b><br/><br/>
+		<li><b>Single Thread</b><br/><br/>
 			<ul>
 				<li onclick="loadTemplate('function')">Regular Function</li>
 				<li onclick="loadTemplate('context')">Function with Context</li>
@@ -64,14 +64,15 @@
 				<li onclick="loadTemplate('lambda')">Lambda Function</li>
 			</ul>
 		</li>
-		<li><b>Promise-based API</b><br/><br/>
+		<!--li><b>Promise-based API</b><br/><br/>
 			<ul>
 				<li onclick="loadTemplate('run')">vkthread.run()</li>
 				<li onclick="loadTemplate('run_all')">vkthread.runAll()</li>
 			</ul>
-		</li>
+		</li-->
 		<li><b>Multi-Threading</b><br/><br/>
 			<ul>
+				<li onclick="loadTemplate('run_all')">vkthread.runAll()</li>
 				<li onclick="loadTemplate('multicore_demo')">Parallel Computing Demo</li>
 			</ul>
 		</li>

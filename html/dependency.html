@@ -2,7 +2,7 @@
 <tr><td>
 <div class="h6">Function with Dependencies</div>
 <p>
-If your function depends on library(ies), thread needs to know a path to the libraries. 
+If your function depends on library(ies), thread needs to know path to the library(ies). 
 </p>
 <pre><code data-language="javascript">//function "_.union()" belongs to "Underscore" library.
 function bar(arr1,arr2){
@@ -12,9 +12,9 @@ function bar(arr1,arr2){
 <input type="button" value="Run in Page" onclick="run_bar()" />
 	<span class="span_demo_result" id="demo_result"></span>  
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">function run_bar(){
-	document.getElementById('demo_result').innerHTML = bar([1,2,3],[2,3,4]);
-}
+<pre><code data-language="javascript">var foo = bar([1,2,3],[2,3,4]);
+	
+console.log(foo);
 </code></pre>
 	
 	<input type="button" value="Run in Thread" onclick="run_bar_in_thread()" />
@@ -22,11 +22,25 @@ function bar(arr1,arr2){
 	<span class="span_demo_result"  id="demo_result_thread"></span> 
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">function run_bar_in_thread(){
-	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
-		document.getElementById('demo_result_thread').innerHTML = data;
-	}, ['../js/underscore-min.js']);
-}
+<pre><code data-language="javascript">/* Callback style */
+vkthread.exec(bar, //function to run in a thread;
+		[[1,2,3],[2,3,4]], //arguments for the function;
+		function(data){ // callback function;
+			var foo = data;
+			console.log(foo);
+		}, 
+		['../js/underscore-min.js'] /* dependency */
+	); 
+		
+/* Promise style */		
+vkthread.run(bar, //function to run in a thread;
+	    [[1,2,3],[2,3,4]], //arguments for the function;
+	    ['../js/underscore-min.js'] /* dependency */
+	).then(function(data){
+		var foo = data;
+		console.log(foo);
+	});
+
 </code></pre>
 
 

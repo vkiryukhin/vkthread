@@ -23,7 +23,7 @@ function run_foo(){
 	document.getElementById('demo_result').innerHTML = foo('a,b,c');
 }
 function run_foo_in_thread(){
-	vkthread.exec(foo,['x,y,z'], function(data){
+	vkthread.exec(foo,['a,b,c'], function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
 	});
 }
@@ -47,7 +47,7 @@ function run_demo(){
 	document.getElementById('demo_result').innerHTML = myDemo.foo();
 }
 function run_demo_in_thread(){
-	var myDemo = new Demo('xxx,yyy,zzz',7e6);
+	var myDemo = new Demo('aaa,bbb,ccc',7e6);
 	vkthread.exec(myDemo.foo,[], function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
 	},myDemo);
@@ -60,7 +60,7 @@ function run_bar(){
 	document.getElementById('demo_result').innerHTML = bar([1,2,3],[2,3,4]);
 }
 function run_bar_in_thread(){
-	vkthread.exec(bar,[[6,7,8],[7,8,9]], function(data){
+	vkthread.exec(bar,[[1,2,3],[2,3,4]], function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
 	}, ['../js/underscore-min.js']);
 }
@@ -77,7 +77,7 @@ function run_foobar(){
 	document.getElementById('demo_result').innerHTML = myFoobar.union();
 }
 function run_foobar_in_thread(){
-	var myFoobar = new Foobar([6,7,8],[7,8,9]);
+	var myFoobar = new Foobar([1,2,3],[2,3,4]);
 	vkthread.exec(myFoobar.union,[],function(data){
 		document.getElementById('demo_result_thread').innerHTML = data;
 	},myFoobar,['../js/underscore-min.js']);
@@ -117,10 +117,11 @@ function run_greetLambda_in_thread(){
 	});
 }
 //----------------------------------------------------//
+/*
 function dummySum(start,end){
 	var sum =0,
 		ix,
-		dummy = 'a,b,c,d';
+		dummy = 'a,b,c,d,e,f,g';
 		
 	for(ix=start; ix<end; ix++){
 		dummy.split(',').join('-');
@@ -128,6 +129,18 @@ function dummySum(start,end){
 	}
 	return sum;
 } 
+*/
+function dummySum(start,end){
+	var sum = 0,
+		dummy = 'a,b,c,d,e',
+	    ix;
+		
+	for(ix=start; ix<end; ix++){
+		dummy.split(',').join('-');
+		sum = sum+ix;
+	}
+	return sum;
+}  
 
 function run_dummySum(){
 
@@ -162,8 +175,8 @@ function run_dummySum_time(){
 
 function runAll_dummySum(){
 
-	vkthread.runAll([ [dummySum, [0,  4e6]], 
-					  [dummySum, [4e6,8e6]] ])
+	vkthread.runAll([ [dummySum, [0, 4e6]], 
+					  [dummySum, [4e6, 8e6]] ])
 			.then(
 				function (data) {
 					document.getElementById('demo_result').innerHTML = data[0]+data[1];

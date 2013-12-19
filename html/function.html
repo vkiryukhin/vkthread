@@ -6,6 +6,7 @@
 <div> - Click <b>"Run in Thread"</b> button. It runs the same process, but now UI is not affected.  </div> 
  
 </p>
+Here is the function we run:
 <pre><code data-language="javascript">function foo(str) {
 	var ret, ix;
 	for(ix=0;ix<1e7;ix++){
@@ -17,9 +18,9 @@
 <input type="button" value="Run in Page" onclick="run_foo()" />
 	<span class="span_demo_result" id="demo_result"></span>  
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">function run_foo(){
-	document.getElementById('demo_result').innerHTML = foo('a,b,c');
-}
+<pre><code data-language="javascript">
+var bar = foo('a,b,c');
+console.log(bar);
 </code></pre>
 	
 	<input type="button" value="Run in Thread" onclick="run_foo_in_thread()" />
@@ -27,11 +28,19 @@
 	<span class="span_demo_result"  id="demo_result_thread"></span> 
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">function run_foo_in_thread(){
-	vkthread.exec(foo,['x,y,z'], function(data){
-		document.getElementById('demo_result_thread').innerHTML = data;
-	});
-}
+<pre>
+<code data-language="javascript">/* Callback style */
+vkthread.exec(foo,['a,b,c'], function(data){
+	var bar = data;
+	console.log(bar);
+});
+
+/* Promise style */	
+vkthread.run(foo,['a,b,c']).then(function(data){
+	var bar = data;
+	console.log(bar);
+});
+
 </code></pre>
 
 
