@@ -7,21 +7,35 @@
 <div id="doc">
 <div class="h6">Documentation</div>
 <ul>
+<li>
+To start using this plugin, download folder "vkthread" on your server. Only this folder out of the entire package you need. 
+The rest content are examples and demo.
+</li>
+
 	<li>
-	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+	
 	There is no dependency on external javascript library, if you prefer to use traditional "callback" coding style. 
-	Function <b>vkthread.exec()</b> uses only native javascript objects<br/><br/>
+	Function <b>vkthread.exec()</b> uses only native javascript objects. <br/><br/>
+	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+	
+
 	However, if you prefer to use promise-style functions <b>vkthread.run()</b> and <b>vkthread.runAll()</b>, which depend on external
 	library, you need to include reference to those library above the reference to vkthread.js. 
 	Master branch uses <a href="http://jquery.com/" target="_blank" class="color_blue">jQuery</a>  as the 
-	promise library.
-<br/><br/>	Another option is <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a>
+	promise library.<br/><br/>
+	
+	<pre><code data-language="html">&lt;script type="text/javascript" src="path/to/jquery-1.9.1.min.js"&gt;&lt;/script&gt;</code>
+<code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+	
+	Another promise library you can use with vkthread is <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a>
 	from <a href="http://cujojs.com/" target="_blank" class="color_blue">cujojs</a>. 
 	Branch <a href="https://github.com/vkiryukhin/vkthread/tree/when" target="_blank" class="color_blue" >vkthread/when</a> 
-	on github is customized to work with this library.
+	on github is customized to work with this library.<br/>
 
-<pre><code data-language="html">&lt;script type="text/javascript" src="path/to/jquery-1.9.1.min.js"&gt;&lt;/script&gt;</code>
-<code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
+<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/when-legacy-setup.js"&gt;&lt;/script&gt;</code>
+<code data-language="html">&lt;script type="text/javascript" src="vkthread/when.js"&gt;&lt;/script&gt;</code>
+<code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>	
+
 
 	
 	</li>
@@ -81,7 +95,7 @@ Foo.prototype.bar = function(){return _.union(this.n + this.m) };
 var myFoo = new Foo([1,2],[2,3]);	
 vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, ['js/underscore.js'] );</code></pre>
 
-If context is omitted, it is set at the 4-th position.
+If context is omitted, dependency is set at the 4-th position.
 <pre><code data-language="javascript">function bar(arr1,arr2){ return _.union(arr1,arr2) }
 
 vkthread.exec(bar, [ [1,2],[1,3] ], 
@@ -125,12 +139,11 @@ vkthread.run( [sum, [1, 2]] )
 	.then(function(data){...});</code></pre>	</h3>
 	<ul>
 	<li> <p>
-		Function <span class="color_blue_bold">vkthread.runAll()</span> is similar to 
-		<span class="color_blue_bold">vkthread.run()</span>, but let you to start simultaneous 
-		execution of multiple functions in parallel threads. It processes returned data when 
-		all threads finish their work.
+		Function <span class="color_blue_bold">vkthread.runAll()</span> lets you to start simultaneous 
+		execution of multiple vkthread.run() functions in parallel threads. Result is returned after 
+		all threads finished their work.
 		
-		Function's argument is an array, each element of which is argument list 
+		Function's argument is an array, each element of which is argument list for individual vkthread.run() function. 
 		(see <b>vkthread.run()</b> for details).
 		</p>
 		

@@ -90,7 +90,7 @@ function run_anonim(){
 }
 function run_anonim_in_thread(){
 	vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)},
-			[[7,8,9],[5,6,7]], 
+			[[1,2,3],[3,4,5]], 
 			function(data){
 				document.getElementById('demo_result_thread').innerHTML = data;
 			}, 

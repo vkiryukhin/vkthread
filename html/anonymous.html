@@ -20,7 +20,7 @@ console.log(foo);
 
 <pre><code data-language="javascript">/* Callback style */
 vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
-		[[7,8,9],[5,6,7]], //list of arguments
+		[[1,2,3],[3,4,5]], //list of arguments
 		function(data){ // callback function
 			var foo = data;
 			console.log(foo);
@@ -30,7 +30,7 @@ vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
 
 /* Promise style */	
 vkthread.run(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
-		[[7,8,9],[5,6,7]], //list of arguments
+		[[1,2,3],[3,4,5]], //list of arguments
 		['../js/underscore-min.js'] 
 	).then(function(data){ 
 		var foo = data;
