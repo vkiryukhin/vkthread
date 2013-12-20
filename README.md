@@ -3,6 +3,8 @@ vkThread
 
 is a javascript plugin, which allows you to execute any function of a your code in a thread.
 
+The only folder you need to have on you server is **vkthread**. The rest stuff are examples, demo, etc.
+
 **Standalone function**: simply pass it as an argument to the vkthread(), and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker.
 
 **Object's method**: vkthread accepts context as an optional parameter and executes function in its context. Simply pass the object as a context, that's it.
