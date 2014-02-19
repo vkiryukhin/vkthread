@@ -1,8 +1,9 @@
 /**
  * vkThread - javascript plugin to execute javascript function(s) in a thread.  
- * http://www.eslinstructor.net/vkthread/
+ * https://github.com/vkiryukhin/vkthread
+  * http://www.eslinstructor.net/vkthread/
  *
- * @version: 0.51.00 ( December 2013 )
+ * @version: 0.55.00 ( February 2014 )
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  * Copyright (c) 2013 Vadim Kiryukhin 
@@ -16,33 +17,25 @@
 (function(){
 "use strict";
 
-/**
- *   JSONfn - plugin to stringify/parse javascript objects with functions.
- *   http://www.eslinstructor.net/jsonfn/  
+/* 
+ * This piece of code is taken from JSONfn (c) plugin 
+ * https://github.com/vkiryukhin/jsonfn
  */
+var JSONfn = {};
 
-var JSONfn;
-if (!JSONfn) {
-    JSONfn = {};
-}
+JSONfn.stringify = function (obj) {
 
-(function () {
-
-	JSONfn.stringify = function(obj) {
-		return JSON.stringify(obj,function(key, value){
-				return (typeof value === 'function' ) ? value.toString() : value;
-			});
-	};
-
-	JSONfn.parse = function(str) {
-		return JSON.parse(str,function(key, value){
-			if(typeof value != 'string') {
-				return value;
-			}
-			return ( value.substring(0,8) === 'function') ? eval('('+value+')') : value;
-		});
-	};
-}()); 
+  return JSON.stringify(obj, function (key, value) {
+    if (value instanceof Function || typeof value == 'function') {
+      return value.toString();
+    }
+    if (value instanceof RegExp) {
+      return '_PxEgEr_' + value;
+    }
+    return value;
+  });
+};
+/* end JSONfn code */
 
 function Vkthread(){
 
@@ -54,10 +47,10 @@ function Vkthread(){
 	 */
 	var err;
 	try { 
-		throw new Error()	
+		throw new Error();
 	} 
 	catch(e){ 
-		err = e.stack	
+		err = e.stack;
 	}
 	
 	if (err === 'undefined') {
@@ -86,11 +79,11 @@ function _buildObj(obj, fn, args, context, importFiles){
  *
  *   Execute function in the thread and process result in callback function.
  *
- *   @fn          - Function;  function to open in a thread;
- *   @args        - Array;     array of arguments for @fn;
- *   @cb          - Function;  callback function to process returned data;
- *	 @context     - Object;    object which will be 'this' for @fn.
- *   @importFiles - Array of Strings;  list of files (with path), which @fn depends on. 
+ *    @fn          - Function;  function to open in a thread;
+ *    @args        - Array;     array of arguments for @fn;
+ *    @cb          - Function;  callback function to process returned data;
+ *    @context     - Object;    object which will be 'this' for @fn.
+ *    @importFiles - Array of Strings;  list of files (with path), which @fn depends on. 
  */
  
  Vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
@@ -108,9 +101,9 @@ function _buildObj(obj, fn, args, context, importFiles){
 	};
 	
 	worker.onerror = function(error) {
- 	  cb(null, error.message);
-	  worker.terminate();
-    };
+    cb(null, error.message);
+    worker.terminate();
+  };
 	
 	worker.postMessage(JSONfn.stringify(obj));
 };
@@ -122,7 +115,7 @@ function _buildObj(obj, fn, args, context, importFiles){
  *
  *   @fn          - Function;  function to execute in a thread;
  *   @args        - Array;     array of arguments for @fn;
- *	 @context     - Object;    object which will be 'this' for @fn.
+ *    @context     - Object;    object which will be 'this' for @fn.
  *   @importFiles - Array of Strings;  list of files (with path), which @fn depends on. 
  */
  Vkthread.prototype.run = function(fn, args,  context, importFiles){
@@ -133,7 +126,7 @@ function _buildObj(obj, fn, args, context, importFiles){
 		worker = new Worker(this.path),
 		obj = {fn:fn, args:args, cntx:false, imprt:false};
 	
-	_buildObj(obj, fn, args, context, importFiles)
+	_buildObj(obj, fn, args, context, importFiles);
 	
 	worker.onmessage = function (oEvent) {
 		dfr.resolve(oEvent.data);
@@ -141,9 +134,9 @@ function _buildObj(obj, fn, args, context, importFiles){
 	};
 	
 	worker.onerror = function(error) {
-	  dfr.reject(new Error('Worker error: ' + error.message));
-	  worker.terminate();
-    };
+    dfr.reject(new Error('Worker error: ' + error.message));
+    worker.terminate();
+  };
 	
 	worker.postMessage(JSONfn.stringify(obj));
 	
@@ -173,7 +166,7 @@ Vkthread.prototype.runAll = function(args){
 	
 	return $.when.apply($,dfrs).then(
 				function(){
-					return Array.prototype.slice.call(arguments)
+					return Array.prototype.slice.call(arguments);
 				}
 			);
 };
