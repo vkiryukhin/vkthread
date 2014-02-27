@@ -12,20 +12,26 @@ The only folder you need to have on you server is **vkthread**. The rest stuff a
 **Function with dependencies**: vkthread accepts a list of filenames as an optional argument and imports these files in the thread before the function is calling
 
 Here is a basic example:
->
+>```javascript
 > function sum(num1, num2) {
 >     return num1 + num2;
 >}
 
-in main thread you execute it this way: 
+in main page you execute it this way: 
 
->
+>```javascript
 >var foo = sum(2,3);
+console.log(foo);
 >
 
 now, let's open a new thread and execute function sum() in this thread.
->
->vkthread.exec(sum, [2,3], function(data){ var foo = data } );
+>```javascript
+>vkthread.exec( sum,  //function to execute in a thread
+              [2,3],  //arguments for the function
+              function(data){ //collback function to process result
+                  var foo = data;
+                  console.log(foo);
+              });
 >
 
 See live examples at [http://eslinstructor.net/vkthread](http://eslinstructor.net/vkthread)
