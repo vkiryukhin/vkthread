@@ -204,6 +204,59 @@ function runAll_dummySum_time(){
 				}
 			)
 }
+
+function run_ajax(){
+
+  function foo(url) {
+    var httpRequest,
+         ret;
+
+    httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function(){
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+          ret = httpRequest.responseText;
+        } else {
+          ret = 'There was a problem with the request.';
+        }
+      }
+    };
+    
+    // IMPORTANT: ajax must perform the operation synchronously  
+    // (the 3-rd arg is false); as ajax is executed in a thread, it's OK.
+    httpRequest.open('GET', url, false);
+    httpRequest.send();
+   
+    return ret;
+  }
+  
+  function bar() {
+    var httpRequest,
+        ret;
+
+    httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function(){
+      if (httpRequest.readyState === 4) {
+        if (httpRequest.status === 200) {
+          var url = httpRequest.responseText;
+          vkthread.exec(foo, [url], 
+              function(data){  
+                document.getElementById('demo_result').innerHTML = data;
+              });
+        } else {
+          ret = 'There was a problem with the request.';
+        }
+      }
+    };
+    
+    httpRequest.open('GET', 'examples/geturl.txt');
+    httpRequest.send();
+   
+    return ret;
+  }
+
+  bar();
+}
 //----------------------------------------------------//
 function loadTemplate(name)
 {
@@ -244,6 +297,11 @@ function loadTemplate(name)
 			$('#rightpanel').empty().load('html/lambda.html',function(){Rainbow.color();});
 			break;
 			
+    case 'ajax':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/ajax.html',function(){Rainbow.color();});
+			break;
+      
 		case 'run':
 			$('#leftpanel').hide();
 			$('#rightpanel').empty().load('html/run.html',function(){Rainbow.color();});

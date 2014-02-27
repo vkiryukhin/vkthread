@@ -1,0 +1,80 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">AJAX</div>
+<p>In this page I demonstrate how to use AJAX with vkThread plugin </p>
+<p>
+<input type="button" value="Run" onclick="run_ajax()" />
+	<span class="span_demo_result" id="demo_result"></span>  
+	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
+</p>	
+	
+
+<pre><code data-language="javascript">/*
+ * function foo() will be executed in a thread:
+ * ajax reads a file and returns its content;
+ */
+function foo(url) {
+  var httpRequest,
+       ret;
+
+  httpRequest = new XMLHttpRequest();
+  httpRequest.onreadystatechange = function(){
+    if (httpRequest.readyState === 4) {
+      if (httpRequest.status === 200) {
+        ret = httpRequest.responseText;
+      } else {
+        ret = 'There was a problem with the request.';
+      }
+    }
+  };
+  
+  // IMPORTANT: ajax must perform the operation synchronously  
+  // (the 3-rd arg is false); as ajax is executed in a thread, it's OK.
+  httpRequest.open('GET', url, false);
+  httpRequest.send();
+ 
+  return ret;
+}</code></pre>
+
+
+<pre>
+<code data-language="javascript">/*
+ * function bar() is executed in the main page: 
+ *
+ * ajax reads a file and the file's content is used as an argument 
+ * for the foo() function, which is run in a thread.
+ */
+ 
+function bar() {
+  var httpRequest,
+      ret;
+
+  httpRequest = new XMLHttpRequest();
+  httpRequest.onreadystatechange = function(){
+    if (httpRequest.readyState === 4) {
+      if (httpRequest.status === 200) {
+        var url = httpRequest.responseText;
+        vkthread.exec(foo, [url], 
+            function(data){  
+              document.getElementById('demo_result').innerHTML = data;
+            });
+      } else {
+        ret = 'There was a problem with the request.';
+      }
+    }
+  };
+  
+  httpRequest.open('GET', '../examples/geturl.txt');
+  httpRequest.send();
+ 
+  return ret;
+}
+
+</code></pre>
+
+
+
+
+
+
+</td></tr></table>

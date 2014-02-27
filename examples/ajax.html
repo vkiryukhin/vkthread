@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html> 
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
+<meta content="utf-8" http-equiv="encoding"/>
+
+<script src="../vkthread/vkthread.js" type="text/javascript"></script>
+
+<title>Worker - Test</title>
+<style type="text/css">
+.interactive{cursor:pointer;text-decoration:underline;}
+</style>
+
+<!--script src="vkthread/when.js"></script-->
+</head>
+<body>
+<h2 align="center" >vkThread - test AJAX</h2>
+
+<input type="button" onclick="runFooInThread()" value="Run AJAX in vkThread"/>
+<div id="report1" >. . .</div>
+<input type="button" onclick="bar()" value="Run vkThread in AJAX"/>
+<div id="report2" >. . .</div>
+<script type="text/javascript" >
+/*
+ * function foo() 
+ *
+ * this function is executed in a thread; ajax reads a file and
+ * returns its content into vkthread's callback;
+ */
+function foo(url) {
+  var httpRequest,
+       ret;
+
+  httpRequest = new XMLHttpRequest();
+  httpRequest.onreadystatechange = function(){
+    if (httpRequest.readyState === 4) {
+      if (httpRequest.status === 200) {
+        ret = httpRequest.responseText;
+      } else {
+        ret = 'There was a problem with the request.';
+      }
+    }
+  };
+  
+  // IMPORTANT: ajax must perform the operation synchronously  
+  // (the 3-rd arg is false); as ajax is executed in a thread, it's OK.
+  httpRequest.open('GET', url, false);
+  httpRequest.send();
+ 
+  return ret;
+}
+
+function runFooInThread(){
+  vkthread.exec(foo, ['../examples/helloajax.txt'], 
+        function(data){  
+          document.getElementById('report1').innerHTML = data;
+        });
+}
+
+/*
+ * function bar() 
+ *
+ * this function is executed in the page; ajax reads file and 
+ * the file's content is provided as an argument to the foo() function, which is 
+ * executed in a thread and returns result back into the page;
+ */
+ 
+function bar() {
+  var httpRequest,
+      ret;
+
+  httpRequest = new XMLHttpRequest();
+  httpRequest.onreadystatechange = function(){
+    if (httpRequest.readyState === 4) {
+      if (httpRequest.status === 200) {
+        var url = httpRequest.responseText;
+        vkthread.exec(foo, [url], 
+            function(data){  
+              document.getElementById('report2').innerHTML = data;
+            });
+      } else {
+        ret = 'There was a problem with the request.';
+      }
+    }
+  };
+  
+  httpRequest.open('GET', '../examples/geturl.txt');
+  httpRequest.send();
+ 
+  return ret;
+}
+
+</script>
+
+
+</body>
+</html>
