@@ -17,22 +17,22 @@ Demo.prototype.foo = function(){
 var myDemo = new Demo('xxx,yyy,zzz',7e6);
 </code></pre>
 
-<input type="button" value="Run in Page" onclick="run_demo()" />
-	<span class="span_demo_result" id="demo_result"></span>  
+<input type="button" value="Run in Page" onclick="run_demo_in_thread()" />
+	<span class="span_demo_result" id="demo_result"></span>
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
 <pre><code data-language="javascript">var bar = myDemo.foo();
-		
+
 console.log(bar);
 </code></pre>
-	
-	<input type="button" value="Run in Thread" onclick="run_demo_in_thread()" />
 
-	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<input type="button" value="Run in Thread" onclick="run_demo_in_thread_promise()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
 <pre><code data-language="javascript">//function Demo.foo() doesn't accept arguments, so we pass an empty array.
 
-/* Callback style */	
+/* Callback style */
 vkthread.exec( myDemo.foo, //function to run in a thread
 		[], 	//arguments for the function;
 		function(data){ //callback function
@@ -41,15 +41,15 @@ vkthread.exec( myDemo.foo, //function to run in a thread
 		},
 		myDemo // context
 	);
-		
-/* Promise style */			
+
+/* Promise style */
 vkthread.run( myDemo.foo, //function to run in a thread
 		[], 	//arguments for the function;
 		myDemo // context
 	).then(function(data){
 		var bar = data;
 		console.log(bar);
-	});		
+	});
 </code></pre>
 
 
