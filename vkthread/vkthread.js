@@ -83,6 +83,45 @@
 */
 /////////////////////////////////////////
 
+
+Vkthread.prototype.exec = function(param){
+
+  if(Array.isArray(param)) {
+    return  this.exePromiseAll(param);
+  } else {
+
+  var worker = new Worker(window.URL.createObjectURL(workerBlob)),
+      paramObj = {
+          fn: param.fn,
+          args: param.args,
+          context: param.context,
+          importFiles:param.importFiles
+        };
+
+    if(typeof param.cb === 'function'){
+        exeCallback(worker, paramObj, param.cb)
+    } else {
+       return exePromise(worker, paramObj);
+    }
+
+  }
+}
+
+function exeCallback(worker, param, cb){
+
+    worker.onmessage = function (oEvent) {
+      cb(oEvent.data);
+      worker.terminate();
+    };
+
+    worker.onerror = function(error) {
+      cb(null, error.message);
+      worker.terminate();
+    };
+
+    worker.postMessage(JSONfn.stringify(param));
+  };
+/*
 Vkthread.prototype.exec = function(param){
 
     var worker = new Worker(window.URL.createObjectURL(workerBlob)),
@@ -106,8 +145,30 @@ Vkthread.prototype.exec = function(param){
 
     worker.postMessage(JSONfn.stringify(_param));
   };
+*/
 ////////////////////////////////////////
+function exePromise(worker, param){
 
+      var promise = new Promise(
+              function(resolve, reject){
+
+                worker.onmessage = function (oEvent) {
+                    resolve(oEvent.data);
+                    worker.terminate();
+                };
+
+                worker.onerror = function(error) {
+                    reject(error.message);
+                    worker.terminate();
+                };
+              }
+          );
+
+      worker.postMessage(JSONfn.stringify(param));
+      return promise;
+  };
+
+/*
 Vkthread.prototype.run = function(param){
 
       var worker = new Worker(window.URL.createObjectURL(workerBlob)),
@@ -129,6 +190,7 @@ Vkthread.prototype.run = function(param){
       worker.postMessage(JSONfn.stringify(param));
       return promise;
   };
+*/
 
 /*
   VkThread.prototype.exec = function(param){
@@ -216,12 +278,12 @@ Vkthread.prototype.run = function(param){
   };
 */
 
-Vkthread.prototype.runAll = function(args){
+  Vkthread.prototype.exePromiseAll = function(args){
 
     var promises = [];
 
     for(var ix=0; ix<args.length; ix++){
-      promises.push( this.run(args[ix]));
+      promises.push( this.exec(args[ix]));
     }
 
     return Promise.all(promises).then(

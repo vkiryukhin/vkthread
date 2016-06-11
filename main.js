@@ -45,7 +45,8 @@ function run_foo_in_thread(){
 	//vkthread.exec(foo,['a,b,c'], function(data){
 	//	document.getElementById('demo_result_thread').innerHTML = data;
 	//});
-	vkthread.run(param)
+	//vkthread.run(param)
+	vkthread.exec(param)
 	.then(
 		function(data){
 			console.log(data);
@@ -220,7 +221,11 @@ function dummySum(start,end){
 
 function run_dummySum(){
 
-	vkthread.run(dummySum, [0,8e6]).then(
+	var param = {
+		fn: dummySum,
+		args:[[0,8e4]]
+	}
+	vkthread.exec(param).then(
 		function (data) {
 			document.getElementById('demo_result')
 					.innerHTML = data;
@@ -255,14 +260,14 @@ function run_dummySum_time(){
 function runAll_dummySum(){
 	var param1 = {
 		fn: dummySum,
-		args: [0, 500]
+		args: [0, 5]
 	},
 	param2 = {
 		fn: dummySum,
-		args: [500, 1000]
+		args: [5, 10]
 	};
 
-	vkthread.runAll([ param1 ,param2]).then(
+	vkthread.exec([ param1, param2]).then(
 		function (data) {
 			document.getElementById('demo_result').innerHTML = data[0] + data[1];
 		},
