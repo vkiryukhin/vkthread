@@ -12,44 +12,23 @@ $(document).ready(function()
 });
 
 function foo(str) {
-	var ret, ix;
-	for(ix=0;ix<1e3;ix++){
+	var ret;
+	for(var ix=0; ix<1e6; ix++){
 		ret = str.split(',').join('-');
 	}
 	return ret;
 }
 
-function run_foo(){
-	//document.getElementById('demo_result').innerHTML = foo('a,b,c');
-	var param = {
-		fn: foo,
-		args: ['a,b,c'],
-		cb: function(data, err){
-			if(err) {
-				alert(err)
-			} else {
-				console.log(data);
-			}
-		}
-	};
-
-	vkthread.exec(param);
-
-}
 function run_foo_in_thread(){
 	var param = {
 		fn: foo,
 		args: ['a,b,c']
 	};
 
-	//vkthread.exec(foo,['a,b,c'], function(data){
-	//	document.getElementById('demo_result_thread').innerHTML = data;
-	//});
-	//vkthread.run(param)
 	vkthread.exec(param)
 	.then(
 		function(data){
-			console.log(data);
+			document.getElementById('demo_result_thread').innerHTML = data;
 		},
 		function(err){
 			alert(err);
@@ -72,19 +51,6 @@ Demo.prototype.foo = function(){
 	return ret;
 };
 
-
-function run_demo_in_thread(){
-	var myDemo = new Demo('aaa,bbb,ccc',7e5),
-		param = {
-			fn: myDemo.foo,
-			context: myDemo,
-			cb: function(data){
-				document.getElementById('demo_result').innerHTML = data;
-			}
-		};
-
-	vkthread.exec(param);
-}
 
 function run_demo_in_thread_promise(){
 	var myDemo = new Demo('aaa,bbb,ccc',7e5),

@@ -3,15 +3,13 @@
  * https://github.com/vkiryukhin/vkthread
  * http://www.eslinstructor.net/vkthread/
  *
- * @version: 2.00.01
+ * @version: 2.0.1
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  * Copyright (c) 2016 Vadim Kiryukhin
  *
  * Licensed under the MIT License.
  *
- * Function vkthread.exec() can be used with no dependancies;
- * Promise-style functions vkthread.run() and vkthread.runAll() require jQuery library.
  */
 
 (function(){
@@ -36,13 +34,10 @@
 
 
   function Vkthread(){
-      this.version = '2.00.01';
       this.getVersion = function(){
-          return this.version;
+          return '2.0.1';
       };
-  };
-
-
+  }
 
   var workerJs = '(function(){var JSONfn={parse:function(str,date2obj){var iso8061=date2obj?/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/:false;return JSON.parse(str,function(key,value){if(typeof value!="string")return value;if(value.length<8)return value;if(iso8061&&value.match(iso8061))return new Date(value);if(value.substring(0,8)==="function")return eval("("+value+")");if(value.substring(0,8)==="_PxEgEr_")return eval(value.slice(8));return value})}};onmessage=function(e){var obj=JSONfn.parse(e.data,true),cntx=obj.context||self;if(obj.importFiles)importScripts.apply(null,obj.importFiles);if(typeof obj.fn==="function")postMessage(obj.fn.apply(cntx,obj.args));else postMessage(self[obj.fn].apply(cntx,obj.args))}})();';
   var workerBlob = new Blob([workerJs], {type: 'application/javascript'});
@@ -60,93 +55,42 @@
    *      @importFiles - array of strings                    (optional)
    *                     each string is a path to a file, which @fn depends on.
    */
-/*
-  Vkthread.prototype.exec = function(fn, args, cb, context, importFiles){
-
-    var worker = new Worker(this.path),
-      obj = {fn:fn, args:args, cntx:false, imprt:false};
-
-    _buildObj(obj, fn, args, context, importFiles);
-
-    worker.onmessage = function (oEvent) {
-      cb(oEvent.data);
-      worker.terminate();
-    };
-
-    worker.onerror = function(error) {
-      cb(null, error.message);
-      worker.terminate();
-    };
-
-    worker.postMessage(JSONfn.stringify(obj));
-  };
-*/
-/////////////////////////////////////////
-
 
 Vkthread.prototype.exec = function(param){
 
   if(Array.isArray(param)) {
-    return  this.exePromiseAll(param);
-  } else {
+    return  this.execAll(param);
+  }
 
   var worker = new Worker(window.URL.createObjectURL(workerBlob)),
+
       paramObj = {
           fn: param.fn,
           args: param.args,
           context: param.context,
           importFiles:param.importFiles
-        };
+        },
 
-    if(typeof param.cb === 'function'){
-        exeCallback(worker, paramObj, param.cb)
-    } else {
-       return exePromise(worker, paramObj);
-    }
+        promise = new Promise(
+          function(resolve, reject){
 
-  }
-}
+            worker.onmessage = function (oEvent) {
+                resolve(oEvent.data);
+                worker.terminate();
+            };
 
-function exeCallback(worker, param, cb){
-
-    worker.onmessage = function (oEvent) {
-      cb(oEvent.data);
-      worker.terminate();
-    };
-
-    worker.onerror = function(error) {
-      cb(null, error.message);
-      worker.terminate();
-    };
+            worker.onerror = function(error) {
+                reject(error.message);
+                worker.terminate();
+            };
+          }
+        );
 
     worker.postMessage(JSONfn.stringify(param));
-  };
-/*
-Vkthread.prototype.exec = function(param){
+    return promise;
 
-    var worker = new Worker(window.URL.createObjectURL(workerBlob)),
-        _param = {
-          fn: param.fn,
-          args: param.args,
-          context: param.context,
-          importFiles:param.importFiles
-        },
-        cb = param.cb;
+};
 
-    worker.onmessage = function (oEvent) {
-      cb(oEvent.data);
-      worker.terminate();
-    };
-
-    worker.onerror = function(error) {
-      cb(null, error.message);
-      worker.terminate();
-    };
-
-    worker.postMessage(JSONfn.stringify(_param));
-  };
-*/
-////////////////////////////////////////
 function exePromise(worker, param){
 
       var promise = new Promise(
@@ -166,53 +110,7 @@ function exePromise(worker, param){
 
       worker.postMessage(JSONfn.stringify(param));
       return promise;
-  };
-
-/*
-Vkthread.prototype.run = function(param){
-
-      var worker = new Worker(window.URL.createObjectURL(workerBlob)),
-          promise = new Promise(
-              function(resolve, reject){
-
-                worker.onmessage = function (oEvent) {
-                    resolve(oEvent.data);
-                    worker.terminate();
-                };
-
-                worker.onerror = function(error) {
-                    reject(error.message);
-                    worker.terminate();
-                };
-              }
-          );
-
-      worker.postMessage(JSONfn.stringify(param));
-      return promise;
-  };
-*/
-
-/*
-  VkThread.prototype.exec = function(param){
-
-      var worker = new Worker(window.URL.createObjectURL(workerBlob)),
-          dfr = $q.defer();
-
-      worker.onmessage = function (oEvent) {
-          dfr.resolve(oEvent.data);
-          worker.terminate();
-      };
-
-      worker.onerror = function(error) {
-          dfr.reject(new Error('Worker error: ' + error.message));
-          worker.terminate();
-      };
-
-      worker.postMessage(JSONfn.stringify(param));
-      return dfr.promise;
-  };
-
-*/
+  }
 
 /**
  *   vkthread.run() - Promise-style API function ( jQuery-dependent )
@@ -225,30 +123,7 @@ Vkthread.prototype.run = function(param){
  *   @importFiles - Array of Strings;  list of files (with path), which @fn depends on.
  */
 
-/*
-  Vkthread.prototype.run = function(fn, args,  context, importFiles){
 
-    var dfr = $.Deferred(),
-      worker = new Worker(this.path),
-      obj = {fn:fn, args:args, cntx:false, imprt:false};
-
-    _buildObj(obj, fn, args, context, importFiles);
-
-    worker.onmessage = function (oEvent) {
-      dfr.resolve(oEvent.data);
-      worker.terminate();
-    };
-
-    worker.onerror = function(error) {
-      dfr.reject(new Error('Worker error: ' + error.message));
-      worker.terminate();
-    };
-
-    worker.postMessage(JSONfn.stringify(obj));
-
-    return dfr;
-  };
-*/
 
 /**
  * vkthread.runAll() - Promise-style API function ( jQuery-dependent )
@@ -259,26 +134,10 @@ Vkthread.prototype.run = function(param){
  *           So, we need to provide arguments for each of them. Each element of the array is
  *           array of arguments for correspondent vkthread.run() function.
  */
-/*
-  Vkthread.prototype.runAll = function(args){
 
-    var dfrs = [],
-      len = args.length,
-      ix;
 
-    for(ix=0; ix<len; ix++){
-      dfrs.push( this.run.apply(this,args[ix]));
-    }
 
-    return $.when.apply($,dfrs).then(
-          function(){
-            return Array.prototype.slice.call(arguments);
-          }
-        );
-  };
-*/
-
-  Vkthread.prototype.exePromiseAll = function(args){
+  Vkthread.prototype.execAll = function(args){
 
     var promises = [];
 
@@ -287,10 +146,10 @@ Vkthread.prototype.run = function(param){
     }
 
     return Promise.all(promises).then(
-          function(values){
-            return values;
-          }
-        );
+      function(values){
+        return values;
+      }
+    );
   };
 
 

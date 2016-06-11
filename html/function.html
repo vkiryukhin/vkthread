@@ -2,43 +2,32 @@
 <tr><td>
 <div class="h6">Standalone Function</div>
 <p><div>This page demonstrates advantage of using vkThread() plugin. </div><br/>
-<div> - Click <b>"Run in Page"</b> button. It runs lengthy heavy process. UI will be frozen for a few seconds. </div>
-<div> - Click <b>"Run in Thread"</b> button. It runs the same process, but now UI is not affected.  </div> 
- 
+<div> - Click <b>"Run in Thread"</b> button. It runs extensive process which takes a few seconds, but UI is not affected.  </div>
+
 </p>
 Here is the function we run:
 <pre><code data-language="javascript">function foo(str) {
-	var ret, ix;
-	for(ix=0;ix<1e7;ix++){
-		ret = str.split(',').join('-');
-	}
-	return ret;
+    var ret, ix;
+    for(ix=0;ix<1e7;ix++){
+	    ret = str.split(',').join('-');
+    }
+    return ret;
 }</code></pre>
 
-<input type="button" value="Run in Page" onclick="run_foo()" />
-	<span class="span_demo_result" id="demo_result"></span>  
-	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">
-var bar = foo('a,b,c');
-console.log(bar);
-</code></pre>
-	
 	<input type="button" value="Run in Thread" onclick="run_foo_in_thread()" />
 
-	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
-
+<br/><br/>
 <pre>
-<code data-language="javascript">/* Callback style */
-vkthread.exec(foo,['a,b,c'], function(data){
-	var bar = data;
-	console.log(bar);
-});
+<code data-language="javascript">
+var param = {
+	fn: foo,
+	args: ['a,b,c']
+};
 
-/* Promise style */	
-vkthread.run(foo,['a,b,c']).then(function(data){
-	var bar = data;
-	console.log(bar);
+vkthread.exec(param).then(function(data){
+	console.log(data);
 });
 
 </code></pre>
