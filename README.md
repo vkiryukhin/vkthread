@@ -1,43 +1,58 @@
-vkThread
-========
+##vkThread
+javascript plugin, which allows you to execute a function in a separate thread.
 
-is a javascript plugin, which allows you to execute any function of a your code in a thread.
+Function can be defined directly in the main thread or called from an external javascript file.
 
-The only folder you need to have on you server is **vkthread**. The rest stuff are examples, demo, etc.
+**Function can be:**
 
-**Standalone function**: simply pass it as an argument to the vkthread(), and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker.
+- Regular functions
+- Object's methods
+- Functions with dependencies
+- Functions with context
+- Anonymous functions
 
-**Object's method**: vkthread accepts context as an optional parameter and executes function in its context. Simply pass the object as a context, that's it.
+Plugin is built on HTML5 "Web Worker" technology.
 
-**Function with dependencies**: vkthread accepts a list of filenames as an optional argument and imports these files in the thread before the function is calling
+- file size: 1.8k minified / 3.6k development
+- Doesn't have any dependecies.
 
-Here is a basic example:
->```javascript
-> function sum(num1, num2) {
->     return num1 + num2;
->}
+**Basic usage:**
+- install with bower
+```
+bower install vkthread
+```
+- integrate plugun in your project:
+```html
+<script src="../vkthread/vkthread.min.js" type="text/javascript"></script>
+```
+- create function
+```javascript
+/* function to execute in a thread */
+function foo(n, m){
+	return n + m;
+}
+```
 
-in main page you execute it this way: 
+- execute this function in a thread
+```javascript
+/* create an object, which you pass to vkThread as an argument*/
+var param = {
+      fn: foo      // <-- function to execute
+      args: [1, 2] // <-- arguments for this function
+    };
 
->```javascript
->var foo = sum(2,3);
-console.log(foo);
->
+/* run thread */
+vkThread.exec(param).then(
+   function (data) {
+       console.log(data);  // <-- thread returns 3
+    },
+    function(err) {
+        alert(err);  // <-- thread returns error message
+    }
 
-now, let's open a new thread and execute function sum() in this thread.
->```javascript
->vkthread.exec( sum,  //function to execute in a thread
-              [2,3],  //arguments for the function
-              function(data){ //collback function to process result
-                  var foo = data;
-                  console.log(foo);
-              });
->
+);
+```
 
-See live examples at [http://eslinstructor.net/vkthread](http://eslinstructor.net/vkthread)
-
-vkThread is built on HTML5 "Worker" technology. It also incorporates [JSONfn](http://www.eslinstructor.net/jsonfn/) code to implement the key tasks.
-In spite of technical complexity, plugin is super compact. Development version (plain text with comments) is less than 2k. I don't care to minify it.
-
+######Documentation & Examples: ( http://www.eslinstructor.net/vkthread/demo/ )
 
 
