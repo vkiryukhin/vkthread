@@ -3,39 +3,28 @@
 <div class="h6">Anonymous Function</div>
 <p>Anonymous function also can be run in a thread, why not?</p>
 
-<input type="button" value="Run in Page" onclick="run_anonim()" />
-	<span class="span_demo_result" id="demo_result"></span>  
-	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">var foo = (function(ar1,ar2){
-		return _.union(ar1,ar2);
-	})([1,2,3],[3,4,5]);
-	
-console.log(foo);
-</code></pre>
-	
+
+
 	<input type="button" value="Run in Thread" onclick="run_anonim_in_thread()" />
 
-	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+<br/><br/>
 
-<pre><code data-language="javascript">/* Callback style */
-vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
-		[[1,2,3],[3,4,5]], //list of arguments
-		function(data){ // callback function
-			var foo = data;
-			console.log(foo);
-		}, 
-		['../js/underscore-min.js'] 
-	);
+<pre><code data-language="javascript">
+var param = {
+	fn: function(ar1, ar2){
+		return _.union(ar1,ar2)
+	},
+	args: [[1,2,3], [3,4,5]],
+	importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js']
+}
 
-/* Promise style */	
-vkthread.run(function(ar1,ar2){return _.union(ar1,ar2)}, //anonymous function
-		[[1,2,3],[3,4,5]], //list of arguments
-		['../js/underscore-min.js'] 
-	).then(function(data){ 
-		var foo = data;
-		console.log(foo);
-	});
+vkthread.exec(param).then(
+	function(data){
+		console.log(data);
+	}
+);
 </code></pre>
 
 

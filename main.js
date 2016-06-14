@@ -70,26 +70,6 @@ function run_demo_in_thread_promise(){
 function bar(arr1,arr2){
 	return _.union(arr1,arr2);
 }
-//function run_bar(){
-//	document.getElementById('demo_result').innerHTML = bar([1,2,3],[2,3,4]);
-//}
-function run_bar_in_thread(){
-
-	var param = {
-			fn:bar,
-			args: [[1,2,3],[2,3,4]],
-			importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'],
-			cb: function(data, err){
-				if(err){
-					console.log(err);
-					return;
-				}
-				document.getElementById('demo_result').innerHTML = data;
-			}
-		};
-
-	vkthread.exec(param);
-}
 
 function run_bar_in_thread_promise(){
 
@@ -99,12 +79,9 @@ function run_bar_in_thread_promise(){
 			importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js']
 		};
 
-	vkthread.run(param).then(
+	vkthread.exec(param).then(
 		function(data){
 			document.getElementById('demo_result_thread').innerHTML = data;
-		},
-		function(err){
-			console.log(err);
 		}
 	);
 }
@@ -113,73 +90,118 @@ function Foobar(arr1,arr2){
 	this.arr1 = arr1;
 	this.arr2 = arr2;
 }
+
 Foobar.prototype.union = function(){
 	return _.union(this.arr1,this.arr2);
 }
-function run_foobar(){
-	var myFoobar = new Foobar([1,2,3],[2,3,4]);
-	document.getElementById('demo_result').innerHTML = myFoobar.union();
-}
+
 function run_foobar_in_thread(){
-	var myFoobar = new Foobar([1,2,3],[2,3,4]);
-	vkthread.exec(myFoobar.union,[],function(data){
-		document.getElementById('demo_result_thread').innerHTML = data;
-	},myFoobar,['../js/underscore-min.js']);
-}
-//----------------------------------------------------//
-function run_anonim(){
-	document.getElementById('demo_result').innerHTML = (function(ar1,ar2){
-									return _.union(ar1,ar2);
-								})([1,2,3],[3,4,5]);
-}
-function run_anonim_in_thread(){
-	vkthread.exec(function(ar1,ar2){return _.union(ar1,ar2)},
-			[[1,2,3],[3,4,5]],
-			function(data){
-				document.getElementById('demo_result_thread').innerHTML = data;
-			},
-			['../js/underscore-min.js']
+	var myFoobar = new Foobar([1,2,3], [2,3,4]);
+
+	var param = {
+			fn: myFoobar.union,
+			context: myFoobar,
+			importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js']
+		};
+
+	vkthread.exec(param).then(
+		function(data){
+			document.getElementById('demo_result_thread').innerHTML = data;
+		}
 	);
 }
+
 //----------------------------------------------------//
-function greetLambda(param) {
+
+function run_anonim_in_thread(){
+
+	var param = {
+		fn: function(ar1, ar2){return _.union(ar1,ar2)},
+		args: [[1,2,3], [3,4,5]],
+		importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js']
+	}
+
+	vkthread.exec(param).then(
+		function(data){
+			document.getElementById('demo_result_thread').innerHTML = data;
+		}
+	);
+
+}
+//----------------------------------------------------//
+
+function greetLambda(arg) {
 	var displayMessage = (function(msg1){
 		return function(msg2){
 			return msg1 + msg2;
 	   }
-	}(param));
+	}(arg));
+
 	return displayMessage("Lambda World!");
 }
 
-function run_greetLambda(){
-	document.getElementById('demo_result').innerHTML = greetLambda('Hello, ');
-}
-
 function run_greetLambda_in_thread(){
-	vkthread.exec(greetLambda, ['Hello, '], function(data){
-		document.getElementById('demo_result_thread').innerHTML = data;
-	});
+
+	var param = {
+		fn: greetLambda,
+		args: ['Hello, ']
+	}
+
+	vkthread.exec(param).then(
+		function(data){
+			document.getElementById('demo_result_thread').innerHTML = data;
+		}
+	);
 }
 //----------------------------------------------------//
-/*
-function dummySum(start,end){
-	var sum =0,
-		ix,
-		dummy = 'a,b,c,d,e,f,g';
+//External
+function run_external_in_thread(){
+	var param = {
+	    fn:'makeNamesUpper',
+	    args: [['one', 'two', 'three']],
+	    importFiles:['http://localhost/projects/app/vkthread/js/my_utils.js']
+	 };
 
-	for(ix=start; ix<end; ix++){
-		dummy.split(',').join('-');
-		sum = sum+ix;
-	}
-	return sum;
+	vkthread.exec(param).then(
+       function (data) {
+          document.getElementById('demo_result_thread').innerHTML = data;
+        }
+   );
 }
-*/
+
+function normalize(arr){
+	return arr.map(function(elm){
+		return elm.trim().toLowerCase();
+	});
+}
+
+
+function execAll_normalize(){
+
+	var arr = ['ONE ', ' TWo ', 'ThReE', 'FouR ', ' Five ', 'sIX', '      SEVEn'],
+
+		param1 = {
+			fn: normalize,
+			args: [arr.slice(0,3)]
+		},
+		param2 = {
+			fn: normalize,
+			args: [arr.slice(3, arr.length)]
+		};
+
+	vkthread.execAll([param1,param2]).then(
+      function (data) {
+        document.getElementById('demo_result').innerHTML = data[0].concat(data[1]);
+      }
+  );
+
+
+}
+
 function dummySum(start,end){
-	var sum = 0,
-		dummy = 'a,b,c,d,e';
+	var sum = 0;
 
 	for(var ix=start; ix<end; ix++){
-		dummy.split(',').join('-');
 		sum = sum+ix;
 	}
 	return sum;
@@ -357,6 +379,11 @@ function loadTemplate(name)
 		case 'lambda':
 			$('#leftpanel').hide();
 			$('#rightpanel').empty().load('html/lambda.html',function(){Rainbow.color();});
+			break;
+
+		case 'remote':
+			$('#leftpanel').hide();
+			$('#rightpanel').empty().load('html/external.html',function(){Rainbow.color();});
 			break;
 
     case 'ajax':

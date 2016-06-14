@@ -2,50 +2,37 @@
 <tr><td>
 <div class="h6">Lambda Function</div>
 <p>Lambda. Have fun! </p>
-<pre><code data-language="javascript">function greetLambda(param) {
-	var displayMessage = (function(msg1){  
-		return function(msg2){  
-			return msg1 + msg2;
-	   }     
-	}(param));
-	return displayMessage("Lambda World!");
-}</code></pre>
+<pre><code data-language="javascript">
+function greetLambda(arg) {
 
+    var displayMessage = (function(msg1){
+        return function(msg2){
+            return msg1 + msg2;
+        }
+    }(arg));
 
-
-<input type="button" value="Run in Page" onclick="run_greetLambda()" />
-	<span class="span_demo_result" id="demo_result"></span>  
-	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">var foo = greetLambda('Hello, ');
-console.log(foo);
+    return displayMessage("Lambda World!");
+}
 </code></pre>
-	
+
+
 	<input type="button" value="Run in Thread" onclick="run_greetLambda_in_thread()" />
 
-	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+<br/><br/>
 
-<pre><code data-language="javascript">/* Callback style */
-vkthread.exec(greetLambda, // lambda function to run in a thread;
-		['Hello, '], //arguments for the function;
-		function(data){ // callback
-			var foo = data;
-			console.log(foo);
-		}
-	);
+<pre><code data-language="javascript">
+var param = {
+    fn: greetLambda,
+    args: ['Hello, ']
+}
 
-/* Promise style */		
-vkthread.run(greetLambda, // lambda function to run in a thread;
-		['Hello, '] //arguments for the function;
-		).then(function(data){ 
-			var foo = data;
-			console.log(foo);
-		});
+vkthread.exec(param).then(
+    function(data){
+	    console.log(data);
+    }
+);
 </code></pre>
-
-
-
 <p>
-
-
 </td></tr></table>

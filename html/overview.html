@@ -2,7 +2,7 @@
 <tr><td>
 <div class="h6">Overview</div>
 <p>
-<b>vkThread</b> is a javascript plugin, which allows you to execute any function of a your code in a thread. 
+<b>vkThread</b> is a javascript plugin, which allows you to execute any function of a your code in a thread.
 </p>
 <p>
 Almost any type of function can be opened in a thread with this plugin:
@@ -15,19 +15,19 @@ Almost any type of function can be opened in a thread with this plugin:
 </ul>
 </p>
 <!--p>
-<span class="color_blue">Regular function:</span> simply pass it as an argument to the <b>vkthread()</b>, and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker. 
+<span class="color_blue">Regular function:</span> simply pass it as an argument to the <b>vkthread()</b>, and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker.
 </p>
-<p><span class="color_blue">Object's method:</span> <b>vkthread</b> accepts context 
+<p><span class="color_blue">Object's method:</span> <b>vkthread</b> accepts context
 as an optional parameter and executes function in its context. Simply pass the object as a context, that's it.</p>
-<p><span class="color_blue">Function with dependencies:</span> <b>vkthread</b> 
-accepts a list of filenames as an optional argument and imports these files 
-in the thread before the function is calling 
+<p><span class="color_blue">Function with dependencies:</span> <b>vkthread</b>
+accepts a list of filenames as an optional argument and imports these files
+in the thread before the function is calling
 </p-->
 
 Working with this plugin you can use 2 type of coding styles:
 <ul>
 <li>"Callback" ( no dependencies in this case)</li>
-<li>"Promise" (you need to link one of two promise libraries: either <a href="http://jquery.com/" target="_blank" class="color_blue">jQuery</a> 
+<li>"Promise" (you need to link one of two promise libraries: either <a href="http://jquery.com/" target="_blank" class="color_blue">jQuery</a>
 or <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a>
  from <a href="http://cujojs.com/" target="_blank" class="color_blue">cujojs</a>  )</li>
 </ul>
@@ -37,38 +37,29 @@ or <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">w
 <pre><code data-language="javascript">function sum(num1, num2) {
 	return num1 + num2;
 }
-/* To run this function in a page */
-var foo = sum(2, 3);
-console.log(foo);
+
 </code></pre>
 
 <p><b>To run this function in a thread:</b></p>
-<pre><code data-language="javascript">/* Callback style */
-vkthread.exec(sum, //function to run in a thread;
-             [2,3], //arguments for the function;
-             function(data){ // callback function;
-                var foo = data; 
-                console.log(foo);
-            });
-</code></pre>
 
-<pre><code data-language="javascript">/* Promise style */
-vkthread.run(sum, //function to run in a thread;
-            [2,3] //arguments for the function;
-           ).then(function (data) { 
-                     var foo = data; 
-                     console.log(foo);
-           });
-</code>	</pre>
+
+<pre><code data-language="javascript">var param = {
+    fn: foo,     // &lt;-- function to run in a thread;
+    args: [2, 3] // &lt;-- function's arguments;
+};
+
+vkthread.exec(param).then(
+    function(data){
+        console.log(data); // &lt;-- prints 5;
+    }
+);</code>	</pre>
 
 
 </p>
 
-<b>vkThread</b> is built on HTML5 "Worker" technology.  It also incorporates 
-<a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"  
-title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a> 
-code to implement key tasks. External "when()" or jQuery library are optional.<br/><br/>
-Plugin is very compact. Development version (plain text with comments) is less than 2.5k. 
-
+<b>vkThread</b> is built on HTML5 "Worker" technology.  It also incorporates
+<a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"
+title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a>
+code to implement key tasks.
 
 </td></tr></table>

@@ -1,0 +1,47 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Remote Function</div>
+<p><div>You can easily use remote function in a thread </div>
+In this case function makeNamesUpper( ) is located in external file.
+
+</p>
+<i>projects/app/vkthread/js/my_utils.js</i>
+<pre><code data-language="javascript">. . .
+
+function makeNamesUpper(arr){
+
+   return arr.map(function(elm){
+    	return elm.toUpperCase();
+    });
+}
+
+. . .
+</code></pre>
+
+	<input type="button" value="Run in Thread" onclick="run_external_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span>
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+<br/><br/>
+<pre>
+<code data-language="javascript">
+var param = {
+    fn:'makeNamesUpper', // &lt;-- function's name; must be a String
+    args: [['one', 'two', 'three']],
+    importFiles:['http://localhost/projects/app/vkthread/js/my_utils.js']
+};
+
+vkthread.exec(param).then(
+   function (data) {
+      console.log(data);
+    }
+);
+
+</code></pre>
+
+
+
+<p>
+
+
+</td></tr></table>

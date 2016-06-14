@@ -1,177 +1,30 @@
-<style type="text/css">
-#doc {margin:1em;}
-#doc ul li {margin:0.5em;}
-#tab1 td {padding-right:15px;}
-</style>
+<p></p>
+<h4>vkThread.exec ( param )</h4>
+<p>Run function in a thread.</p>
+<pre><code data-language="javascript">
+	@return -- promise object
 
-<div id="doc">
-<div class="h6">Documentation</div>
-<ul>
-<li>
-To start using this plugin, download folder "vkthread" on your server. Only this folder out of the entire package you need. 
-The rest content are examples and demo.
-</li>
+	param -- object which has following attributes:
 
-	<li>
-	
-	There is no dependency on external javascript library, if you prefer to use traditional "callback" coding style. 
-	Function <b>vkthread.exec()</b> uses only native javascript objects. <br/><br/>
-	<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
-	
+	@fn                     - function to execute
+	@args        (optional) - array of arguments for @fn
+	@context     (optional) - object which will be 'this' for @fn
+	@importFiles (optional) - array of strings; each string is URL
+	                          to a file, which @fn depends on.
 
-	However, if you prefer to use promise-style functions <b>vkthread.run()</b> and <b>vkthread.runAll()</b>, which depend on external
-	library, you need to include reference to those library above the reference to vkthread.js. 
-	Master branch uses <a href="http://jquery.com/" target="_blank" class="color_blue">jQuery</a>  as the 
-	promise library.<br/><br/>
-	
-	<pre><code data-language="html">&lt;script type="text/javascript" src="path/to/jquery-1.9.1.min.js"&gt;&lt;/script&gt;</code>
-<code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>
-	
-	Another promise library you can use with vkthread is <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a>
-	from <a href="http://cujojs.com/" target="_blank" class="color_blue">cujojs</a>. 
-	Branch <a href="https://github.com/vkiryukhin/vkthread/tree/when" target="_blank" class="color_blue" >vkthread/when</a> 
-	on github is customized to work with this library.<br/>
-
-<pre><code data-language="html">&lt;script type="text/javascript" src="vkthread/when-legacy-setup.js"&gt;&lt;/script&gt;</code>
-<code data-language="html">&lt;script type="text/javascript" src="vkthread/when.js"&gt;&lt;/script&gt;</code>
-<code data-language="html">&lt;script type="text/javascript" src="vkthread/vkthread.js"&gt;&lt;/script&gt;</code></pre>	
-
-
-	
-	</li>
-	<li>
-	<b>Configuration</b> ( optional )<br/><br/>
-	vkthread plugin consist of 2 files: vkthread.js and worker.js, which are located in the same folder. Plugin needs to know path to <b>worker.js</b>. At construction time plugin figures it out automatically.
-	However, developer can set it manually.
-	<pre><code data-language="javascript">vkthread.setPath("vkthread/worker.js");</code></pre>
-	</li>
-	<li>
-	<b>API</b>
-<div id="accordion">
-	<h3><pre><code data-language="javascript">vkthread.exec(fn,args, callback[, context[, dependents]] );</code></pre></h3>
-	<ul>
-	<li><span class="color_blue_bold">fn</span> - function to execute in a thread <br/><span class="color_red">mandatory</span> <br/><br/>
-	<pre><code data-language="javascript">function foo();
-	
-vkthread.exec(foo, . . . );</code></pre>
-Function can be anonymous:<br/>
-<pre><code data-language="javascript">vkthread.exec(function(n,m){return n+m;},  . . . );</code></pre>
-	</li>
-	
-	
-	<li><span class="color_blue_bold">args</span> - Array of arguments, which you want to pass along with this function<br/> <span class="color_red">mandatory</span> <br/><br/>
-	<pre><code data-language="javascript">function foo(m,n){return n+m};
-	
-vkthread.exec(foo, [2,3], . . . );</code></pre>
-Array can be empty:
-<pre><code data-language="javascript">function foo(){return 'hello world'};
-
-vkthread.exec(foo, [], . . . );</code></pre>
-	</li>
-	
-	
-	<li><span class="color_blue_bold">callback</span> - function to process returned data. Data is passed as an argument<br/> <span class="color_red">mandatory</span> <br/><br/>
-	<pre><code data-language="javascript">function foo(m,n){return n+m};
-	
-vkthread.exec(foo, [2,3], function(data){alert(data)} );</code></pre>
-	</li>
-	
-	<li><span class="color_blue_bold">context</span> - object, which function's <code><i>this</i></code> pointer will point to.<br/> <span class="color_green">optional</span> <br/><br/>
-	If omitted, thread's <code>self</code> is used as context.
-	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
-Foo.prototype.bar = function(){return this.n + this.m};
-	
-var myFoo = new Foo(2,3);
-	
-vkthread.exec(myFoo.bar, [], function(data){...}, myFoo );</code></pre>
-	</li>
-	
-	<li><span class="color_blue_bold">dependencies</span> - Array of strings; list of files, which this function depends on.
-	<br/> <span class="color_green">optional</span> <br/><br/>
-	
-	<pre><code data-language="javascript">function Foo(n,m){this.n = n; this.m = m;};
-Foo.prototype.bar = function(){return _.union(this.n + this.m) };
-	
-var myFoo = new Foo([1,2],[2,3]);	
-vkthread.exec(myFoo.bar, [], function(data){...}, myFoo, ['js/underscore.js'] );</code></pre>
-
-If context is omitted, dependency is set at the 4-th position.
-<pre><code data-language="javascript">function bar(arr1,arr2){ return _.union(arr1,arr2) }
-
-vkthread.exec(bar, [ [1,2],[1,3] ], 
-		function(data){...}, 
-		['js/underscore.js','js/lib/helper.js'] );
 </code></pre>
-	</li>
-	
-	
-	</ul>
-	
-	
-	
-<h3><pre><code data-language="javascript">vkthread.run(fn,args[, context[, dependents]] ).then(function(data){...});</code></pre>	</h3>
-	<ul>
-	<li> 
-		<div><span class="color_blue_bold">fn</span>  - same as in vkthread.exec()</div> 
-		<div><span class="color_blue_bold">args</span>  - same as in vkthread.exec() </div>
-		<div><span class="color_blue_bold">context</span>  - same as in vkthread.exec() </div> 
-		<div><span class="color_blue_bold">dependents</span>  - same as in vkthread.exec() </div>
-<br/>		
-There is no @callback argument. Returned data is processed in <span class="color_blue_bold">.then()</span> claster. It's passed as an argument to the <span class="color_blue_bold">then()</span> function
-<br/>
-<pre><code data-language="javascript">function sum(num1, num2){
-	return num1 + num2;
-}
+<p></p>
+<h4>vkThread.execAll ( [param1, param2, ... ] )</h4>
+<p>Run multiple functions in multiple threads.</p>
+<pre><code data-language="javascript">
+	@return -- promise object when all threads done.
 
-vkthread.run( [sum, [1, 2]] )
-	.then(function (data) {
-		console.log( data ); // print "3"
-	});
+	param -- object (see above )
 </code></pre>
 
-	</li>
-	
-	</ul>
-	
-
-
-<h3><pre><code data-language="javascript">vkthread.runAll( [fn,args[, context[, dependents]] ], [...], ...  )
-	.then(function(data){...});</code></pre>	</h3>
-	<ul>
-	<li> <p>
-		Function <span class="color_blue_bold">vkthread.runAll()</span> lets you to start simultaneous 
-		execution of multiple vkthread.run() functions in parallel threads. Result is returned after 
-		all threads finished their work.
-		
-		Function's argument is an array, each element of which is argument list for individual vkthread.run() function. 
-		(see <b>vkthread.run()</b> for details).
-		</p>
-		
-<pre><code data-language="javascript">function sum(num1, num2){
-	return num1 + num2;
-}
-
-function mul(num1, num2){
-	return num1 * num2;
-}
-
-vkthread.runAll([ 
-	[sum, [1, 2]], 
-	[mul, [7, 8]] 
-]).then(function (data) {
-	console.log( data[1] - data[0]); // print "53"
-});
+<p></p>
+	<h4>vkThread.getVersion();</h4>
+<pre><code data-language="javascript">
+	@return current version as a String;
 </code></pre>
-	</li>
-	
-	</ul>	
-	
-	
-	
-	
-</div><!-- /accordion -->	
-
-	</li>
-</ul>
-
-</div>
+<p></p><p></p>

@@ -14,46 +14,24 @@ Foobar.prototype.union = function(){
 var myFoobar = new Foobar([1,2,3],[2,3,4]);
 </code></pre>
 
-<input type="button" value="Run in Page" onclick="run_foobar()" />
-	<span class="span_demo_result" id="demo_result"></span>  
-	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
-<pre><code data-language="javascript">
-
-var baz = myFoobar.union();
-console.log(baz);
-
-</code></pre>
-	
 	<input type="button" value="Run in Thread" onclick="run_foobar_in_thread()" />
 
-	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">/* Callback style */
-vkthread.exec(myFoobar.union, //function to run in a thread;
-		[], //arguments for the function;
-		function(data){ // callback function;
-			var baz = data;
-			console.log(baz);
-		},
-		myFoobar, // context
-		['../js/underscore-min.js'] /* dependency */
-	);
+<br/></br/>
+<pre><code data-language="javascript">
+var param = {
+	fn: myFoobar.union,
+	context: myFoobar,
+	importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js']
+};
 
-/* Promise style */	
-vkthread.run(myFoobar.union, //function to run in a thread;
-		[], //arguments for the function;
-		myFoobar, // context
-		['../js/underscore-min.js'] /* dependency */
-	).then(function(data){
-		var baz = data;
-		console.log(baz);
-	});
+vkthread.exec(param).then(
+	function(data){
+		console.log(data);
+	}
+);
 </code></pre>
-
-
-
 <p>
-
-
 </td></tr></table>
