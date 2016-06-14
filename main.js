@@ -59,7 +59,7 @@ function run_demo_in_thread_promise(){
 			context: myDemo
 		};
 
-	vkthread.run(param).then(
+	vkthread.exec(param).then(
 		function(data){
 			document.getElementById('demo_result_thread').innerHTML = data;
 		}
