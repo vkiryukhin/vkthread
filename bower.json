@@ -1,0 +1,25 @@
+{
+  "name": "vkThread",
+  "description": "javascript plugin to execute a function in a thread",
+  "main": "vkthread/vkthread.js",
+  "authors": [
+    "Vadim Kiryukhin <vkiryukhin@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "webworker",
+    "multithreading",
+    "thread"
+  ],
+  "homepage": "https://github.com/vkiryukhin/vkthread",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {},
+  "dependencies": {}
+}

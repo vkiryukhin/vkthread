@@ -2,7 +2,14 @@
 <tr><td>
 <div class="h6">Overview</div>
 <p>
-<b>vkThread</b> is a javascript plugin, which allows you to execute any function of a your code in a thread.
+<b>vkThread</b> is a javascript plugin, which allows you to execute a piece of your code in a thread.
+<br/><br/>
+Plugin is built on HTML5 "Web Workers" technology and uses ES6 "Promise" object. <br/>It also incorporates
+<a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"
+title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a>
+code to implement key tasks.
+<br/>
+
 </p>
 <p>
 Almost any type of function can be opened in a thread with this plugin:
@@ -14,27 +21,10 @@ Almost any type of function can be opened in a thread with this plugin:
 <li>Lambda functions</li>
 </ul>
 </p>
-<!--p>
-<span class="color_blue">Regular function:</span> simply pass it as an argument to the <b>vkthread()</b>, and get the result in a callback function. You don't need to create a separate file for each thread, like you normally do with a regular worker.
-</p>
-<p><span class="color_blue">Object's method:</span> <b>vkthread</b> accepts context
-as an optional parameter and executes function in its context. Simply pass the object as a context, that's it.</p>
-<p><span class="color_blue">Function with dependencies:</span> <b>vkthread</b>
-accepts a list of filenames as an optional argument and imports these files
-in the thread before the function is calling
-</p-->
-
-Working with this plugin you can use 2 type of coding styles:
-<ul>
-<li>"Callback" ( no dependencies in this case)</li>
-<li>"Promise" (you need to link one of two promise libraries: either <a href="http://jquery.com/" target="_blank" class="color_blue">jQuery</a>
-or <a href="https://github.com/cujojs/when" target="_blank" class="color_blue">when()</a>
- from <a href="http://cujojs.com/" target="_blank" class="color_blue">cujojs</a>  )</li>
-</ul>
 
 <p>
-<b>Here is a basic example:</b>
-<pre><code data-language="javascript">function sum(num1, num2) {
+<b>Basic usage:</b>
+<pre><code data-language="javascript">function foo(num1, num2) {
 	return num1 + num2;
 }
 
@@ -56,10 +46,5 @@ vkthread.exec(param).then(
 
 
 </p>
-
-<b>vkThread</b> is built on HTML5 "Worker" technology.  It also incorporates
-<a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"
-title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a>
-code to implement key tasks.
 
 </td></tr></table>

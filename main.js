@@ -114,11 +114,18 @@ function run_foobar_in_thread(){
 //----------------------------------------------------//
 
 function run_anonim_in_thread(){
-
+/*
 	var param = {
 		fn: function(ar1, ar2){return _.union(ar1,ar2)},
 		args: [[1,2,3], [3,4,5]],
 		importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js']
+	}
+*/
+	var param = {
+		fn: function(arr){
+				return arr.map(Math.sqrt);
+			},
+		args: [[1, 4, 9]]
 	}
 
 	vkthread.exec(param).then(

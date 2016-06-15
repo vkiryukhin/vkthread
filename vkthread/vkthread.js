@@ -14,16 +14,17 @@
  */
 
 /* jshint maxlen:false */
+/* global Promise */
 
 (function(){
-"use strict";
+'use strict';
 
 /* fragment of JSONfn plugin ( https://github.com/vkiryukhin/jsonfn ) */
 
   var JSONfn = {
     stringify:function (obj) {
       return JSON.stringify(obj, function (key, value) {
-        if (value instanceof Function || typeof value == 'function') {
+        if (value instanceof Function || typeof value === 'function') {
           return value.toString();
         }
         if (value instanceof RegExp) {
