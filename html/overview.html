@@ -4,10 +4,7 @@
 <p>
 <b>vkThread</b> is a javascript plugin, which allows you to execute a piece of your code in a thread.
 <br/><br/>
-Plugin is built on HTML5 "Web Workers" technology and uses ES6 "Promise" object. <br/>It also incorporates
-<a href="http://www.eslinstructor.net/jsonfn/" target="_blank" class="color_blue"
-title="Converts jsvascript object with functions into a string and vise versa.">JSONfn</a>
-code to implement key tasks.
+Plugin is built on HTML5 "Web Workers" technology and uses ES6 "Promise" object.<sup>*</sup>
 <br/>
 
 </p>
@@ -24,13 +21,26 @@ Almost any type of function can be opened in a thread with this plugin:
 
 <p>
 <b>Basic usage:</b>
+
+<p>Install with bower</p>
+<pre><code data-language="javascript">
+bower install vkthread
+</code></pre>
+
+
+<p>integrate plugun in your project</p>
+<pre><code data-language="html">
+&lt;script src="../vkthread/vkthread.min.js" type="text/javascript"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>create function</p>
 <pre><code data-language="javascript">function foo(num1, num2) {
 	return num1 + num2;
 }
 
 </code></pre>
 
-<p><b>To run this function in a thread:</b></p>
+<p><b>execute this function in a thread:</b></p>
 
 
 <pre><code data-language="javascript">var param = {
@@ -47,4 +57,7 @@ vkthread.exec(param).then(
 
 </p>
 
+
+<div style="font-size:80%"><sup>*</sup>
+old version of this plugin can be found on github under tag <a href="https://github.com/vkiryukhin/vkthread/tree/0.5.7" target="_blank">0.5.7</a>,  demo and documentation can be found <a href="http://www.eslinstructor.net/vkthread-0.5.7/" target="_blank">here</a></div>
 </td></tr></table>
