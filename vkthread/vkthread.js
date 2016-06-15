@@ -3,7 +3,7 @@
  *
  * https://github.com/vkiryukhin/vkthread
  *
- * @version: 2.0.1
+ * @version: 2.0.2
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  *
@@ -45,7 +45,7 @@
 
   function Vkthread(){
       this.getVersion = function(){
-          return '2.0.1';
+          return '2.0.2';
       };
   }
 
