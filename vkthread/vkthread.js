@@ -3,7 +3,7 @@
  * https://github.com/vkiryukhin/vkthread
  * http://www.eslinstructor.net/vkthread/
  *
- * @version: 0.57.00 ( February 2014 )
+ * @version: 0.5.7 ( February 2014 )
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  * Copyright (c) 2013 Vadim Kiryukhin 
