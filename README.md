@@ -53,6 +53,6 @@ vkThread.exec(param).then(
 );
 ```
 
-######Documentation & Examples: ( http://www.eslinstructor.net/vkthread/demo/ )
+######Documentation & Examples: ( http://www.eslinstructor.net/vkthread/ )
 
 
