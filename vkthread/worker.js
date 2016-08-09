@@ -6,8 +6,9 @@
  * http://www.eslinstructor.net/vkthread/
  *
  */
-'use strict';
+
 (function() {
+  'use strict';
 
   var JSONfn = {
     parse:function (str, date2obj) {
@@ -57,12 +58,16 @@
     var obj = JSONfn.parse(e.data, true),
         cntx = obj.context || self;
 
-    if(obj.importFiles){
-      importScripts.apply(null,obj.importFiles);
+    if (obj.importFiles) {
+      importScripts.apply(null, obj.importFiles);
     }
 
-    postMessage(obj.fn.apply(obj.context, obj.args));
-
-  };
+    if (typeof obj.fn === "function") {
+      postMessage(obj.fn.apply(cntx, obj.args));
+    }
+    else {
+      postMessage(self[obj.fn].apply(cntx, obj.args));
+    }
+  }
 
 }());

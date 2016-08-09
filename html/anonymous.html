@@ -1,7 +1,7 @@
 <table style="text-align:justify;">
 <tr><td>
 <div class="h6">Anonymous Function</div>
-<p>Anonymous function also can be run in a thread, why not?</p>
+<p>Anonymous function also can be run in a thread. In this example it is ES6 Arrow function.</p>
 
 
 
@@ -13,9 +13,7 @@
 
 <pre><code data-language="javascript">
 var param = {
-	fn: function(arr){
-		return arr.map(Math.sqrt);
-	},
+	fn: (arr) => arr.map(Math.sqrt),
 	args: [[1, 4, 9]]
 }
 

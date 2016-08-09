@@ -115,43 +115,11 @@ function run_foobar_in_thread(){
 
 function run_anonim_in_thread(){
 
-	var obj = {
-    firstName: "John",
-    lastName: "Dow",
-
-    getFullNameArrow: () =>
-            this.firstName + " " + this.lastName,
-
-    testArrow: (n, m) =>  n + m,
-
-    greetLambda: function (param) {
-      var displayMessage = (function (msg1) {
-          return msg2 => msg1 + msg2;
-      }(param));
-      return displayMessage("Lambda World!");
-    }
-  };
-
 	var param = {
-		//fn: (a) => { return 'hello'},
-		//fn: (n) =>  {return n+1},
-		//fn: (arr) => arr.map(Math.sqrt),
-		//args: [7],
-		//args: [[1, 4, 9]],
-		//fn: function(){return 'Hello'},
-		fn: obj.getFullNameArrow,
-
-		context:obj
-	}
-
-/*
-	var param = {
-		fn: function(arr){
-				return arr.map(Math.sqrt);
-			},
+		fn: (arr) => arr.map(Math.sqrt),
 		args: [[1, 4, 9]]
 	}
-*/
+
 	vkthread.exec(param).then(
 		function(data){
 			document.getElementById('demo_result_thread').innerHTML = data;
@@ -448,11 +416,6 @@ function loadTemplate(name)
 								});
 							});
 			break;
-
-		//case 'function':
-		//	$('#leftpanel').show().load('html/basic.html',function(){Rainbow.color();});
-		//	$('#rightpanel').empty().load('html/demo.html',function(){Rainbow.color();});
-		//	break;
 
 	}
 
