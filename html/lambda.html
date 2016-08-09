@@ -4,13 +4,9 @@
 <p>Lambda. Have fun! </p>
 <pre><code data-language="javascript">
 function greetLambda(arg) {
-
     var displayMessage = (function(msg1){
-        return function(msg2){
-            return msg1 + msg2;
-        }
+        return (msg2) => msg1 + msg2; // ES6 Arrow function
     }(arg));
-
     return displayMessage("Lambda World!");
 }
 </code></pre>

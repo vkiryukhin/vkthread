@@ -8,7 +8,6 @@
  */
 
 (function() {
-
   'use strict';
 
   var JSONfn = {
@@ -54,9 +53,9 @@
       });
     }
   };
+
   onmessage = function(e) {
     var obj = JSONfn.parse(e.data, true),
-
         cntx = obj.context || self;
 
     if (obj.importFiles) {

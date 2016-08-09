@@ -131,11 +131,8 @@ function run_anonim_in_thread(){
 
 function greetLambda(arg) {
 	var displayMessage = (function(msg1){
-		return function(msg2){
-			return msg1 + msg2;
-	   }
+		return (msg2) => msg1 + msg2;
 	}(arg));
-
 	return displayMessage("Lambda World!");
 }
 
