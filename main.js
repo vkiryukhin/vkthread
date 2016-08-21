@@ -337,6 +337,68 @@ function run_ajax(){
 
   bar();
 }
+
+//----------  Promise --------------------------------//
+/*
+function promiseTest(){
+		var promise = new Promise(function(resolve, reject){
+			setTimeout( function(){
+				resolve('I am success');
+				//reject('I am rejected');
+			}, 1000);
+		});
+		return promise;
+}
+*/
+function promiseTestGET(url){
+
+	return $http(url).get().then(function(data){
+		return data.split('\n')[0];
+	});
+}
+
+function promiseTestPOST(url, args){
+
+	return $http(url, args).post().then(function(data){
+		return data.split('\n')[0];
+	});
+}
+
+function run_promiseTestGET_in_thread(){
+	var param = {
+		fn: promiseTestGET,
+		args:['http://localhost/projects/app/vkthread/LICENSE']
+	};
+
+	vkthread.exec(param)
+	.then(
+		function(data){
+			document.getElementById('demo_result_thread').innerHTML = data;
+		},
+		function(err){
+			alert(err);
+		}
+	);
+}
+
+function run_promiseTestPOST_in_thread(){
+	var param = {
+		fn: promiseTestPOST,
+		args:['http://localhost/projects/app/vkthread/LICENSE', {id:123, name:'John'}]
+	};
+
+	vkthread.exec(param)
+	.then(
+		function(data){
+			document.getElementById('demo_result_thread').innerHTML = data;
+		},
+		function(err){
+			alert(err);
+		}
+	);
+}
+//----------------------------------------------------//
+
 //----------------------------------------------------//
 function loadTemplate(name)
 {
@@ -384,7 +446,7 @@ function loadTemplate(name)
 
     case 'ajax':
 			$('#leftpanel').hide();
-			$('#rightpanel').empty().load('html/ajax.html',function(){Rainbow.color();});
+			$('#rightpanel').empty().load('html/http.html',function(){Rainbow.color();});
 			break;
 
 		case 'run':

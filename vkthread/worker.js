@@ -82,8 +82,9 @@
  * Customized by Vadim Kiryukhin
  */
 
- function $http(url, args){
+ function $http(url, _args){
 
+  var args = _args || '';
   // A small example of object
   var core = {
 
@@ -95,10 +96,9 @@
 
         // Instantiates the XMLHttpRequest
         var client = new XMLHttpRequest();
-        var uri = '';// = url;
+        var uri = '';
 
         if (args && (method === 'POST' || method === 'PUT')) {
-          //uri += '?';
           var argcount = 0;
           for (var key in args) {
             if (args.hasOwnProperty(key)) {
