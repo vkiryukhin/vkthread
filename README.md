@@ -14,7 +14,7 @@ Function can be defined directly in the main thread or called from an external j
 Plugin is built on HTML5 "Web Worker" technology.
 (old version of the plugin can be found under tag 0.5.7)
 
-- file size: 1.8k minified / 3.6k development
+- file size: 3.5k minified / 5.5k development
 - Doesn't have any dependecies.
 
 **Basic usage:**

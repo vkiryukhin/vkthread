@@ -1,0 +1,84 @@
+<table style="text-align:justify;">
+<tr><td>
+<div class="h6">Ajax in Thread</div>
+<p>
+To download and process data in a thread vkthread provides promise-style <b>$http()</b> function.
+</p>
+
+
+
+<p>
+<b>Example GET:</b>
+<br/>
+In this example function requests data from a github server (see URL below), sorts result based on<br/>
+star counter and returns name and number of stars for the most popular project in my github repo.
+</p>
+
+<pre><code data-language="javascript">function foo(url){
+	return $http(url).get().then(function(data){
+
+        var obj = JSON.parse(data)
+                      .sort( (a,b) => b.stargazers_count - a.stargazers_count )[0];
+
+		return obj.name + ' : ' + obj.stargazers_count + ' stars';
+	});
+}
+
+</code></pre>
+
+	<input type="button" value="Run GET" onclick="run_promiseTestGET_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread"></span>
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
+<br/><br/>
+<pre>
+<code data-language="javascript">var param = {
+	fn: foo,
+	args:['https://api.github.com/users/vkiryukhin/repos']
+};
+
+vkthread.exec(param).then(
+	function(data){
+		console.log(data);
+	}
+);
+</code></pre>
+
+
+<p>
+<b>Example POST:</b>
+<br/>
+In this example function requests file LICENSE from the origin server and returns the first line of the text.
+</p>
+<pre><code data-language="javascript">function foo(url){
+	return $http(url, args).post().then(function(data){
+		return data.split('\n')[0];
+	});
+}
+
+</code></pre>
+
+	<input type="button" value="Run POST" onclick="run_promiseTestPOST_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread_2"></span>
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread_2').innerHTML =''"/>
+<br/><br/>
+<pre>
+<code data-language="javascript">var param = {
+	fn: foo,
+	args:[ '../LICENSE', {id:123, name:'John'} ]
+};
+
+vkthread.exec(param).then(
+	function(data){
+		console.log(data);
+	}
+);
+</code></pre>
+
+
+
+</p>
+
+
+</td></tr></table>

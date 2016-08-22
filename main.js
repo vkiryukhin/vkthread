@@ -13,7 +13,7 @@ $(document).ready(function()
 
 function foo(str) {
 	var ret;
-	for(var ix=0; ix<1e6; ix++){
+	for(var ix=0; ix<1e7; ix++){
 		ret = str.split(',').join('-');
 	}
 	return ret;
@@ -353,7 +353,11 @@ function promiseTest(){
 function promiseTestGET(url){
 
 	return $http(url).get().then(function(data){
-		return data.split('\n')[0];
+
+        var obj = JSON.parse(data)
+        			  .sort( (a,b) => b.stargazers_count - a.stargazers_count )[0];
+
+		return obj.name + ' : ' + obj.stargazers_count + ' stars';
 	});
 }
 
@@ -367,7 +371,7 @@ function promiseTestPOST(url, args){
 function run_promiseTestGET_in_thread(){
 	var param = {
 		fn: promiseTestGET,
-		args:['http://localhost/projects/app/vkthread/LICENSE']
+		args:['https://api.github.com/users/vkiryukhin/repos']
 	};
 
 	vkthread.exec(param)
@@ -382,15 +386,19 @@ function run_promiseTestGET_in_thread(){
 }
 
 function run_promiseTestPOST_in_thread(){
+	var url = location.origin+'projects/app/vkthread/LICENSE';
+	console.log(url);
 	var param = {
 		fn: promiseTestPOST,
-		args:['http://localhost/projects/app/vkthread/LICENSE', {id:123, name:'John'}]
+		args:[ location.origin+'/projects/app/vkthread/LICENSE',
+			  {id:123, name:'John'} //dummy
+			 ]
 	};
 
 	vkthread.exec(param)
 	.then(
 		function(data){
-			document.getElementById('demo_result_thread').innerHTML = data;
+			document.getElementById('demo_result_thread_2').innerHTML = data;
 		},
 		function(err){
 			alert(err);
