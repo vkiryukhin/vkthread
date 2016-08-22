@@ -50,7 +50,7 @@ vkthread.exec(param).then(
 <br/>
 In this example function requests file LICENSE from the origin server and returns the first line of the text.
 </p>
-<pre><code data-language="javascript">function foo(url){
+<pre><code data-language="javascript">function foo(url, args){
 	return $http(url, args).post().then(function(data){
 		return data.split('\n')[0];
 	});
