@@ -386,12 +386,11 @@ function run_promiseTestGET_in_thread(){
 }
 
 function run_promiseTestPOST_in_thread(){
-	var url = location.origin+'projects/app/vkthread/LICENSE';
-	console.log(url);
+
 	var param = {
 		fn: promiseTestPOST,
-		args:[ location.origin+'/projects/app/vkthread/LICENSE',
-			  {id:123, name:'John'} //dummy
+		args:[ location.href+'html/http_post.php',
+			  {firstname:'John', lastname:'Dow'}
 			 ]
 	};
 

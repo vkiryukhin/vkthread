@@ -111,6 +111,7 @@
         }
 
         client.open(method, url);
+        client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
         client.send(uri);
 
         client.onload = function () {
