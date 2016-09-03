@@ -96,23 +96,15 @@
 
         // Instantiates the XMLHttpRequest
         var client = new XMLHttpRequest();
-        var uri = '';
+        var body = '';
 
         if (args && (method === 'POST' || method === 'PUT')) {
-          var argcount = 0;
-          for (var key in args) {
-            if (args.hasOwnProperty(key)) {
-              if (argcount++) {
-                uri += '&';
-              }
-              uri += encodeURIComponent(key) + '=' + encodeURIComponent(args[key]);
-            }
-          }
+          body += JSON.stringify(args);
         }
 
         client.open(method, url);
-        client.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
-        client.send(uri);
+        client.setRequestHeader('Content-Type', 'application/json')
+        client.send(body);
 
         client.onload = function () {
           if (this.status >= 200 && this.status < 300) {

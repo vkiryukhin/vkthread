@@ -1,3 +1,4 @@
 <?php
-     echo "Hello ". $_POST['firstname']. " ".$_POST['lastname'];
+	$json = json_decode(file_get_contents('php://input'));
+	echo "Hello ". $json->firstname . " ".$json->lastname;
 ?>
