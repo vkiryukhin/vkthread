@@ -352,7 +352,7 @@ function promiseTest(){
 */
 function promiseTestGET(url){
 
-	return $http(url).get().then(function(data){
+	return vkhttp(url).get().then(function(data){
 
         var obj = JSON.parse(data)
         			  .sort( (a,b) => b.stargazers_count - a.stargazers_count )[0];
@@ -363,9 +363,11 @@ function promiseTestGET(url){
 
 function promiseTestPOST(url, args){
 
-	return $http(url, args).post().then(function(data){
-		return data.split('\n')[0];
-	});
+	return vkhttp(url, args).post().then(
+		function(data){
+			var str = data.toUpperCase() + '!';
+			return str;
+		});
 }
 
 function run_promiseTestGET_in_thread(){

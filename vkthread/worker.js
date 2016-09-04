@@ -77,12 +77,12 @@
 
 /**
  * XMLHttpRequest using Promise
- * taken from
+ * code taken from
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
- * Customized by Vadim Kiryukhin
+ * customized by Vadim Kiryukhin
  */
 
- function $http(url, _args){
+ function vkhttp(url, _args){
 
   var args = _args || '';
   // A small example of object
