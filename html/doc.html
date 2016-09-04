@@ -25,7 +25,7 @@
 <p></p>
 
 
-<h4>$http( url, args )</h4>
+<h4>vkhttp( url, args )</h4>
 <p>Run XMLHttpRequest in a threads.</p>
 <pre><code data-language="javascript">
 	@return -- string
@@ -34,15 +34,15 @@
 	@args (optional) - object; data you send to server with POST or PUT methods
 
 </code></pre>
-<p>$http Usage:</p>
+<p>vkhttp Usage:</p>
 <pre><code data-language="javascript">
-	$http(url).get().then(...);
+	vkhttp(url).get().then(...);
 
-	$http(url, args).post().then(...);
+	vkhttp(url, args).post().then(...);
 
-	$http(url, args).put().then(...);
+	vkhttp(url, args).put().then(...);
 
-	$http(url).delete().then(...);
+	vkhttp(url).delete().then(...);
 
 </code></pre>
 
