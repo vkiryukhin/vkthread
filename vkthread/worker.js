@@ -63,8 +63,7 @@
     }
 
     if (typeof obj.fn === "function") { //regular function
-      if (Promise) {
-        //using Promise let us create promise-style vkhttp() later if needed;
+      if (typeof Promise !== 'undefined') {
         Promise.resolve(obj.fn.apply(cntx, obj.args))
                .then(function(data){postMessage(data)})
                .catch(function(reason){postMessage(reason)});
@@ -117,6 +116,3 @@ function vkhttp(url, method, _cb, _body){
 
   return ret;
 }
-
-
-

@@ -1,19 +1,25 @@
 <table style="text-align:justify;">
 <tr><td>
 <div class="h6">Anonymous Function</div>
-<p>Anonymous function also can be run in a thread. In this example it is ES6 Arrow function.</p>
+<p>Anonymous function also can be run in a thread. It can also be ES6 Arrow function.</p>
 
 
 
-	<input type="button" value="Run in Thread" onclick="run_anonim_in_thread()" />
+	<input type="button" value="Run Promise-style" onclick="run_anonim_in_thread()" class="hideFromIE"/>
+	<br/>
+	<input type="button" value="Run Callback-style" onclick="run_anonim_in_thread_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
 
 <pre><code data-language="javascript">
+/* ------- Promise style ------- */
+
 var param = {
-	fn: (arr) => arr.map(Math.sqrt),
+	fn: function(arr){
+            return arr.map(Math.sqrt)
+        },
 	args: [[1, 4, 9]]
 }
 
@@ -22,6 +28,22 @@ vkthread.exec(param).then(
 		console.log(data);
 	}
 );
+
+/* ------- Callback style ------- */
+
+function display(data){ // <-- callback function
+	console.log(data);
+}
+
+var param = {
+	fn: function(arr){
+            return arr.map(Math.sqrt)
+        },
+	args: [[1, 4, 9]],
+	cb: display    // <-- callback function
+}
+
+vkthread.exec(param);
 </code></pre>
 
 

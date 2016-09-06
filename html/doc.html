@@ -1,16 +1,21 @@
 <p></p>
-<h4>vkThread.exec ( param )</h4>
+<h4>vkthread.exec ( param )</h4>
 <p>Run function in a thread.</p>
 <pre><code data-language="javascript">
-	@return -- promise object
+	@return -- promise (Promise style)
+	        -- null (Callback style)
 
 	param -- object which has following attributes:
 
-	@fn                     - function to execute
-	@args        (optional) - array of arguments for @fn
-	@context     (optional) - object which will be 'this' for @fn
-	@importFiles (optional) - array of strings; each string is URL
-	                          to a file, which @fn depends on.
+	@fn                      - function to execute
+	@args        (optional)  - array of arguments for @fn
+	@context     (optional)  - object which will be 'this' for @fn
+	@importFiles (optional)  - array of strings; each string is URL
+	                           to a file, which @fn depends on.
+
+	@cb (mandatory/not used) - callback function to process returned
+	                           from a thread data. Mandatory for callback
+	                           style coding, ignored in Promise style code.
 
 </code></pre>
 <p></p>

@@ -81,6 +81,17 @@ function run_demo_in_thread_promise(){
 	);
 }
 
+function run_demo_in_thread_promise_cb(){
+	var myDemo = new Demo('aaa,bbb,ccc',7e5),
+		param = {
+			fn: myDemo.foo,
+			context: myDemo,
+			cb:function(data){document.getElementById('demo_result_thread').innerHTML = data;}
+		};
+
+	vkthread.exec(param);
+}
+
 //-------------------- Dependency --------------------------------//
 function bar(arr1,arr2){
 	return _.union(arr1,arr2);
@@ -100,6 +111,19 @@ function run_bar_in_thread_promise(){
 		}
 	);
 }
+
+function run_bar_in_thread_promise_cb(){
+
+	var param = {
+			fn:bar,
+			args: [[1,2,3],[2,3,4]],
+			importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'],
+			cb: function(data){document.getElementById('demo_result_thread').innerHTML = data;}
+		};
+
+	vkthread.exec(param);
+}
+
 //----------------------------------------------------//
 function Foobar(arr1,arr2){
 	this.arr1 = arr1;
@@ -126,12 +150,30 @@ function run_foobar_in_thread(){
 	);
 }
 
+function run_foobar_in_thread_cb(){
+	var myFoobar = new Foobar([1,2,3], [2,3,4]);
+
+	var param = {
+			fn: myFoobar.union,
+			context: myFoobar,
+			importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'],
+			cb: function(data){
+				document.getElementById('demo_result_thread').innerHTML = data;
+			}
+		};
+
+	vkthread.exec(param);
+}
+
 //----------------------------------------------------//
 
 function run_anonim_in_thread(){
 
 	var param = {
-		fn: (arr) => arr.map(Math.sqrt),
+		//fn: (arr) => arr.map(Math.sqrt),
+		fn: function(arr){
+				return arr.map(Math.sqrt)
+			},
 		args: [[1, 4, 9]]
 	}
 
@@ -142,11 +184,30 @@ function run_anonim_in_thread(){
 	);
 
 }
+
+function run_anonim_in_thread_cb(){
+
+	function display(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	}
+
+	var param = {
+		fn: function(arr){
+				return arr.map(Math.sqrt)
+			},
+		args: [[1, 4, 9]],
+		cb: display
+	}
+
+	vkthread.exec(param);
+}
+
 //----------------------------------------------------//
 
 function greetLambda(arg) {
 	var displayMessage = (function(msg1){
-		return (msg2) => msg1 + msg2;
+		//return (msg2) => msg1 + msg2;
+		return function(msg2){ return msg1 + msg2}
 	}(arg));
 	return displayMessage("Lambda World!");
 }
@@ -164,6 +225,22 @@ function run_greetLambda_in_thread(){
 		}
 	);
 }
+
+function run_greetLambda_in_thread_cb(){
+
+	function print(data){
+		document.getElementById('demo_result_thread').innerHTML = data;
+	}
+	var param = {
+		fn: greetLambda,
+		args: ['Hello, '],
+		cb:print
+	}
+
+	vkthread.exec(param);
+}
+
+
 //----------------------------------------------------//
 //External
 function run_external_in_thread(){
@@ -178,6 +255,20 @@ function run_external_in_thread(){
           document.getElementById('demo_result_thread').innerHTML = data;
         }
    );
+}
+
+
+function run_external_in_thread_cb(){
+	var param = {
+	    fn:'makeNamesUpper',
+	    args: [['one', 'two', 'three']],
+	    importFiles:['http://localhost/projects/app/vkthread/js/my_utils.js'],
+	    cb:function(data){
+	    	document.getElementById('demo_result_thread').innerHTML = data;
+	    }
+	 };
+
+	vkthread.exec(param);
 }
 
 function normalize(arr){
@@ -399,13 +490,17 @@ function run_promiseTestGET_in_thread(){
 
 function getTop(data){
 
-    var obj = JSON.parse(data)
-    			  .sort( (a,b) => b.stargazers_count - a.stargazers_count )[0];
+	function doSort(a,b){
+		return  b.stargazers_count - a.stargazers_count;
+	}
+
+    var obj = JSON.parse(data).sort(doSort)[0];
 
 	return obj.name + ' : ' + obj.stargazers_count + ' stars';
 }
 
 function run_promiseTestGET_in_thread(){
+
 	var param = {
 		fn: 'vkhttp',
 		args:['https://api.github.com/users/vkiryukhin/repos', 'GET', getTop]
@@ -421,12 +516,17 @@ function run_promiseTestGET_in_thread(){
 			alert(err);
 		}
 	);
-
 }
 
+function run_callbackTestGET_in_thread(){
+	var param = {
+		fn: 'vkhttp',
+		args:['https://api.github.com/users/vkiryukhin/repos', 'GET', getTop],
+		cb: function(data){document.getElementById('demo_result_thread').innerHTML = data;}
+	};
 
-
-
+	vkthread.exec(param);
+}
 
 //--------------
 /*
@@ -465,7 +565,7 @@ function toUpper(data){
 	return data.toUpperCase() + '!';
 }
 
-function cb (data){
+function postcb (data){
 	document.getElementById('demo_result_thread_2').innerHTML = data;
 }
 
@@ -476,11 +576,7 @@ function run_promiseTestPOST_in_thread(){
 				'POST',
 				toUpper,
 				{firstname:'John', lastname:'Dow'}]
-		        //,cb: cb
-
 	};
-
-	//vkthread.exec(param);
 
 	vkthread.exec(param)
 	.then(
@@ -492,6 +588,19 @@ function run_promiseTestPOST_in_thread(){
 		}
 	);
 
+}
+
+function run_callbackTestPOST_in_thread(){
+var param = {
+	fn: 'vkhttp',
+	args:[location.href+'html/http_post.php',
+		'POST',
+		toUpper,
+		{firstname:'John', lastname:'Dow'}],
+        cb: postcb
+};
+
+vkthread.exec(param);
 }
 
 

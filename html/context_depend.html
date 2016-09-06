@@ -14,13 +14,16 @@ Foobar.prototype.union = function(){
 var myFoobar = new Foobar([1,2,3],[2,3,4]);
 </code></pre>
 
-	<input type="button" value="Run in Thread" onclick="run_foobar_in_thread()" />
+	<input type="button" value="Run Promise-style" onclick="run_foobar_in_thread()" />
+	<br/>
+	<input type="button" value="Run Callback-style" onclick="run_foobar_in_thread_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
 <br/></br/>
-<pre><code data-language="javascript">
+<pre><code data-language="javascript">/* ------------ Promise Style ------------ */
+
 var param = {
 	fn: myFoobar.union,
 	context: myFoobar,
@@ -32,6 +35,19 @@ vkthread.exec(param).then(
 		console.log(data);
 	}
 );
+
+/* ------------ Callback Style ------------ */
+
+var param = {
+	fn: myFoobar.union,
+	context: myFoobar,
+	importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'],
+	cb: function(data){
+		console.log(data);
+	}
+};
+
+vkthread.exec(param);
 </code></pre>
 <p>
 </td></tr></table>

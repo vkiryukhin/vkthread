@@ -2,11 +2,11 @@
 <tr><td>
 <div class="h6">Standalone Function</div>
 <p><div>This page demonstrates advantage of using vkThread() plugin. </div><br/>
-<div> This function runs extensive process which takes a few seconds (on my comp at least), but UI is not affected.  </div>
+<div> This function runs extensive process which takes a few seconds (on my comp), but UI is not affected.  </div>
 
 </p>
-Here is the function we run:
-<pre><code data-language="javascript">function foo(str) {
+<pre><code data-language="javascript">/* ------- Function to run in a thread  -------*/
+function foo(str) {
     var ret, ix;
     for(ix=0;ix<1e7;ix++){
 	    ret = str.split(',').join('-');
@@ -14,7 +14,7 @@ Here is the function we run:
     return ret;
 }</code></pre>
 
-	<input type="button" value="Run Promise-style" onclick="run_foo_in_thread()" />
+	<input type="button" value="Run Promise-style" onclick="run_foo_in_thread()" class="hideFromIE"/>
 	<br/>
 	<input type="button" value="Run Callback-style" onclick="run_foo_in_thread_cb()" />
 
@@ -35,7 +35,7 @@ vkthread.exec(param).then(function(data){
 
 /* ------------ Callback Style ------------ */
 
-function fooCb (data) { // <-- callback function process date returned from the thread
+function fooCb (data) { // <-- callback function
 	console.log(data.toUpperCase());
 }
 

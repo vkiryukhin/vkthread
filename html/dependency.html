@@ -9,12 +9,14 @@ function bar(arr1,arr2){
 	return _.union(arr1,arr2);
 }</code></pre>
 
-	<input type="button" value="Run in Thread" onclick="run_bar_in_thread_promise()" />
+	<input type="button" value="Run Promise-style" onclick="run_bar_in_thread_promise()" class="hideFromIE"/>
+	<br/>
+	<input type="button" value="Run Callback-style" onclick="run_bar_in_thread_promise_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span> &nbsp;&nbsp;
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
-<pre><code data-language="javascript">
+<pre><code data-language="javascript">/* ------- Promise style ------- */
 
 var param = {
 	fn:bar,
@@ -27,6 +29,17 @@ vkthread.exec(param).then(
 		console.log(data);
 	}
 );
+
+/* ------- Callback style ------- */
+
+var param = {
+	fn:bar,
+	args: [[1,2,3],[2,3,4]],
+	importFiles: ['https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js'],
+	cb: function(data){console.log(data)}
+};
+
+vkthread.exec(param);
 
 </code></pre>
 

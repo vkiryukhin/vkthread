@@ -12,13 +12,16 @@ function greetLambda(arg) {
 </code></pre>
 
 
-	<input type="button" value="Run in Thread" onclick="run_greetLambda_in_thread()" />
+	<input type="button" value="Run Promise-style" onclick="run_greetLambda_in_thread()" />
+    <br/>
+    <input type="button" value="Run Callback-style" onclick="run_greetLambda_in_thread_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
 
-<pre><code data-language="javascript">
+<pre><code data-language="javascript">/* ------------ Promise Style ------------ */
+
 var param = {
     fn: greetLambda,
     args: ['Hello, ']
@@ -29,6 +32,20 @@ vkthread.exec(param).then(
 	    console.log(data);
     }
 );
+
+/* ------------ Callback Style ------------ */
+
+function print(data){
+    document.getElementById('demo_result_thread').innerHTML = data;
+}
+
+var param = {
+    fn: greetLambda,
+    args: ['Hello, '],
+    cb:print
+}
+
+vkthread.exec(param);
 </code></pre>
 <p>
 </td></tr></table>

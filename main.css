@@ -43,7 +43,7 @@ a:visited {color:black;}
 #mode {font-weight:bold;float:left; }
 
 .codecontrol { cursor:pointer; margin-bottom:10px; color:#808080; font-size:85%;}
-.codesource { 
+.codesource {
 	display:none; background:#ffffe0; position:absolute; z-index:100; padding:15px;
 	border-top:5px solid #cccccc; border-left:5px solid #cccccc;
 	border-bottom:4px solid #333333;border-right:4px solid #333333;
@@ -81,7 +81,7 @@ a:visited {color:black;}
 	margin:5px;
 }
 .option {
-	color:#0000ff; 
+	color:#0000ff;
 	/*font-weight:bold;*/
 	text-size:80%;
 }
@@ -106,7 +106,7 @@ a:visited {color:black;}
 	background-image: url("img/demo-spindown-closed.gif");
 	background-repeat:no-repeat;
 	 padding-left: 15px;
-	cursor:pointer; 
+	cursor:pointer;
 }
 
 .functionDoc {background-color:#E0FFFF; padding:0.5em;}
@@ -126,5 +126,9 @@ a:visited {color:black;}
 	width:25em;height:1.5em;padding-left:1em; margin-left:3em;
 }
 
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+     /* IE10+ CSS styles go here */
+     .hideFromIE {display:none;}
+}
 
 

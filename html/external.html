@@ -18,13 +18,16 @@ function makeNamesUpper(arr){
 . . .
 </code></pre>
 
-	<input type="button" value="Run in Thread" onclick="run_external_in_thread()" />
+	<input type="button" value="Run Promise-style" onclick="run_external_in_thread()" />
+  <br/>
+    <input type="button" value="Run Callback-style" onclick="run_external_in_thread_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
 <pre>
-<code data-language="javascript">
+<code data-language="javascript">/* ------------ Promise Style ------------ */
+
 var param = {
     fn:'makeNamesUpper', // &lt;-- function's name; must be a String
     args: [['one', 'two', 'three']],
@@ -37,6 +40,18 @@ vkthread.exec(param).then(
     }
 );
 
+/* ------------ Callback Style ------------ */
+
+var param = {
+      fn:'makeNamesUpper',
+      args: [['one', 'two', 'three']],
+      importFiles:['http://localhost/projects/app/vkthread/js/my_utils.js'],
+      cb:function(data){
+        console.log(data;
+      }
+   };
+
+  vkthread.exec(param);
 </code></pre>
 
 

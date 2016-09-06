@@ -17,12 +17,14 @@ Demo.prototype.foo = function(){
 
 </code></pre>
 
-	<input type="button" value="Run in Thread" onclick="run_demo_in_thread_promise()" />
+	<input type="button" value="Run Promise-style" onclick="run_demo_in_thread_promise()" class="hideFromIE"/>
+    <br/>
+    <input type="button" value="Run Callback-style" onclick="run_demo_in_thread_promise_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
-<pre><code data-language="javascript">
+<pre><code data-language="javascript">/* ------- Promise style ------- */
 var myDemo = new Demo('aaa,bbb,ccc',7e5),
     param = {
 	    fn: myDemo.foo,
@@ -34,6 +36,19 @@ vkthread.exec(param).then(
 	    console.log(data);
     }
 );
+
+/* ------- Callback style ------- */
+
+var myDemo = new Demo('aaa,bbb,ccc',7e5),
+        param = {
+            fn: myDemo.foo,
+            context: myDemo,
+            cb:function(data){    //<-- anonymous callback
+                console.log(data)
+            }
+        };
+
+    vkthread.exec(param);
 </code></pre>
 
 

@@ -4,7 +4,7 @@
 <p>
 <b>vkThread</b> is a javascript plugin, which allows you to execute a piece of your code in a thread.
 <br/><br/>
-Plugin is built on HTML5 "Web Workers" technology and uses ES6 "Promise" object.<sup>*</sup>
+Plugin is built on HTML5 "Web Workers" technology.  <sup>*</sup>
 <br/>
 
 </p>
@@ -17,8 +17,13 @@ Almost any type of function can be opened in a thread with this plugin:
 <li>Anonymous and Arrow functions</li>
 <li>Lambda functions</li>
 </ul>
+
 </p>
 
+
+<p>
+One of the most useful features is vkhttp() function which let you to run AJAX in a thread. With this function you can open a thread, request data from a server, process it and send result to the UI.
+</p>
 <p>
 vkThread supports both Promise and Callback development styles. However multithreading can be done only with Promise style. The reason I keep callback functionality is IE browser, which doesn't support native ES6 Promise object. So, if you must support IE family, use callback style.
 
@@ -45,10 +50,12 @@ bower install vkthread
 
 </code></pre>
 
-<p>execute this function in a thread:</p>
+<p>execute this function in a thread </p>
 
 
-<pre><code data-language="javascript">var param = {
+<pre><code data-language="javascript">/* ------- Promise style ------- */
+
+var param = {
     fn: foo,     // &lt;-- function to run in a thread;
     args: [2, 3] // &lt;-- function's arguments;
 };
@@ -57,7 +64,24 @@ vkthread.exec(param).then(
     function(data){
         console.log(data); // &lt;-- prints 5;
     }
-);</code>	</pre>
+);
+
+/* ------- Callback style ------- */
+
+function display(data){ //&lt;-- callback function;
+    console.log(data);
+}
+
+var param = {
+    fn: foo,     // &lt;-- function to run in a thread;
+    args: [2, 3], // &lt;-- function's arguments;
+    cb: display  // &lt;-- callback function; can be anonymous
+};
+
+vkthread.exec(param);
+
+</code>	</pre>
+
 
 
 </p>
