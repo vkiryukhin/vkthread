@@ -62,82 +62,61 @@
       importScripts.apply(null, obj.importFiles);
     }
 
-    if (typeof obj.fn === "function") {
-      Promise.resolve(obj.fn.apply(cntx, obj.args))
-             .then(function(data){postMessage(data)})
-             .catch(function(reason){postMessage(reason)});
+    if (typeof obj.fn === "function") { //regular function
+      if (Promise) {
+        //using Promise let us create promise-style vkhttp() later if needed;
+        Promise.resolve(obj.fn.apply(cntx, obj.args))
+               .then(function(data){postMessage(data)})
+               .catch(function(reason){postMessage(reason)});
+      } else {
+        // to satisfy IE
+        postMessage(obj.fn.apply(cntx, obj.args));
+      }
 
     }
-    else {
+    else { //ES6 arrow function
       postMessage(self[obj.fn].apply(cntx, obj.args));
     }
   }
 
 }());
 
-/**
- * XMLHttpRequest using Promise
- * code taken from
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
- * customized by Vadim Kiryukhin
+/*
+ * XMLHttpRequest in plain javascript;
  */
 
- function vkhttp(url, _args){
+function vkhttp(url, method, _cb, _body){
 
-  var args = _args || '';
-  // A small example of object
-  var core = {
+  var fn = function(data){return data}, //dummy function
+      cb = _cb || fn,
+      body = _body  ? JSON.stringify(_body) : null,
+      xhr = new XMLHttpRequest(),
+      ret;
 
-    // Method that performs the ajax request
-    ajax: function (method, url, args) {
+    if(typeof cb !== 'function') {
+      // cb is omitted, so the 3-rd argument is body; let's fix it here. //
+      cb = fn; // dummy function
+      body = JSON.stringify(_cb);
+    }
 
-      // Creating a promise
-      var promise = new Promise( function (resolve, reject) {
-
-        // Instantiates the XMLHttpRequest
-        var client = new XMLHttpRequest();
-        var body = '';
-
-        if (args && (method === 'POST' || method === 'PUT')) {
-          body += JSON.stringify(args);
-        }
-
-        client.open(method, url);
-        client.setRequestHeader('Content-Type', 'application/json')
-        client.send(body);
-
-        client.onload = function () {
-          if (this.status >= 200 && this.status < 300) {
-            // Performs the function "resolve" when this.status is equal to 2xx
-            resolve(this.response);
-          } else {
-            // Performs the function "reject" when this.status is different than 2xx
-            reject(this.statusText);
-          }
-        };
-        client.onerror = function () {
-          reject(this.statusText);
-        };
-      });
-
-      // Return the promise
-      return promise;
+  xhr.onload = function () {
+    if (xhr.status >= 200 && xhr.status < 300) {
+      ret = cb(xhr.responseText);
+    } else {
+      ret = 'Error: ' + xhr.status + xhr.statusText;
     }
   };
 
-  // Adapter pattern
-  return {
-    'get': function() {
-      return core.ajax('GET', url, args);
-    },
-    'post': function() {
-      return core.ajax('POST', url, args);
-    },
-    'put': function() {
-      return core.ajax('PUT', url, args);
-    },
-    'delete': function() {
-      return core.ajax('DELETE', url, args);
-    }
+  xhr.onerror = function (data) {
+    ret = xhr.status + xhr.statusText;
   };
-};
+
+  xhr.open(method.toUpperCase(), url, false); //synchronous request
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.send(body);
+
+  return ret;
+}
+
+
+

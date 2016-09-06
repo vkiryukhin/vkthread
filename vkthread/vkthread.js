@@ -56,7 +56,7 @@
       };
 
     // to use standalone worker.js uncomment code below
-    /*
+
       var err;
       try { throw new Error() }
       catch(e){ err = e.stack }
@@ -66,7 +66,7 @@
       } else {
         this.path = 'http'+ err.split('http')[1].split('vkthread.js').slice(0,-1) + 'worker.js';
       }
-    */
+
   }
 
   /**
@@ -86,15 +86,24 @@
 
   Vkthread.prototype.exec = function(param){
 
-    var worker = new Worker(window.URL.createObjectURL(workerBlob)), //embedded worker
-    //var worker = new Worker(this.path),  //standalone worker (use for customizeing or debug)
+    //var worker = new Worker(window.URL.createObjectURL(workerBlob)), //embedded worker
+    var worker = new Worker(this.path),  //standalone worker (use for customizeing or debug)
+        promise;
 
-        paramObj = {
-            fn: param.fn,
-            args: param.args,
-            context: param.context,
-            importFiles:param.importFiles
-          },
+        if (param.cb && typeof param.cb === 'function') {
+          worker.onmessage = function (oEvent) {
+            param.cb(oEvent.data);
+            worker.terminate();
+          };
+
+          worker.onerror = function(error) {
+            param.cb(null, error.message);
+            worker.terminate();
+          };
+
+          worker.postMessage(JSONfn.stringify(param));
+
+        } else {
 
           promise = new Promise(
             function(resolve, reject){
@@ -110,10 +119,9 @@
               };
             }
           );
-
-      worker.postMessage(JSONfn.stringify(param));
-      return promise;
-
+          worker.postMessage(JSONfn.stringify(param));
+          return promise;
+        }
   };
 
   /**

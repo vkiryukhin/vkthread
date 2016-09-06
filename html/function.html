@@ -2,7 +2,7 @@
 <tr><td>
 <div class="h6">Standalone Function</div>
 <p><div>This page demonstrates advantage of using vkThread() plugin. </div><br/>
-<div> - Click <b>"Run in Thread"</b> button. It runs extensive process which takes a few seconds, but UI is not affected.  </div>
+<div> This function runs extensive process which takes a few seconds (on my comp at least), but UI is not affected.  </div>
 
 </p>
 Here is the function we run:
@@ -14,13 +14,16 @@ Here is the function we run:
     return ret;
 }</code></pre>
 
-	<input type="button" value="Run in Thread" onclick="run_foo_in_thread()" />
+	<input type="button" value="Run Promise-style" onclick="run_foo_in_thread()" />
+	<br/>
+	<input type="button" value="Run Callback-style" onclick="run_foo_in_thread_cb()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
 <pre>
 <code data-language="javascript">
+/* ------------ Promise Style ------------ */
 var param = {
 	fn: foo,
 	args: ['a,b,c']
@@ -30,6 +33,20 @@ vkthread.exec(param).then(function(data){
 	console.log(data);
 });
 
+/* ------------ Callback Style ------------ */
+
+function fooCb (data) { // <-- callback function process date returned from the thread
+	console.log(data.toUpperCase());
+}
+
+var param = {
+	fn: foo,
+	args: ['a,b,c'],
+	cb:fooCb // <-- callback function can be anonymouse;
+
+};
+
+vkthread.exec(param);
 </code></pre>
 
 

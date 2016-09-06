@@ -36,6 +36,21 @@ function run_foo_in_thread(){
 	);
 
 }
+
+function fooCb (data) {
+	document.getElementById('demo_result_thread').innerHTML = data.toUpperCase();
+}
+
+function run_foo_in_thread_cb(){
+	var param = {
+		fn: foo,
+		args: ['a,b,c'],
+		cb:fooCb
+		//cb: (data) => alert(data)
+	};
+
+	vkthread.exec(param);
+}
 //-------------------- Context --------------------------------//
 function Demo(str, max){
 	this.str = str;
@@ -350,6 +365,9 @@ function promiseTest(){
 		return promise;
 }
 */
+
+//-----------------
+/*
 function promiseTestGET(url){
 
 	return vkhttp(url).get().then(function(data){
@@ -359,15 +377,6 @@ function promiseTestGET(url){
 
 		return obj.name + ' : ' + obj.stargazers_count + ' stars';
 	});
-}
-
-function promiseTestPOST(url, args){
-
-	return vkhttp(url, args).post().then(
-		function(data){
-			var str = data.toUpperCase() + '!';
-			return str;
-		});
 }
 
 function run_promiseTestGET_in_thread(){
@@ -385,6 +394,49 @@ function run_promiseTestGET_in_thread(){
 			alert(err);
 		}
 	);
+}
+*/
+
+function getTop(data){
+
+    var obj = JSON.parse(data)
+    			  .sort( (a,b) => b.stargazers_count - a.stargazers_count )[0];
+
+	return obj.name + ' : ' + obj.stargazers_count + ' stars';
+}
+
+function run_promiseTestGET_in_thread(){
+	var param = {
+		fn: 'vkhttp',
+		args:['https://api.github.com/users/vkiryukhin/repos', 'GET', getTop]
+
+	};
+
+	vkthread.exec(param)
+	.then(
+		function(data){
+			document.getElementById('demo_result_thread').innerHTML = data;
+		},
+		function(err){
+			alert(err);
+		}
+	);
+
+}
+
+
+
+
+
+//--------------
+/*
+function promiseTestPOST(url, args){
+
+	return vkhttp(url, args).post().then(
+		function(data){
+			var str = data.toUpperCase() + '!';
+			return str;
+		});
 }
 
 function run_promiseTestPOST_in_thread(){
@@ -406,7 +458,42 @@ function run_promiseTestPOST_in_thread(){
 		}
 	);
 }
+*/
 //----------------------------------------------------//
+
+function toUpper(data){
+	return data.toUpperCase() + '!';
+}
+
+function cb (data){
+	document.getElementById('demo_result_thread_2').innerHTML = data;
+}
+
+function run_promiseTestPOST_in_thread(){
+	var param = {
+		fn: 'vkhttp',
+		args:[location.href+'html/http_post.php',
+				'POST',
+				toUpper,
+				{firstname:'John', lastname:'Dow'}]
+		        //,cb: cb
+
+	};
+
+	//vkthread.exec(param);
+
+	vkthread.exec(param)
+	.then(
+		function(data){
+			document.getElementById('demo_result_thread_2').innerHTML = data;
+		},
+		function(err){
+			alert(err);
+		}
+	);
+
+}
+
 
 //----------------------------------------------------//
 function loadTemplate(name)
