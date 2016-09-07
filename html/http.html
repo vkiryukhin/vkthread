@@ -2,75 +2,50 @@
 <tr><td>
 <div class="h6">Ajax in Thread</div>
 <p>
-To download and process data in a thread vkthread provides promise-style <b>vkhttp()</b> function.
+Instead of downloading data in UI and pass it in a thread for processing, you can download data directly in the thread, process it and return result in UI. In case of big data it can significately  improve performance as you don't need to transfer entire data from UI to a thread.
+<br/><br/>
+To download and process data in a thread use <b>vkhttp()</b> function.
 </p>
 
-
+<p>
+    Ajax in a thread is a special case for vkthread, as we need to add configuration for vkhttp() to the regular param object. Config for vkhttp must be the first object in args[] array
+</p>
 
 <p>
 <b>Example GET:</b>
 <br/>
 In this example function requests data from a github server (see URL below), sorts result based on<br/>
-star counter and returns name and number of stars for the most popular project in my github repo.
+star counter and returns name and number of stars for the most popular project in my github repo. Method GET is default one, so we don't need to add it to config object
 </p>
 
-<pre><code data-language="javascript">function foo(url){
-	return vkhttp(url).get().then(function(data){
+<pre><code data-language="javascript">function getTop(config, suffix){
 
-        var obj = JSON.parse(data)
-                      .sort( (a,b) => b.stargazers_count - a.stargazers_count )[0];
+    function doSort(a,b){
+        return  b.stargazers_count - a.stargazers_count;
+    }
 
-		return obj.name + ' : ' + obj.stargazers_count + ' stars';
-	});
+    var data = vkhttp(config),
+        obj = JSON.parse(data).sort(doSort)[0];
+
+    return obj.name + ' : ' + obj.stargazers_count + ' stars' + '  ' + suffix;
 }
 
 </code></pre>
 
-	<input type="button" value="Run GET" onclick="run_promiseTestGET_in_thread()" />
+	<input type="button" value="Run with Promise" onclick="run_promiseTestGET_in_thread()" />
+    <br/>
+    <input type="button" value="Run with Callback" onclick="run_callbackTestGET_in_thread()" />
 
 	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 <br/><br/>
 <pre>
-<code data-language="javascript">var param = {
-	fn: foo,
-	args:['https://api.github.com/users/vkiryukhin/repos']
-};
-
-vkthread.exec(param).then(
-	function(data){
-		console.log(data);
-	}
-);
-</code></pre>
-
-
-<p>
-<b>Example POST:</b>
-<br/>
-In this example function requests file LICENSE from the origin server and returns the first line of the text.
-</p>
-<pre><code data-language="javascript">function foo(url, args){
-	return vkhttp(url, args).post() // <-- request data in a thread
-            .then( function(data){
-	             var str = data.toUpperCase() + '!'; // <-- process received data
-	             return str; // <-- return result to the main thread
-             });
-}
-
-</code></pre>
-
-	<input type="button" value="Run POST" onclick="run_promiseTestPOST_in_thread()" />
-
-	<span class="span_demo_result"  id="demo_result_thread_2"></span>
-	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread_2').innerHTML =''"/>
-<br/><br/>
-<pre>
-<code data-language="javascript">var param = {
-	fn: foo,
-	args:[
-            location.href+'html/http_post.php',
-            {firstname:'John', lastname:'Dow'}
+<code data-language="javascript">/* ------------ Promise Style ------------ */
+var param = {
+    fn: getTop,
+    args:[
+            { url:'https://api.github.com/users/vkiryukhin/repos'}, // <-- config
+            'WOW!' // <-- suffix
         ]
 };
 
@@ -79,6 +54,83 @@ vkthread.exec(param).then(
 		console.log(data);
 	}
 );
+
+/* ------------ Callback Style ------------ */
+
+var param = {
+    fn: getTop,
+    args:[
+            { url:'https://api.github.com/users/vkiryukhin/repos'},
+            'Good!'
+        ],
+    cb: function(data){
+        console.log(data);
+    }
+};
+
+vkthread.exec(param);
+</code></pre>
+
+
+<p>
+<b>Example POST:</b>
+<br/>
+In this example function sends POST request with message body and server simply echo this message as a string. Function toUpper() processes server response in the thread and returns result to UI. Method POST must be configured, otherwise GET method is applied and message body is ignored.
+</p>
+<pre><code data-language="javascript">function toUpper(config, prefix){
+    var data = vkhttp(config);
+    return prefix + ' ' + data.toUpperCase() + '!';
+}
+
+</code></pre>
+
+	<input type="button" value="Run with Promise" onclick="run_promiseTestPOST_in_thread()" />
+    <br/>
+    <input type="button" value="Run with Callback" onclick="run_callbackTestPOST_in_thread()" />
+
+	<span class="span_demo_result"  id="demo_result_thread_2"></span>
+	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread_2').innerHTML =''"/>
+<br/><br/>
+<pre>
+<code data-language="javascript">/* ------------ Promise Style ------------ */
+var param = {
+    fn: toUpper,
+    args:[
+            { url:location.href+'html/http_post.php',
+              method:'POST',
+              body: {firstname:'John', lastname:'Dow'}
+            },
+            'server says: '
+        ]
+};
+
+vkthread.exec(param)
+.then(
+    function(data){
+        console.log(data)
+    },
+    function(err){
+        alert(err);
+    }
+);
+
+/* ------------ Callback Style ------------ */
+
+var param = {
+    fn: toUpper,
+    args:[
+            { url:location.href+'html/http_post.php',
+              method:'POST',
+              body: {firstname:'John', lastname:'Dow'}
+            }, // <-- config
+            'server says: ', // <-- prefix
+        ],
+    cb: function(data){
+        console.log(data)
+    }
+};
+
+vkthread.exec(param);
 </code></pre>
 
 

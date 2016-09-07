@@ -56,7 +56,7 @@
       };
 
     // to use standalone worker.js uncomment code below
-    /*
+
       var err;
       try { throw new Error() }
       catch(e){ err = e.stack }
@@ -66,7 +66,7 @@
       } else {
         this.path = 'http'+ err.split('http')[1].split('vkthread.js').slice(0,-1) + 'worker.js';
       }
-    */
+
   }
 
   /**
@@ -86,8 +86,8 @@
 
   Vkthread.prototype.exec = function(param){
 
-    var worker = new Worker(window.URL.createObjectURL(workerBlob)), //embedded worker
-    //var worker = new Worker(this.path),  //standalone worker (use for customizing or debug)
+    //var worker = new Worker(window.URL.createObjectURL(workerBlob)), //embedded worker
+    var worker = new Worker(this.path),  //standalone worker (use for customizing or debug)
         promise;
 
         if (param.cb && typeof param.cb === 'function') {

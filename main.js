@@ -488,23 +488,26 @@ function run_promiseTestGET_in_thread(){
 }
 */
 
-function getTop(data){
+function getTop(config, suffix){
 
 	function doSort(a,b){
 		return  b.stargazers_count - a.stargazers_count;
 	}
 
-    var obj = JSON.parse(data).sort(doSort)[0];
+	var data = vkhttp(config),
+        obj = JSON.parse(data).sort(doSort)[0];
 
-	return obj.name + ' : ' + obj.stargazers_count + ' stars';
+	return obj.name + ' : ' + obj.stargazers_count + ' stars' + '  ' + suffix;
 }
 
 function run_promiseTestGET_in_thread(){
 
 	var param = {
-		fn: 'vkhttp',
-		args:['https://api.github.com/users/vkiryukhin/repos', 'GET', getTop]
-
+		fn: getTop,
+		args:[
+				{ url:'https://api.github.com/users/vkiryukhin/repos'},
+				'WOW!'
+			]
 	};
 
 	vkthread.exec(param)
@@ -520,8 +523,11 @@ function run_promiseTestGET_in_thread(){
 
 function run_callbackTestGET_in_thread(){
 	var param = {
-		fn: 'vkhttp',
-		args:['https://api.github.com/users/vkiryukhin/repos', 'GET', getTop],
+		fn: getTop,
+		args:[
+				{ url:'https://api.github.com/users/vkiryukhin/repos'},
+				'Good!'
+			],
 		cb: function(data){document.getElementById('demo_result_thread').innerHTML = data;}
 	};
 
@@ -561,21 +567,21 @@ function run_promiseTestPOST_in_thread(){
 */
 //----------------------------------------------------//
 
-function toUpper(data){
-	return data.toUpperCase() + '!';
-}
-
-function postcb (data){
-	document.getElementById('demo_result_thread_2').innerHTML = data;
+function toUpper(config, prefix){
+	var data = vkhttp(config);
+	return prefix + ' ' + data.toUpperCase() + '!';
 }
 
 function run_promiseTestPOST_in_thread(){
 	var param = {
-		fn: 'vkhttp',
-		args:[location.href+'html/http_post.php',
-				'POST',
-				toUpper,
-				{firstname:'John', lastname:'Dow'}]
+		fn: toUpper,
+		args:[
+				{ url:location.href+'html/http_post.php',
+				  method:'POST',
+				  body: {firstname:'John', lastname:'Dow'}
+				},
+				'server says: '
+			]
 	};
 
 	vkthread.exec(param)
@@ -591,14 +597,20 @@ function run_promiseTestPOST_in_thread(){
 }
 
 function run_callbackTestPOST_in_thread(){
+
 var param = {
-	fn: 'vkhttp',
-	args:[location.href+'html/http_post.php',
-		'POST',
-		toUpper,
-		{firstname:'John', lastname:'Dow'}],
-        cb: postcb
-};
+		fn: toUpper,
+		args:[
+				{ url:location.href+'html/http_post.php',
+				  method:'POST',
+				  body: {firstname:'John', lastname:'Dow'}
+				},
+				'server says: ',
+			],
+		cb: function(data){
+			document.getElementById('demo_result_thread_2').innerHTML = data;
+		}
+	};
 
 vkthread.exec(param);
 }

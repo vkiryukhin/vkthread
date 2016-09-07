@@ -78,29 +78,21 @@
     }
   }
 
-}());
-
 /*
  * XMLHttpRequest in plain javascript;
  */
 
-function vkhttp(url, method, _cb, _body){
+function vkhttp(cfg){
 
-  var fn = function(data){return data}, //dummy function
-      cb = _cb || fn,
-      body = _body  ? JSON.stringify(_body) : null,
+  var body = cfg.body  ? JSON.stringify(cfg.body) : null,
+      contentType = cfg.contentType || 'application/json',
+      method = cfg.method ? cfg.method.toUpperCase() : 'GET',
       xhr = new XMLHttpRequest(),
       ret;
 
-    if(typeof cb !== 'function') {
-      // cb is omitted, so the 3-rd argument is body; let's fix it here. //
-      cb = fn; // dummy function
-      body = JSON.stringify(_cb);
-    }
-
   xhr.onload = function () {
     if (xhr.status >= 200 && xhr.status < 300) {
-      ret = cb(xhr.responseText);
+      ret = xhr.responseText;
     } else {
       ret = 'Error: ' + xhr.status + xhr.statusText;
     }
@@ -110,9 +102,14 @@ function vkhttp(url, method, _cb, _body){
     ret = xhr.status + xhr.statusText;
   };
 
-  xhr.open(method.toUpperCase(), url, false); //synchronous request
-  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.open(method, cfg.url, false); //synchronous request
+  if(method === 'POST') {
+    xhr.setRequestHeader('Content-Type', contentType);
+  }
   xhr.send(body);
 
   return ret;
 }
+
+}());
+
