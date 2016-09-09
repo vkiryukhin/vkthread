@@ -1,28 +1,29 @@
 <table style="text-align:justify;">
 <tr><td>
 <div class="h6">Multi-Threading</div>
+(<div style="font-color:red; font-size:80%; font-style:italic;"> Not supported by Internet Explorer </div>)
 <p>Function <b>vkthread.runAll()</b> let you to  create multiple threads and execute task in these threads independently. In computer science it is known as "parallel computing". This technology significantly gain performance on multi-core CPU computers. </p>
  <p>
 This page demonstrates an advantage of multi-threading on multi-core CPU. The first example runs foo() function in a single thread. The second one divides this function in 2 tasks and runs a separate thread for each of them. At OS kernel level these threads are executed in 2 CPU cores, which makes this application about 60%-70% faster. <br/>
 It doesn't make sense to create too many threads, as number of CPU cores is limited. The best case is: number of cpu cores is equal to number of threads.
- </p> 
+ </p>
 
 </p>
 <pre><code data-language="javascript">function foo(start,end){
 	var sum = 0,
 		dummy = 'a,b,c,d,e',
 	    ix;
-		
+
 	for(ix=start; ix&lt;end; ix++){
 		dummy.split(',').join('-'); // do something to slowdown the process
 		sum = sum+ix;
 	}
 	return sum;
-} 
+}
 </code></pre>
 
 <input type="button" value="Run in Page" onclick="run_dummySum_time()" />
-	<span class="span_demo_result" id="demo_result"></span>  
+	<span class="span_demo_result" id="demo_result"></span>
 	<input value="clear" type="button" onclick="document.getElementById('demo_result').innerHTML =''"/>
 <pre><code data-language="javascript">vkthread.run(foo, [0, 8e6]).then(
 	function (data) {
@@ -30,24 +31,24 @@ It doesn't make sense to create too many threads, as number of CPU cores is limi
 		console.log(bar);
 	})
 </code></pre>
-	
+
 	<input type="button" value="Run in Thread" onclick="runAll_dummySum_time()" />
 
-	<span class="span_demo_result"  id="demo_result_thread"></span> 
+	<span class="span_demo_result"  id="demo_result_thread"></span>
 	<input value="clear"  type="button"  onclick="document.getElementById('demo_result_thread').innerHTML =''"/>
 
-<pre><code data-language="javascript">vkthread.runAll([ [foo, [0, 4e6]], 
+<pre><code data-language="javascript">vkthread.runAll([ [foo, [0, 4e6]],
 		  [foo, [4e6, 8e6]]]).then(
 	function (data) {
 		var bar = data[0]+data[1];
 		console.log(bar);
 	})
 </code></pre>
- <p> 
-However, we can't  guarantee, that OS runs these threads on different cores 
+ <p>
+However, we can't  guarantee, that OS runs these threads on different cores
 as it depends on many things, which we are not able to control with javascript.
- But there is a very good chance that threads, opened with runAll(), will be executed in parallel. 
-</p> 
+ But there is a very good chance that threads, opened with runAll(), will be executed in parallel.
+</p>
 
 
 

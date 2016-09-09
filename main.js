@@ -247,7 +247,7 @@ function run_external_in_thread(){
 	var param = {
 	    fn:'makeNamesUpper',
 	    args: [['one', 'two', 'three']],
-	    importFiles:['http://localhost/projects/app/vkthread/js/my_utils.js']
+	    importFiles:[location.href + 'js/my_utils.js']
 	 };
 
 	vkthread.exec(param).then(
@@ -262,7 +262,8 @@ function run_external_in_thread_cb(){
 	var param = {
 	    fn:'makeNamesUpper',
 	    args: [['one', 'two', 'three']],
-	    importFiles:['http://localhost/projects/app/vkthread/js/my_utils.js'],
+	    importFiles:[location.href + 'js/my_utils.js'],
+	    //url:location.href+'html/http_post.php'
 	    cb:function(data){
 	    	document.getElementById('demo_result_thread').innerHTML = data;
 	    }
