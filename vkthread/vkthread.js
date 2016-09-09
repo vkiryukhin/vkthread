@@ -3,7 +3,7 @@
  *
  * https://github.com/vkiryukhin/vkthread
  *
- * @version: 2.4.0
+ * @version: 2.5.0
  *
  * @author: Vadim Kiryukhin ( vkiryukhin @ gmail.com )
  *
@@ -25,7 +25,7 @@
     stringify:function (obj) {
       return JSON.stringify(obj, function (key, value) {
         var fnBody;
-      if (value instanceof Function || typeof value == 'function') {
+      if (value instanceof Function || typeof value === 'function') {
 
         fnBody = value.toString();
 
@@ -52,7 +52,7 @@
 
   function Vkthread(){
       this.getVersion = function(){
-          return '2.4.0';
+          return '2.5.0';
       };
 
     // to use standalone worker.js uncomment code below

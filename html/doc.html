@@ -1,6 +1,8 @@
 <p></p>
-<h4>vkthread.exec ( param )</h4>
-<p>Runs function in a thread.</p>
+<p> <span style="font-weight:900; margin-left:2em;">vkthread.exec ( param ) </span>--
+Runs function in a thread.
+</p>
+<!--p> Runs function in a thread.</p-->
 <pre><code data-language="javascript">
 	@return -- promise (Promise style)
 	        -- null (Callback style)
@@ -19,8 +21,9 @@
 
 </code></pre>
 <p></p>
-<h4>vkThread.execAll ( [param1, param2, ... ] )</h4>
-<p>Runs multiple functions in multiple threads.</p>
+<p> <span style="font-weight:900; margin-left:2em;">vkThread.execAll ( [param1, param2, ... ] )
+</span> -- Runs multiple functions in multiple threads.
+</p>
 <pre><code data-language="javascript">
 	@return -- promise object when all threads done.
 
@@ -30,8 +33,14 @@
 <p></p>
 
 
-<h4>vkhttp( config )</h4>
-<p>Runs XMLHttpRequest in a threads.</p>
+<p> <span style="font-weight:900; margin-left:2em;">vkhttp( config )</span>
+-- Runs XMLHttpRequest in a threads.</p>
+
+<p>
+vkhttp() runs XMLHttpRequest synchronously. <br/>
+As it runs in a thread, it's OK to perform it this way.
+</p>
+
 <pre><code data-language="javascript">
 	@return -- string
 
@@ -46,10 +55,7 @@
                                            by default it is 'application/json'
 
 </code></pre>
-<p>
-vkhttp() runs XMLHttpRequest synchronously. <br/>
-As it runs in a thread, it's OK to perform it this way.
-</p>
+
 <pre><code data-language="javascript">
 function foo(config, arg2, ...) {
 

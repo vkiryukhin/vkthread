@@ -7,6 +7,9 @@
  *
  */
 
+/* jshint -W074, -W117, -W061*/
+/* global Promise, self, postMessage, importScripts, onmessage:true */
+
 (function() {
   'use strict';
 
@@ -62,11 +65,11 @@
       importScripts.apply(null, obj.importFiles);
     }
 
-    if (typeof obj.fn === "function") { //regular function
+    if (typeof obj.fn === 'function') { //regular function
       if (typeof Promise !== 'undefined') {
         Promise.resolve(obj.fn.apply(cntx, obj.args))
-               .then(function(data){postMessage(data)})
-               .catch(function(reason){postMessage(reason)});
+               .then(function(data){postMessage(data);})
+               .catch(function(reason){postMessage(reason);});
       } else {
         // to satisfy IE
         postMessage(obj.fn.apply(cntx, obj.args));
@@ -76,7 +79,7 @@
     else { //ES6 arrow function
       postMessage(self[obj.fn].apply(cntx, obj.args));
     }
-  }
+  };
 
 /*
  * XMLHttpRequest in plain javascript;
